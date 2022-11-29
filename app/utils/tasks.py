@@ -5,8 +5,8 @@ import shutil
 import redis
 import codecs
 import hashlib
-from .common import get_settings
-from .git import update_git_repo
+from .common import get_settings, cache_file, download_file
+from .git import update_git_repo, get_repo_dir
 from .redis import Redis
 
 
@@ -124,3 +124,46 @@ def regen_asset(redis_client = None):
     print("Regenerated Assets: \n" + str(json.dumps(asset_json, indent=2)))
     redis_client.hset('xlweb-fastapi|asset', 'meta', json.dumps(asset_json))
     return asset_json
+
+
+def regen_dalamud(redis_client = None):
+    if not redis_client:
+        redis_client = Redis.create_client()
+    settings = get_settings()
+    update_git_repo(settings.dalamud_repo)
+    dalamud_repo_dir = get_repo_dir(settings.dalamud_repo)
+    runtime_verlist = []
+    release_version = {}
+    for track in ["release", "stg", "canary"]:
+        dist_dir = dalamud_repo_dir if track == "release" else \
+            os.path.join(dalamud_repo_dir, track)
+        with codecs.open(os.path.join(dist_dir, 'version'), 'r', 'utf8') as f:
+            version_json = json.load(f)
+        if version_json['RuntimeRequired'] and version_json['RuntimeVersion'] not in runtime_verlist:
+            runtime_verlist.append(version_json['RuntimeVersion'])
+        ext_format = settings.dalamud_format  # zip or 7z
+        dalamud_path = os.path.join(dist_dir, f"latest.{ext_format}")
+        (hashed_name, _) = cache_file(dalamud_path)
+        version_json['downloadUrl'] = settings.hosted_url.rstrip('/') + f'/File/Get/{hashed_name}'
+        version_json['track'] = track
+        if track == 'release':
+            version_json['changelog'] = []
+        if 'key' not in version_json:
+            version_json['key'] = None
+        redis_client.hset('xlweb-fastapi|dalamud', f'dist-{track}', json.dumps(version_json))
+        if track == 'release':
+            release_version = version_json
+    file_cache_dir = os.path.join(settings.root_path, settings.file_cache_dir)
+    for version in runtime_verlist:
+        desktop_url = f'https://dotnetcli.azureedge.net/dotnet/WindowsDesktop/{version}/windowsdesktop-runtime-{version}-win-x64.zip'
+        (hashed_name, _) = cache_file(download_file(desktop_url, file_cache_dir))
+        redis_client.hset('xlweb-fastapi|runtime', f'desktop-{version}', hashed_name)
+        dotnet_url = f'https://dotnetcli.azureedge.net/dotnet/Runtime/{version}/dotnet-runtime-{version}-win-x64.zip'
+        (hashed_name, _) = cache_file(download_file(dotnet_url, file_cache_dir))
+        redis_client.hset('xlweb-fastapi|runtime', f'dotnet-{version}', hashed_name)
+    for hash_file in os.listdir(os.path.join(dalamud_repo_dir, 'runtimehashes')):
+        version = re.search(r'(?P<ver>.*)\.json$', hash_file).group('ver')
+        (hashed_name, _) = cache_file(os.path.join(dalamud_repo_dir, f'runtimehashes/{hash_file}'))
+        redis_client.hset('xlweb-fastapi|runtime', f'hashes-{version}', hashed_name)
+    return release_version
+

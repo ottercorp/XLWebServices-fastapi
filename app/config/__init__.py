@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     github_token: str = ''
     cache_clear_key: str = ''
     dalamud_repo: str = ''
+    dalamud_format: str = 'zip'
     asset_repo: str = ''
     plugin_repo: str = ''
     plugin_api_level: int = 7
@@ -22,35 +23,6 @@ class Settings(BaseSettings):
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'
-        fields = {
-            'app_name': {
-                'env': 'app_name',
-            },
-            'file_cache_dir': {
-                'env': 'file_cache_dir',
-            },
-            'repo_cache_dir': {
-                'env': 'repo_cache_dir',
-            },
-            'github_token': {
-                'env': 'github_token',
-            },
-            'cache_clear_key': {
-                'env': 'cache_clear_key',
-            },
-            'redis_host': {
-                'env': 'redis_host',
-            },
-            'redis_port': {
-                'env': 'redis_port',
-            },
-            'hosted_url': {
-                'env': 'hosted_url',
-            },
-            'plugin_api_level': {
-                'env': 'plugin_api_level',
-            }
-        }
 
 print("Loading settings as:")
 print(json.dumps(Settings().dict(), indent=2))

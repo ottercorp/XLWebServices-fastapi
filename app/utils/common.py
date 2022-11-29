@@ -6,6 +6,7 @@ import redis
 import codecs
 import hashlib
 import git
+import requests
 from ..config import Settings
 from functools import cache
 from fastapi import Depends
@@ -33,3 +34,16 @@ def cache_file(file_path: str):
     print(f"Caching {file_path} -> {hashed_path}")
     shutil.copy(file_path, hashed_path)
     return hashed_name, hashed_path
+
+
+def download_file(url, dst, force: bool = False):
+    local_filename = url.split('/')[-1]
+    filepath = os.path.join(dst, local_filename)
+    if os.path.exists(filepath) and not force:
+        return filepath
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(filepath, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192): 
+                f.write(chunk)
+    return filepath

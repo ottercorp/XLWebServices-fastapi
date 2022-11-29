@@ -6,6 +6,7 @@ from app.utils.common import get_settings
 from app.utils.redis import Redis
 from app.utils.tasks import regen_asset
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 
@@ -22,14 +23,37 @@ async def dalamud_assets(settings: Settings = Depends(get_settings)):
 
 @router.get("/Release/VersionInfo")
 async def dalamud_release(settings: Settings = Depends(get_settings), track: str = "release"):
-    return {}
+    if track == "staging":
+        track = "stg"
+    r = Redis.create_client()
+    version_str = r.hget('xlweb-fastapi|dalamud', f'dist-{track}')
+    if not version_str:
+        raise HTTPException(status_code=400, detail="Invalid track")
+    version_json = json.loads(version_str)
+    return version_json
 
-@router.get("/Release/Runtime/DotNet/{version}")
-async def dalamud_runtime_dotnet(settings: Settings = Depends(get_settings)):
-    return {}
 
-@router.get("/Release/Runtime/WindowsDesktop/{version}")
-async def dalamud_runtime_windowsdesktop(settings: Settings = Depends(get_settings)):
-    return {}
-
+@router.get("/Release/Runtime/{kind_version:path}")
+async def dalamud_runtime_dotnet(kind_version: str, settings: Settings = Depends(get_settings)):
+    print(kind_version)
+    if len(kind_version.split('/')) != 2:
+        return HTTPException(status_code=400, detail="Invalid path")
+    kind, version = kind_version.split('/')
+    r = Redis.create_client()
+    if kind == 'WindowsDesktop':
+        hashed_name = r.hget('xlweb-fastapi|runtime', f'desktop-{version}')
+        if not hashed_name:
+            raise HTTPException(status_code=400, detail="Invalid version")
+        return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
+    elif kind == 'DotNet':
+        hashed_name = r.hget('xlweb-fastapi|runtime', f'dotnet-{version}')
+        if not hashed_name:
+            raise HTTPException(status_code=400, detail="Invalid version")
+        return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
+    elif kind == 'Hashes':
+        hashed_name = r.hget('xlweb-fastapi|runtime', f'hashes-{version}')
+        if not hashed_name:
+            raise HTTPException(status_code=400, detail="Invalid version")
+        return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
+    return HTTPException(status_code=400, detail="Invalid kind")
 
