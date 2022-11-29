@@ -15,8 +15,8 @@ router = APIRouter()
 
 # may refactor this to configurable
 APILEVEL_NAMESPACE_MAP = {
-    7: 'plugin-PluginDistD17-main',
-    6: 'plugin-DalamudPlugins-cn-api6'
+    "7": 'plugin-PluginDistD17-main',
+    "6": 'plugin-DalamudPlugins-cn-api6'
 }
 
 
@@ -26,8 +26,6 @@ async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool =
     api_level = re.search(r'api(?P<level>\d+)', branch).group('level')
     if not api_level:
         api_level = settings.plugin_api_level
-    else:
-        api_level = int(api_level)
     if api_level not in APILEVEL_NAMESPACE_MAP:
         return HTTPException(status_code=400, detail="API level not supported")
     plugin_namespace = APILEVEL_NAMESPACE_MAP[api_level]
@@ -41,9 +39,9 @@ async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool =
 
 
 @router.get("/PluginMaster", response_class=PrettyJSONResponse)
-async def pluginmaster(apiLevel: int = -1, settings: Settings = Depends(get_settings)):
+async def pluginmaster(apiLevel: str = "", settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
-    if apiLevel == -1:
+    if not apiLevel:
         apiLevel = settings.plugin_api_level
     if apiLevel not in APILEVEL_NAMESPACE_MAP:
         return HTTPException(status_code=400, detail="API level not supported")

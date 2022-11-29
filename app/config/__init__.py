@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     dalamud_format: str = 'zip'
     asset_repo: str = ''
     plugin_repo: str = ''
-    plugin_api_level: int = 7
+    plugin_api_level: str = "7"
     xl_repo: str = ''
 
     class Config:
