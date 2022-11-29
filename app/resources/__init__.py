@@ -6,7 +6,7 @@ from .file import router as router_file
 from .plugin import router as router_plugin
 # from .xivlauncher import router as router_xivl
 
-from ..util import get_git_hash
+from app.utils.git import get_git_hash
 
 
 router = APIRouter()

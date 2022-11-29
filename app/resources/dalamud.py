@@ -2,7 +2,9 @@ import os, sys
 import json
 import codecs
 from app.config import Settings
-from app.util import get_settings, Redis, regen_asset
+from app.utils.common import get_settings
+from app.utils.redis import Redis
+from app.utils.tasks import regen_asset
 from fastapi import APIRouter, HTTPException, Depends
 
 router = APIRouter()

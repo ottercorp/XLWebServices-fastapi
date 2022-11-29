@@ -5,82 +5,9 @@ import shutil
 import redis
 import codecs
 import hashlib
-import git
-from .config import Settings
-from functools import cache
-from fastapi import Depends
-from jsoncomment import JsonComment
-
-
-@cache
-def get_settings():
-    return Settings()
-
-
-def cache_file(file_path: str):
-    settings = get_settings()
-    file_cache_dir = os.path.join(settings.root_path, settings.file_cache_dir)
-    try:
-        with open(file_path,"rb") as f:
-            bs = f.read()
-    except FileNotFoundError:
-        print("File not found: " + file_path)
-        return None
-    sha256_hash = hashlib.sha256(bs).hexdigest()
-    s = re.search(r'(?P<name>[^/\\&\?]+)\.(?P<ext>\w+)', file_path)
-    hashed_name = f"{s.group('name')}.{sha256_hash}.{s.group('ext')}"
-    hashed_path = os.path.join(file_cache_dir, hashed_name)
-    print(f"Caching {file_path} -> {hashed_path}")
-    shutil.copy(file_path, hashed_path)
-    return hashed_name, hashed_path
-
-
-
-def get_git_hash(repo_path: str = '', short_sha: bool = True, check_dirty: bool = True):
-    repo = git.Repo(repo_path)
-    sha = repo.head.commit.hexsha
-    if short_sha:
-        sha = sha[:7]
-    dirty = '-dirty' if repo.is_dirty() and check_dirty else ''
-    return f'{sha}{dirty}'
-
-
-def get_repo_dir(git_url: str):
-    settings = get_settings()
-    repo_name = re.search(r'\/(?P<name>.*)\.git', git_url).group('name')
-    repo_root_dir = os.path.join(settings.root_path, settings.repo_cache_dir)
-    repo_dir = os.path.join(repo_root_dir, repo_name)
-    if not os.path.exists(repo_dir) or not os.path.isdir(repo_dir):
-        os.mkdir(repo_dir)
-    return repo_dir
-
-
-def get_git_repo(git_url: str, shallow: bool = True):
-    repo_dir = get_repo_dir(git_url)
-    if os.path.exists(os.path.join(repo_dir, ".git")):
-        return git.Repo(repo_dir)
-    options = ['--depth=1'] if shallow else []
-    return git.Repo.clone_from(
-        git_url,
-        repo_dir,
-        multi_options=['--depth=1']
-    )
-
-
-def update_git_repo(git_url: str):
-    repo = get_git_repo(git_url)
-    pull = repo.remotes.origin.pull()
-    info = pull[0]
-    assert info.flags & info.ERROR == 0, f"Error while pulling repo {git_url}"
-    assert info.flags & info.REJECTED == 0, f"Rejected while pulling repo {git_url}"
-    return info, repo
-
-
-class Redis():
-    @staticmethod
-    def create_client():
-        settings = get_settings()
-        return redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0, decode_responses=True)
+from .common import get_settings
+from .git import update_git_repo
+from .redis import Redis
 
 
 async def rehash(repo_name_list: list[str]):
@@ -96,19 +23,12 @@ async def rehash(repo_name_list: list[str]):
         elif repo in ['xl', 'xivlauncher']:
             pass
 
+
 DEFAULT_META = {
     "Changelog": "",
     "Tags": [],
-    # "CategoryTags": [],
     "IsHide": False,
     "TestingAssemblyVersion": None,
-    # "IsTestingExclusive": False,
-    # "DalamudApiLevel": 0,
-    # "DownloadCount": 0,
-    # "LastUpdate": 0,
-    # "DownloadLinkInstall": "",
-    # "DownloadLinkUpdate": "",
-    # "DownloadLinkTesting": "",
     "AcceptsFeedback": True,
     "FeedbackMessage": None,
     "FeedbackWebhook": None,
@@ -204,5 +124,3 @@ def regen_asset(redis_client = None):
     print("Regenerated Assets: \n" + str(json.dumps(asset_json, indent=2)))
     redis_client.hset('xlweb-fastapi|asset', 'meta', json.dumps(asset_json))
     return asset_json
-    
-

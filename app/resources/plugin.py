@@ -4,9 +4,12 @@ import json
 import codecs
 from functools import cache
 from app.config import Settings
-from app.util import get_settings, Redis, regen_asset
+from app.utils.common import get_settings
+from app.utils.responses import PrettyJSONResponse
+from app.utils.redis import Redis
+from app.utils.tasks import regen_pluginmaster
 from fastapi import APIRouter, HTTPException, Depends
-from fastapi.responses import RedirectResponse, Response
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 
@@ -18,10 +21,13 @@ APILEVEL_NAMESPACE_MAP = {
 
 
 @router.get("/Download/{plugin}")
-async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool = False, branch: str = 'api7'):
+async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool = False, branch: str = ''):
     r = Redis.create_client()
     api_level = re.search(r'api(?P<level>\d+)', branch).group('level')
-    api_level = int(api_level)
+    if not api_level:
+        api_level = settings.plugin_api_level
+    else:
+        api_level = int(api_level)
     if api_level not in APILEVEL_NAMESPACE_MAP:
         return HTTPException(status_code=400, detail="API level not supported")
     plugin_namespace = APILEVEL_NAMESPACE_MAP[api_level]
@@ -34,22 +40,11 @@ async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool =
     return RedirectResponse(f"/File/Get/{plugin_hashed_name}", status_code=302)
 
 
-class PrettyJSONResponse(Response):
-    media_type = "application/json"
-
-    def render(self, content) -> bytes:
-        return json.dumps(
-            content,
-            ensure_ascii=False,
-            allow_nan=False,
-            indent=2,
-            separators=(", ", ": "),
-        ).encode("utf-8")
-
-
 @router.get("/PluginMaster", response_class=PrettyJSONResponse)
-async def pluginmaster(apiLevel: int = 6):
+async def pluginmaster(apiLevel: int = -1, settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
+    if apiLevel == -1:
+        apiLevel = settings.plugin_api_level
     if apiLevel not in APILEVEL_NAMESPACE_MAP:
         return HTTPException(status_code=400, detail="API level not supported")
     plugin_namespace = APILEVEL_NAMESPACE_MAP[apiLevel]
