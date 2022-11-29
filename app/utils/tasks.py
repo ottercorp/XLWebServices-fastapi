@@ -130,13 +130,13 @@ def regen_dalamud(redis_client = None):
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
-    update_git_repo(settings.dalamud_repo)
-    dalamud_repo_dir = get_repo_dir(settings.dalamud_repo)
+    update_git_repo(settings.distrib_repo)
+    distrib_repo_dir = get_repo_dir(settings.distrib_repo)
     runtime_verlist = []
     release_version = {}
     for track in ["release", "stg", "canary"]:
-        dist_dir = dalamud_repo_dir if track == "release" else \
-            os.path.join(dalamud_repo_dir, track)
+        dist_dir = distrib_repo_dir if track == "release" else \
+            os.path.join(distrib_repo_dir, track)
         with codecs.open(os.path.join(dist_dir, 'version'), 'r', 'utf8') as f:
             version_json = json.load(f)
         if version_json['RuntimeRequired'] and version_json['RuntimeVersion'] not in runtime_verlist:
@@ -161,9 +161,9 @@ def regen_dalamud(redis_client = None):
         dotnet_url = f'https://dotnetcli.azureedge.net/dotnet/Runtime/{version}/dotnet-runtime-{version}-win-x64.zip'
         (hashed_name, _) = cache_file(download_file(dotnet_url, file_cache_dir))
         redis_client.hset('xlweb-fastapi|runtime', f'dotnet-{version}', hashed_name)
-    for hash_file in os.listdir(os.path.join(dalamud_repo_dir, 'runtimehashes')):
+    for hash_file in os.listdir(os.path.join(distrib_repo_dir, 'runtimehashes')):
         version = re.search(r'(?P<ver>.*)\.json$', hash_file).group('ver')
-        (hashed_name, _) = cache_file(os.path.join(dalamud_repo_dir, f'runtimehashes/{hash_file}'))
+        (hashed_name, _) = cache_file(os.path.join(distrib_repo_dir, f'runtimehashes/{hash_file}'))
         redis_client.hset('xlweb-fastapi|runtime', f'hashes-{version}', hashed_name)
     return release_version
 

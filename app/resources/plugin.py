@@ -23,7 +23,7 @@ APILEVEL_NAMESPACE_MAP = {
 @router.get("/Download/{plugin}")
 async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool = False, branch: str = ''):
     r = Redis.create_client()
-    api_level = re.search(r'api(?P<level>\d+)', branch).group('level')
+    api_level = re.search(r'api(?P<level>.+)', branch).group('level')
     if not api_level:
         api_level = settings.plugin_api_level
     if api_level not in APILEVEL_NAMESPACE_MAP:

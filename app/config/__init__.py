@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     github_token: str = ''
     cache_clear_key: str = ''
     dalamud_repo: str = ''
+    distrib_repo: str = ''
     dalamud_format: str = 'zip'
     asset_repo: str = ''
     plugin_repo: str = ''
