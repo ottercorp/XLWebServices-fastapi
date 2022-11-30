@@ -4,7 +4,6 @@ import codecs
 from app.config import Settings
 from app.utils.common import get_settings
 from app.utils.redis import Redis
-from app.utils.tasks import regen_asset
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import RedirectResponse, PlainTextResponse
 

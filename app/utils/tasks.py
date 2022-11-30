@@ -126,8 +126,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             redis_client.hset(f'xlweb-fastapi|{plugin_namespace}', plugin_name, hashed_name)
             pluginmaster.append(plugin_meta)
     redis_client.hset(f'xlweb-fastapi|{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
-    print(f"Regenerated Pluginmaster for {plugin_namespace}: \n" + str(json.dumps(pluginmaster, indent=2)))
-    return pluginmaster
+    # print(f"Regenerated Pluginmaster for {plugin_namespace}: \n" + str(json.dumps(pluginmaster, indent=2)))
 
 
 def regen_asset(redis_client = None):
@@ -147,9 +146,8 @@ def regen_asset(redis_client = None):
             asset["Url"] = settings.hosted_url.rstrip('/') + '/File/Get/' + hashed_name
         asset_list.append(asset)
     asset_json["Assets"] = asset_list
-    print("Regenerated Assets: \n" + str(json.dumps(asset_json, indent=2)))
+    # print("Regenerated Assets: \n" + str(json.dumps(asset_json, indent=2)))
     redis_client.hset('xlweb-fastapi|asset', 'meta', json.dumps(asset_json))
-    return asset_json
 
 
 def regen_dalamud(redis_client = None):
@@ -191,7 +189,7 @@ def regen_dalamud(redis_client = None):
         version = re.search(r'(?P<ver>.*)\.json$', hash_file).group('ver')
         (hashed_name, _) = cache_file(os.path.join(distrib_repo_dir, f'runtimehashes/{hash_file}'))
         redis_client.hset('xlweb-fastapi|runtime', f'hashes-{version}', hashed_name)
-    return release_version
+    # return release_version
 
 
 def regen_xivlauncher(redis_client = None):

@@ -7,7 +7,6 @@ from app.config import Settings
 from app.utils.common import get_settings
 from app.utils.responses import PrettyJSONResponse
 from app.utils.redis import Redis
-from app.utils.tasks import regen_pluginmaster
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import RedirectResponse
 
@@ -48,7 +47,6 @@ async def pluginmaster(apiLevel: str = "", settings: Settings = Depends(get_sett
     plugin_namespace = APILEVEL_NAMESPACE_MAP[apiLevel]
     pluginmaster_str = r.hget(f'xlweb-fastapi|{plugin_namespace}', 'pluginmaster')
     if not pluginmaster_str:
-        pluginmaster = regen_pluginmaster(r)
-    else:
-        pluginmaster = json.loads(pluginmaster_str)
+        raise HTTPException(status_code=404, detail="Pluginmaster not found")
+    pluginmaster = json.loads(pluginmaster_str)
     return pluginmaster
