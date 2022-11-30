@@ -11,7 +11,8 @@ Yet another xlweb service provider written in python &amp; fastapi
 - [x] Plugin Master
 - [x] Multiple Plugin Master (D17 & old)
 - [ ] Plugin Download Count
-- [ ] XIVLauncher Distribution
-- [ ] XIVLauncher Changelog
+- [x] XIVLauncher Distribution
+- [x] XIVLauncher Changelog
+- [ ] XIVLauncher Download Count
 - [ ] Webhook (Discord & OtterBot)
 - [ ] Bleatbot
