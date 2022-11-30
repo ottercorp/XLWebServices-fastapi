@@ -10,7 +10,6 @@ import requests
 from ..config import Settings
 from functools import cache
 from fastapi import Depends
-from jsoncomment import JsonComment
 
 
 @cache
@@ -36,11 +35,17 @@ def cache_file(file_path: str):
     return hashed_name, hashed_path
 
 
-def download_file(url, dst, force: bool = False):
+def download_file(url, dst="", force: bool = False):
+    settings = get_settings()
+    file_cache_dir = os.path.join(settings.root_path, settings.file_cache_dir)
+    if not dst:
+        dst = file_cache_dir
     local_filename = url.split('/')[-1]
     filepath = os.path.join(dst, local_filename)
     if os.path.exists(filepath) and not force:
+        print(f"File {filepath} exists, skipping download")
         return filepath
+    print(f"Downloading {url} -> {filepath}")
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(filepath, 'wb') as f:

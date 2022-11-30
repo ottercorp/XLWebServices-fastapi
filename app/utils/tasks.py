@@ -5,23 +5,42 @@ import shutil
 import redis
 import codecs
 import hashlib
+import asyncio
 from .common import get_settings, cache_file, download_file
 from .git import update_git_repo, get_repo_dir
 from .redis import Redis
+from github import Github
+from jsoncomment import JsonComment
 
 
-async def rehash(repo_name_list: list[str]):
-    settings = get_settings()
-    redis_client = Redis.create_client()
-    async for repo in repo_name_list:
-        if repo == 'dalamud':
-            pass
-        elif repo == 'plugin':
+async def regen(task_list: list[str]):
+    print(f"Started regeneration tasks: {task_list}.")
+    results = await asyncio.gather(
+        *map(regen_task, task_list)
+    )
+    print(f"Regeneration tasks finished with results:\n{results}.")
+
+async def regen_task(task: str):
+    print(f"Started regeneration task: {task}.")
+    try:
+        redis_client = Redis.create_client()
+        if task == 'dalamud':
+            regen_dalamud(redis_client)
+        elif task == 'plugin':
             regen_pluginmaster(redis_client)
-        elif repo == 'asset':
+        elif task == 'asset':
             regen_asset(redis_client)
-        elif repo in ['xl', 'xivlauncher']:
-            pass
+        elif task in ['xl', 'xivlauncher']:
+            regen_xivlauncher(redis_client)
+        else:
+            raise RuntimeError("Invalid task")
+        print(f"Regeneration task {task} finished.")
+        return True
+    except Exception as e:
+        print(e)
+        print(f"Regeneration task {task} failed.")
+        return False
+
 
 
 DEFAULT_META = {
@@ -35,6 +54,7 @@ DEFAULT_META = {
 }
 
 def regen_pluginmaster(redis_client = None, repo_url: str = ''):
+    print("Start regenerating pluginmaster.")
     settings = get_settings()
     if not redis_client:
         redis_client = Redis.create_client()
@@ -106,6 +126,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
 
 
 def regen_asset(redis_client = None):
+    print("Start regenerating dalamud assets.")
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
@@ -127,6 +148,7 @@ def regen_asset(redis_client = None):
 
 
 def regen_dalamud(redis_client = None):
+    print("Start regenerating dalamud distribution.")
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
@@ -153,13 +175,12 @@ def regen_dalamud(redis_client = None):
         redis_client.hset('xlweb-fastapi|dalamud', f'dist-{track}', json.dumps(version_json))
         if track == 'release':
             release_version = version_json
-    file_cache_dir = os.path.join(settings.root_path, settings.file_cache_dir)
     for version in runtime_verlist:
         desktop_url = f'https://dotnetcli.azureedge.net/dotnet/WindowsDesktop/{version}/windowsdesktop-runtime-{version}-win-x64.zip'
-        (hashed_name, _) = cache_file(download_file(desktop_url, file_cache_dir))
+        (hashed_name, _) = cache_file(download_file(desktop_url))
         redis_client.hset('xlweb-fastapi|runtime', f'desktop-{version}', hashed_name)
         dotnet_url = f'https://dotnetcli.azureedge.net/dotnet/Runtime/{version}/dotnet-runtime-{version}-win-x64.zip'
-        (hashed_name, _) = cache_file(download_file(dotnet_url, file_cache_dir))
+        (hashed_name, _) = cache_file(download_file(dotnet_url))
         redis_client.hset('xlweb-fastapi|runtime', f'dotnet-{version}', hashed_name)
     for hash_file in os.listdir(os.path.join(distrib_repo_dir, 'runtimehashes')):
         version = re.search(r'(?P<ver>.*)\.json$', hash_file).group('ver')
@@ -167,3 +188,60 @@ def regen_dalamud(redis_client = None):
         redis_client.hset('xlweb-fastapi|runtime', f'hashes-{version}', hashed_name)
     return release_version
 
+
+def regen_xivlauncher(redis_client = None):
+    print("Start regenerating xivlauncher distribution.")
+    if not redis_client:
+        redis_client = Redis.create_client()
+    settings = get_settings()
+    xivl_repo_url = settings.xivl_repo
+    s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', xivl_repo_url)
+    user, repo_name = s.group('user'), s.group('repo')
+    gh = Github(None if not settings.github_token else settings.github_token)
+    repo = gh.get_repo(f'{user}/{repo_name}')
+    releases = repo.get_releases()
+    pre_release = None
+    release = None
+    latest_release = releases[0]
+    if latest_release.prerelease:
+        pre_release = latest_release
+        for r in releases:
+            if not r.prerelease:
+                release = r
+                break
+    else:
+        pre_release = release = latest_release
+
+    for (idx, rel) in enumerate([pre_release, release]):
+        release_type = 'prerelease' if idx == 0 else 'release'
+        redis_client.hset('xlweb-fastapi|xivlauncher', f'{release_type}-tag', rel.tag_name)
+        changelog = ''
+        for asset in rel.get_assets():
+            asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
+            if asset.name == 'RELEASES':
+                with codecs.open(asset_filepath, 'r', 'utf8') as f:
+                    releases_list = f.read()
+                redis_client.hset('xlweb-fastapi|xivlauncher', f'{release_type}-releaseslist', releases_list)
+                continue
+            if asset.name == 'CHANGELOG.txt':
+                with codecs.open(asset_filepath, 'r', 'utf8') as f:
+                    changelog = f.read()
+            (hashed_name, _) = cache_file(asset_filepath)
+            redis_client.hset(
+                'xlweb-fastapi|xivlauncher',
+                f'{release_type}-{asset.name}',
+                hashed_name
+            )
+        track = release_type.capitalize()
+        meta = {
+            'ReleasesInfo': f"/Proxy/Update/{track}/RELEASES",
+            'Version': rel.tag_name,
+            'Url': rel.html_url,
+            'Changelog': changelog,
+            'When': rel.published_at.isoformat(),
+        }
+        redis_client.hset(
+            'xlweb-fastapi|xivlauncher',
+            f'{release_type}-meta',
+            json.dumps(meta)
+        )

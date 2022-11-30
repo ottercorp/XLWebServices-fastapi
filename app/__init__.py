@@ -1,8 +1,10 @@
 import time
+import re
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from starlette.routing import Route
 
 from .resources import router
 # from .models import database
@@ -38,6 +40,12 @@ def get_app() -> FastAPI:
         return response
 
     app.include_router(router)
+
+    for route in app.router.routes:
+        if isinstance(route, Route):
+            # print(route.path_regex.pattern)
+            route.path_regex = re.compile(route.path_regex.pattern, re.IGNORECASE)
+
     
     # No database needs, for now
     # @app.on_event("startup")

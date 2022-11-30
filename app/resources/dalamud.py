@@ -34,26 +34,21 @@ async def dalamud_release(settings: Settings = Depends(get_settings), track: str
 
 
 @router.get("/Release/Runtime/{kind_version:path}")
-async def dalamud_runtime_dotnet(kind_version: str, settings: Settings = Depends(get_settings)):
+async def dalamud_runtime(kind_version: str, settings: Settings = Depends(get_settings)):
     print(kind_version)
     if len(kind_version.split('/')) != 2:
         return HTTPException(status_code=400, detail="Invalid path")
     kind, version = kind_version.split('/')
     r = Redis.create_client()
-    if kind == 'WindowsDesktop':
-        hashed_name = r.hget('xlweb-fastapi|runtime', f'desktop-{version}')
-        if not hashed_name:
-            raise HTTPException(status_code=400, detail="Invalid version")
-        return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
-    elif kind == 'DotNet':
-        hashed_name = r.hget('xlweb-fastapi|runtime', f'dotnet-{version}')
-        if not hashed_name:
-            raise HTTPException(status_code=400, detail="Invalid version")
-        return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
-    elif kind == 'Hashes':
-        hashed_name = r.hget('xlweb-fastapi|runtime', f'hashes-{version}')
-        if not hashed_name:
-            raise HTTPException(status_code=400, detail="Invalid version")
-        return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
-    return HTTPException(status_code=400, detail="Invalid kind")
+    kind_map = {
+        'WindowsDesktop': 'desktop',
+        'DotNet': 'dotnet',
+        'Hashes': 'hashes'
+    }
+    if kind not in kind_map:
+        raise HTTPException(status_code=400, detail="Invalid kind")
+    hashed_name = r.hget('xlweb-fastapi|runtime', f'{kind_map[kind]}-{version}')
+    if not hashed_name:
+        raise HTTPException(status_code=400, detail="Invalid version")
+    return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
 

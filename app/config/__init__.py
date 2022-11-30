@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     asset_repo: str = ''
     plugin_repo: str = ''
     plugin_api_level: str = "7"
-    xl_repo: str = ''
+    xivl_repo: str = ''
 
     class Config:
         env_file = '.env'
