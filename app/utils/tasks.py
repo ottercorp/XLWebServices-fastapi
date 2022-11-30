@@ -18,7 +18,7 @@ async def regen(task_list: list[str]):
     results = await asyncio.gather(
         *map(regen_task, task_list)
     )
-    print(f"Regeneration tasks finished with results:\n{results}.")
+    print(f"Regeneration tasks finished with results:\n{results}")
 
 async def regen_task(task: str):
     print(f"Started regeneration task: {task}.")
@@ -30,7 +30,7 @@ async def regen_task(task: str):
             regen_pluginmaster(redis_client)
         elif task == 'asset':
             regen_asset(redis_client)
-        elif task in ['xl', 'xivlauncher']:
+        elif task in ['xl', 'xivl', 'xivlauncher']:
             regen_xivlauncher(redis_client)
         else:
             raise RuntimeError("Invalid task")

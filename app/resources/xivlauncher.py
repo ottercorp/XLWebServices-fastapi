@@ -50,10 +50,12 @@ async def xivlauncher(track_file: str, settings: Settings = Depends(get_settings
         'Setup.exe',
         f'XIVLauncherCN-{tag_name}-delta.nupkg',
         f'XIVLauncherCN-{tag_name}-full.nupkg',
+        f'XIVLauncher-{tag_name}-delta.nupkg',
+        f'XIVLauncher-{tag_name}-full.nupkg',
         'CHANGELOG.txt'
     ]
-    if file not in valid_files:
-        raise HTTPException(status_code=400, detail="Invalid file name")
     hashed_name = r.hget('xlweb-fastapi|xivlauncher', f'{release_type}-{file}')
+    if file not in valid_files or not hashed_name:
+        raise HTTPException(status_code=400, detail="Invalid file name")
     return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
 
