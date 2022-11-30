@@ -6,6 +6,7 @@ import redis
 import codecs
 import hashlib
 import asyncio
+import concurrent.futures
 from .common import get_settings, cache_file, download_file
 from .git import update_git_repo, get_repo_dir
 from .redis import Redis
@@ -14,18 +15,17 @@ from jsoncomment import JsonComment
 from termcolor import colored
 
 
-async def regen(task_list: list[str]):
+def regen(task_list: list[str]):
     print(f"Started regeneration tasks: {task_list}.")
-    results = await asyncio.gather(
-        *map(regen_task, task_list)
-    )
-    results_str = ""
-    for (task, result) in zip(task_list, results):
-        ok = colored("ok", "green") if result else colored("failed", "red")
-        results_str += f"{task}: {ok}\n"
-    print(f"Regeneration tasks finished with results:\n{results_str.strip()}")
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = executor.map(regen_task, task_list)
+        results_str = ""
+        for (task, result) in zip(task_list, results):
+            ok = colored("ok", "green") if result else colored("failed", "red")
+            results_str += f"{task}: {ok}\n"
+        print(f"Regeneration tasks finished with results:\n{results_str.strip()}")
 
-async def regen_task(task: str):
+def regen_task(task: str):
     print(f"Started regeneration task: {task}.")
     try:
         redis_client = Redis.create_client()
