@@ -26,5 +26,11 @@ class Settings(BaseSettings):
         env_file = '.env'
         env_file_encoding = 'utf-8'
 
+
+SENSITIVE_FIELDS = ['github_token', 'cache_clear_key']
+settings_json = Settings().dict()
+for field in SENSITIVE_FIELDS:
+    if field in settings_json:
+        settings_json[field] = '*' * len(settings_json[field])
 print("Loading settings as:")
-print(json.dumps(Settings().dict(), indent=2))
+print(json.dumps(settings_json, indent=2))
