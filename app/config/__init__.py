@@ -1,6 +1,6 @@
 import os
 import json
-from pydantic import BaseSettings, RedisDsn
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -9,8 +9,9 @@ class Settings(BaseSettings):
     file_cache_dir: str = "cache"
     repo_cache_dir: str = "repo"
     redis_host: str = 'localhost'
-    hosted_url: str = 'https://aonyx.ffxiv.wang'
     redis_port: str = '6379'
+    redis_prefix: str = 'xlweb-fastapi|'
+    hosted_url: str = 'https://aonyx.ffxiv.wang'
     github_token: str = ''
     cache_clear_key: str = ''
     dalamud_repo: str = ''

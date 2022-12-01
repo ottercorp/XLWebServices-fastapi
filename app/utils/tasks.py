@@ -5,8 +5,9 @@ import shutil
 import redis
 import codecs
 import hashlib
-import asyncio
+import toml
 import concurrent.futures
+from collections import defaultdict
 from .common import get_settings, cache_file, download_file
 from .git import update_git_repo, get_repo_dir
 from .redis import Redis
@@ -65,6 +66,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
         redis_client = Redis.create_client()
     if not repo_url:
         repo_url = settings.plugin_repo
+    is_dip17 = True  # default to be using dip17
     repo_name = re.search(r'\/(?P<name>.*)\.git', repo_url).group('name')
     (_, repo) = update_git_repo(repo_url)
     branch = repo.active_branch.name
@@ -81,10 +83,34 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             'testing': 'testing'
         }
         api_level = 6
+        is_dip17 = False
     pluginmaster = []
     stable_dir = os.path.join(plugin_repo_dir, cahnnel_map['stable'])
     testing_dir = os.path.join(plugin_repo_dir, cahnnel_map['testing'])
     jsonc = JsonComment(json)
+    # Load categories
+    category_tags = defaultdict(list)
+    category_path = os.path.join(settings.root_path, 'app/utils/categoryfallbacks.json')
+    if os.path.exists(category_path):
+        with codecs.open(category_path, "r", "utf8") as f:
+            category_tags.update(jsonc.load(f))
+    # Load last update time
+    last_updated = {}
+    if not is_dip17:
+        legacy_pluginmaster = []
+        legacy_pluginmaster_path = os.path.join(plugin_repo_dir, 'pluginmaster.json')
+        with codecs.open(legacy_pluginmaster_path, 'r', 'utf8') as f:
+            legacy_pluginmaster = jsonc.load(f)
+        for legacy_meta in legacy_pluginmaster:
+            last_updated[legacy_meta['InternalName']] = int(legacy_meta['LastUpdated'])
+    else:
+        state_path = os.path.join(plugin_repo_dir, 'State.toml')
+        with codecs.open(state_path, 'r', 'utf8') as f:
+            state = toml.load(f)
+        for (channel, channel_meta) in state['channels'].items():
+            for (plugin, plugin_meta) in channel_meta['plugins'].items():
+                last_updated[plugin] = int(plugin_meta['time_built'].timestamp())
+    # Generate pluginmaster
     for plugin_dir in [stable_dir, testing_dir]:
         for plugin in os.listdir(plugin_dir):
             try:
@@ -111,9 +137,10 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             if is_testing:
                 plugin_meta["TestingAssemblyVersion"] = plugin_meta["AssemblyVersion"]
             plugin_meta["DalamudApiLevel"] = api_level
-            plugin_meta["DownloadCount"] = 0  # TODO
-            plugin_meta["LastUpdate"] = 0  # TODO
-            plugin_meta["CategoryTags"] = []  # TODO
+            download_count = redis_client.hget(f'{settings.redis_prefix}plugin-count', plugin) or 0
+            plugin_meta["DownloadCount"] = int(download_count)
+            plugin_meta["LastUpdate"] = last_updated.get(plugin, 0)
+            plugin_meta["CategoryTags"] = category_tags[plugin]
             plugin_meta["DownloadLinkInstall"] = settings.hosted_url.rstrip('/') \
                 + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=False&branch=api{api_level}"
             plugin_meta["DownloadLinkUpdate"] = settings.hosted_url.rstrip('/') \
@@ -123,9 +150,9 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             plugin_latest_path = os.path.join(plugin_dir, f'{plugin}/latest.zip')
             (hashed_name, _) = cache_file(plugin_latest_path)
             plugin_name = f"{plugin}-testing" if is_testing else plugin
-            redis_client.hset(f'xlweb-fastapi|{plugin_namespace}', plugin_name, hashed_name)
+            redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', plugin_name, hashed_name)
             pluginmaster.append(plugin_meta)
-    redis_client.hset(f'xlweb-fastapi|{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
+    redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
     # print(f"Regenerated Pluginmaster for {plugin_namespace}: \n" + str(json.dumps(pluginmaster, indent=2)))
 
 
@@ -147,7 +174,7 @@ def regen_asset(redis_client = None):
         asset_list.append(asset)
     asset_json["Assets"] = asset_list
     # print("Regenerated Assets: \n" + str(json.dumps(asset_json, indent=2)))
-    redis_client.hset('xlweb-fastapi|asset', 'meta', json.dumps(asset_json))
+    redis_client.hset(f'{settings.redis_prefix}asset', 'meta', json.dumps(asset_json))
 
 
 def regen_dalamud(redis_client = None):
@@ -175,20 +202,20 @@ def regen_dalamud(redis_client = None):
             version_json['changelog'] = []
         if 'key' not in version_json:
             version_json['key'] = None
-        redis_client.hset('xlweb-fastapi|dalamud', f'dist-{track}', json.dumps(version_json))
+        redis_client.hset(f'{settings.redis_prefix}dalamud', f'dist-{track}', json.dumps(version_json))
         if track == 'release':
             release_version = version_json
     for version in runtime_verlist:
         desktop_url = f'https://dotnetcli.azureedge.net/dotnet/WindowsDesktop/{version}/windowsdesktop-runtime-{version}-win-x64.zip'
         (hashed_name, _) = cache_file(download_file(desktop_url))
-        redis_client.hset('xlweb-fastapi|runtime', f'desktop-{version}', hashed_name)
+        redis_client.hset(f'{settings.redis_prefix}runtime', f'desktop-{version}', hashed_name)
         dotnet_url = f'https://dotnetcli.azureedge.net/dotnet/Runtime/{version}/dotnet-runtime-{version}-win-x64.zip'
         (hashed_name, _) = cache_file(download_file(dotnet_url))
-        redis_client.hset('xlweb-fastapi|runtime', f'dotnet-{version}', hashed_name)
+        redis_client.hset(f'{settings.redis_prefix}runtime', f'dotnet-{version}', hashed_name)
     for hash_file in os.listdir(os.path.join(distrib_repo_dir, 'runtimehashes')):
         version = re.search(r'(?P<ver>.*)\.json$', hash_file).group('ver')
         (hashed_name, _) = cache_file(os.path.join(distrib_repo_dir, f'runtimehashes/{hash_file}'))
-        redis_client.hset('xlweb-fastapi|runtime', f'hashes-{version}', hashed_name)
+        redis_client.hset(f'{settings.redis_prefix}runtime', f'hashes-{version}', hashed_name)
     # return release_version
 
 
@@ -217,34 +244,34 @@ def regen_xivlauncher(redis_client = None):
 
     for (idx, rel) in enumerate([pre_release, release]):
         release_type = 'prerelease' if idx == 0 else 'release'
-        redis_client.hset('xlweb-fastapi|xivlauncher', f'{release_type}-tag', rel.tag_name)
+        redis_client.hset(f'{settings.redis_prefix}xivlauncher', f'{release_type}-tag', rel.tag_name)
         changelog = ''
         for asset in rel.get_assets():
             asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
             if asset.name == 'RELEASES':
                 with codecs.open(asset_filepath, 'r', 'utf8') as f:
                     releases_list = f.read()
-                redis_client.hset('xlweb-fastapi|xivlauncher', f'{release_type}-releaseslist', releases_list)
+                redis_client.hset(f'{settings.redis_prefix}xivlauncher', f'{release_type}-releaseslist', releases_list)
                 continue
             if asset.name == 'CHANGELOG.txt':
                 with codecs.open(asset_filepath, 'r', 'utf8') as f:
                     changelog = f.read()
             (hashed_name, _) = cache_file(asset_filepath)
             redis_client.hset(
-                'xlweb-fastapi|xivlauncher',
+                f'{settings.redis_prefix}xivlauncher',
                 f'{release_type}-{asset.name}',
                 hashed_name
             )
         track = release_type.capitalize()
         meta = {
-            'ReleasesInfo': f"/Proxy/Update/{track}/RELEASES",
-            'Version': rel.tag_name,
-            'Url': rel.html_url,
-            'Changelog': changelog,
-            'When': rel.published_at.isoformat(),
+            'releasesInfo': f"/Proxy/Update/{track}/RELEASES",
+            'version': rel.tag_name,
+            'url': rel.html_url,
+            'changelog': changelog,
+            'when': rel.published_at.isoformat(),
         }
         redis_client.hset(
-            'xlweb-fastapi|xivlauncher',
+            f'{settings.redis_prefix}xivlauncher',
             f'{release_type}-meta',
             json.dumps(meta)
         )

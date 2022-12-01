@@ -4,7 +4,7 @@ import codecs
 from app.config import Settings
 from app.utils.common import get_settings
 from app.utils.redis import Redis
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse
 
 router = APIRouter()
@@ -12,7 +12,7 @@ router = APIRouter()
 @router.get("/Asset/Meta")
 async def dalamud_assets(settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
-    asset_str = r.hget('xlweb-fastapi|asset', 'meta')
+    asset_str = r.hget(f'{settings.redis_prefix}asset', 'meta')
     if not asset_str:
         raise HTTPException(status_code=404, detail="Asset meta not found")
     asset_json = json.loads(asset_str)
@@ -24,7 +24,7 @@ async def dalamud_release(settings: Settings = Depends(get_settings), track: str
     if track == "staging":
         track = "stg"
     r = Redis.create_client()
-    version_str = r.hget('xlweb-fastapi|dalamud', f'dist-{track}')
+    version_str = r.hget(f'{settings.redis_prefix}dalamud', f'dist-{track}')
     if not version_str:
         raise HTTPException(status_code=400, detail="Invalid track")
     version_json = json.loads(version_str)
@@ -45,8 +45,22 @@ async def dalamud_runtime(kind_version: str, settings: Settings = Depends(get_se
     }
     if kind not in kind_map:
         raise HTTPException(status_code=400, detail="Invalid kind")
-    hashed_name = r.hget('xlweb-fastapi|runtime', f'{kind_map[kind]}-{version}')
+    hashed_name = r.hget(f'{settings.redis_prefix}runtime', f'{kind_map[kind]}-{version}')
     if not hashed_name:
         raise HTTPException(status_code=400, detail="Invalid version")
     return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
 
+
+@router.post("/Release/ClearCache")
+async def release_clear_cache(background_tasks: BackgroundTasks, key: str = Query(), settings: Settings = Depends(get_settings)):
+    if key != settings.cache_clear_key:
+        raise HTTPException(status_code=400, detail="Cache clear key not match")
+    background_tasks.add_task(regen, ['dalamud'])
+    return {'message': 'Background task was started.'}
+
+@router.post("/Asset/ClearCache")
+async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(), settings: Settings = Depends(get_settings)):
+    if key != settings.cache_clear_key:
+        raise HTTPException(status_code=400, detail="Cache clear key not match")
+    background_tasks.add_task(regen, ['asset'])
+    return {'message': 'Background task was started.'}
