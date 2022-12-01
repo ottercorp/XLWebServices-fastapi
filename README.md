@@ -10,9 +10,9 @@ Yet another xlweb service provider written in python &amp; fastapi
 - [ ] Dalamud Core Changelog (why is it in /Plugin)
 - [x] Plugin Master
 - [x] Multiple Plugin Master (D17 & old)
-- [ ] Plugin Download Count
+- [x] Plugin Download Count
 - [x] XIVLauncher Distribution
 - [x] XIVLauncher Changelog
-- [ ] XIVLauncher Download Count
+- [x] XIVLauncher Download Count
 - [ ] Webhook (Discord & OtterBot)
 - [ ] Bleatbot
