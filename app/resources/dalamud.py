@@ -55,7 +55,7 @@ async def dalamud_runtime(kind_version: str, settings: Settings = Depends(get_se
 async def release_clear_cache(background_tasks: BackgroundTasks, key: str = Query(), settings: Settings = Depends(get_settings)):
     if key != settings.cache_clear_key:
         raise HTTPException(status_code=400, detail="Cache clear key not match")
-    background_tasks.add_task(regen, ['dalamud'])
+    background_tasks.add_task(regen, ['dalamud', 'dalamud_changelog'])
     return {'message': 'Background task was started.'}
 
 @router.post("/Asset/ClearCache")

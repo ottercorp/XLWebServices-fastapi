@@ -30,14 +30,18 @@ def regen_task(task: str):
     print(f"Started regeneration task: {task}.")
     try:
         redis_client = Redis.create_client()
-        if task == 'dalamud':
-            regen_dalamud(redis_client)
-        elif task == 'plugin':
-            regen_pluginmaster(redis_client)
-        elif task == 'asset':
-            regen_asset(redis_client)
-        elif task in ['xl', 'xivl', 'xivlauncher']:
-            regen_xivlauncher(redis_client)
+        task_map = {
+            'dalamud': regen_dalamud,
+            'dalamud_changelog': regen_dalamud_changelog,
+            'plugin': regen_pluginmaster,
+            'asset': regen_asset,
+            'xl': regen_xivlauncher,
+            'xivl': regen_xivlauncher,
+            'xivlauncher': regen_xivlauncher,
+        }
+        if task in task_map:
+            func = task_map[task]
+            func(redis_client)
         else:
             raise RuntimeError("Invalid task")
         print(f"Regeneration task {task} finished.")
@@ -216,10 +220,6 @@ def regen_dalamud(redis_client = None):
         version = re.search(r'(?P<ver>.*)\.json$', hash_file).group('ver')
         (hashed_name, _) = cache_file(os.path.join(distrib_repo_dir, f'runtimehashes/{hash_file}'))
         redis_client.hset(f'{settings.redis_prefix}runtime', f'hashes-{version}', hashed_name)
-    try:
-        regen_dalamud_changelog(redis_client)
-    except github.GithubException.RateLimitExceededException as e:
-        print("API rate limit exceeded.")
     # return release_version
 
 
