@@ -55,6 +55,16 @@ async def pluginmaster(apiLevel: str = "", settings: Settings = Depends(get_sett
     return pluginmaster
 
 
+@router.get("/CoreChangelog")
+async def core_changelog(settings: Settings = Depends(get_settings)):
+    r = Redis.create_client()
+    changelog_str = r.hget(f'{settings.redis_prefix}dalamud', 'changelog')
+    if not changelog_str:
+        return []
+    changelog = json.loads(changelog_str)
+    return changelog
+
+
 @router.post("/ClearCache")
 async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), settings: Settings = Depends(get_settings)):
     if key != settings.cache_clear_key:

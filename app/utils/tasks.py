@@ -216,7 +216,47 @@ def regen_dalamud(redis_client = None):
         version = re.search(r'(?P<ver>.*)\.json$', hash_file).group('ver')
         (hashed_name, _) = cache_file(os.path.join(distrib_repo_dir, f'runtimehashes/{hash_file}'))
         redis_client.hset(f'{settings.redis_prefix}runtime', f'hashes-{version}', hashed_name)
+    try:
+        regen_dalamud_changelog(redis_client)
+    except github.GithubException.RateLimitExceededException as e:
+        print("API rate limit exceeded.")
     # return release_version
+
+
+def regen_dalamud_changelog(redis_client = None):
+    print("Start regenerating dalamud changelog.")
+    if not redis_client:
+        redis_client = Redis.create_client()
+    settings = get_settings()
+    dalamud_repo_url = settings.dalamud_repo
+    s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', dalamud_repo_url)
+    user, repo_name = s.group('user'), s.group('repo')
+    gh = Github(None if not settings.github_token else settings.github_token)
+    repo = gh.get_repo(f'{user}/{repo_name}')
+    tags = repo.get_tags()
+    sliced_tags = list(tags[:11]) # only care about latest 10 tags
+    changelogs = []
+    skip_prefix = ['build:', 'Merge pull request', 'Merge branch']
+    for (idx, tag) in enumerate(sliced_tags[:-1]):
+        next_tag = sliced_tags[idx + 1]
+        changes = []
+        diff = repo.compare(next_tag.commit.sha, tag.commit.sha)
+        for commit in diff.commits:
+            msg = commit.commit.message
+            if any([msg.startswith(x) for x in skip_prefix]):
+                continue
+            changes.append({
+                'author': commit.commit.author.name,
+                'message': msg.split('\n')[0],
+                'sha': commit.sha,
+                'date': commit.commit.author.date.isoformat()
+            })
+        changelogs.append({
+            'version': tag.name,
+            'date': tag.commit.commit.author.date.isoformat(),
+            'changes': changes,
+        })
+    redis_client.hset(f'{settings.redis_prefix}dalamud', 'changelog', json.dumps(changelogs))
 
 
 def regen_xivlauncher(redis_client = None):
