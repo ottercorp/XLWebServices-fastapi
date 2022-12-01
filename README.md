@@ -16,3 +16,21 @@ Yet another xlweb service provider written in python &amp; fastapi
 - [x] XIVLauncher Download Count
 - [ ] Webhook (Discord & OtterBot)
 - [ ] Bleatbot
+
+## Use
+
+Create a `.env` file with env vars like:
+
+```
+CACHE_CLEAR_KEY=''
+GITHUB_TOKEN=''
+DALAMUD_REPO=''
+DISTRIB_REPO=''
+PLUGIN_REPO=''
+ASSET_REPO=''
+XIVL_REPO=''
+HOSTED_URL=''
+PLUGIN_API_LEVEL=''
+```
+
+For other available settings please check [the config file](/app/config/__init__.py).
