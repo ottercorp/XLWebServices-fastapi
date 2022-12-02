@@ -15,7 +15,7 @@ def get_git_hash(repo_path: str = '', short_sha: bool = True, check_dirty: bool 
 
 def get_repo_dir(git_url: str):
     settings = get_settings()
-    repo_name = re.search(r'\/(?P<name>.*)\.git', git_url).group('name')
+    repo_name = re.search(r'\/(?P<name>[^\/]*?)\.git', git_url).group('name')
     repo_root_dir = os.path.join(settings.root_path, settings.repo_cache_dir)
     repo_dir = os.path.join(repo_root_dir, repo_name)
     if not os.path.exists(repo_dir) or not os.path.isdir(repo_dir):
