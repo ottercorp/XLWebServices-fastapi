@@ -20,6 +20,8 @@ def get_settings():
 def cache_file(file_path: str):
     settings = get_settings()
     file_cache_dir = os.path.join(settings.root_path, settings.file_cache_dir)
+    if not os.path.exists(file_cache_dir):
+        os.makedirs(file_cache_dir, exist_ok=True)
     try:
         with open(file_path,"rb") as f:
             bs = f.read()
@@ -40,6 +42,8 @@ def download_file(url, dst="", force: bool = False):
     file_cache_dir = os.path.join(settings.root_path, settings.file_cache_dir)
     if not dst:
         dst = file_cache_dir
+    if not os.path.exists(dst):
+        os.makedirs(dst, exist_ok=True)
     local_filename = url.split('/')[-1]
     filepath = os.path.join(dst, local_filename)
     if os.path.exists(filepath) and not force:
