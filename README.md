@@ -38,7 +38,7 @@ PLUGIN_REPO=''
 ASSET_REPO=''
 XIVL_REPO=''
 HOSTED_URL=''
-PLUGIN_API_LEVEL=''
+PLUGIN_API_LEVEL=7
 ```
 
 For the `*_REPO` vars, both `https://github.com/xxx/yyy.git` and `git@github.com:xxx/yyy.git` are supported.

@@ -81,13 +81,11 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
         'stable': 'stable',
         'testing': 'testing-live'
     }
-    api_level = settings.plugin_api_level
     if repo_name == 'DalamudPlugins':  # old plugin dist repo
         cahnnel_map = {
             'stable': 'plugins',
             'testing': 'testing'
         }
-        api_level = 6
         is_dip17 = False
     pluginmaster = []
     stable_dir = os.path.join(plugin_repo_dir, cahnnel_map['stable'])
@@ -141,7 +139,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             plugin_meta["IsTestingExclusive"] = is_testing
             if is_testing:
                 plugin_meta["TestingAssemblyVersion"] = plugin_meta["AssemblyVersion"]
-            plugin_meta["DalamudApiLevel"] = api_level
+            api_level = int(plugin_meta.get("DalamudApiLevel", 0))
             download_count = redis_client.hget(f'{settings.redis_prefix}plugin-count', plugin) or 0
             plugin_meta["DownloadCount"] = int(download_count)
             plugin_meta["LastUpdate"] = last_updated.get(plugin, 0)
