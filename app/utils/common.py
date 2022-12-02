@@ -16,6 +16,14 @@ from fastapi import Depends
 def get_settings():
     return Settings()
 
+@cache
+def get_apilevel_namespace_map():
+    return get_settings().api_namespace
+
+@cache
+def get_namespace_apilevel_map():
+    return dict([(v, k) for (k, v) in get_settings().api_namespace.items()])
+
 
 def cache_file(file_path: str):
     settings = get_settings()
@@ -57,10 +65,3 @@ def download_file(url, dst="", force: bool = False):
                 f.write(chunk)
     return filepath
 
-@cache
-def get_apilevel_namespace_map():
-    return get_settings().api_namespace
-
-@cache
-def get_namespace_apilevel_map():
-    return dict([(v, k) for (k, v) in get_settings().api_namespace.items()])
