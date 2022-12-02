@@ -13,9 +13,6 @@ from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 
-# may refactor this to configurable
-
-
 @router.get("/Download/{plugin}")
 async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool = False, branch: str = '', settings: Settings = Depends(get_settings)):
     r = Redis.create_client()

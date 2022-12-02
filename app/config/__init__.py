@@ -1,7 +1,7 @@
 import os
 import json
 from pydantic import BaseSettings
-
+from typing import Dict
 
 class Settings(BaseSettings):
     app_name: str = "XLWebServices-fastapi"
@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     plugin_repo: str = ''
     plugin_api_level: int = 7
     xivl_repo: str = ''
+    api_namespace: Dict[int, str] = {
+        7: 'plugin-PluginDistD17-main'
+    }
 
     class Config:
         env_file = '.env'

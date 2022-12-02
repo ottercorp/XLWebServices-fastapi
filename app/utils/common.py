@@ -57,16 +57,10 @@ def download_file(url, dst="", force: bool = False):
                 f.write(chunk)
     return filepath
 
-
-APILEVEL_NAMESPACE_MAP = {
-    7: 'plugin-PluginDistD17-main',
-    6: 'plugin-DalamudPlugins-cn-api6'
-}
-
 @cache
 def get_apilevel_namespace_map():
-    return APILEVEL_NAMESPACE_MAP
+    return get_settings().api_namespace
 
 @cache
 def get_namespace_apilevel_map():
-    return dict([(v, k) for (k, v) in APILEVEL_NAMESPACE_MAP.items()])
+    return dict([(v, k) for (k, v) in get_settings().api_namespace.items()])

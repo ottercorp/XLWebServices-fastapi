@@ -33,7 +33,6 @@ async def dalamud_release(settings: Settings = Depends(get_settings), track: str
 
 @router.get("/Release/Runtime/{kind_version:path}")
 async def dalamud_runtime(kind_version: str, settings: Settings = Depends(get_settings)):
-    print(kind_version)
     if len(kind_version.split('/')) != 2:
         return HTTPException(status_code=400, detail="Invalid path")
     kind, version = kind_version.split('/')
