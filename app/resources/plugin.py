@@ -52,6 +52,10 @@ async def pluginmaster(apiLevel: str = "", settings: Settings = Depends(get_sett
     if not pluginmaster_str:
         raise HTTPException(status_code=404, detail="Pluginmaster not found")
     pluginmaster = json.loads(pluginmaster_str)
+    for plugin in pluginmaster:
+        plugin_name = plugin['InternalName']
+        download_count = r.hget(f'{settings.redis_prefix}plugin-count', plugin_name) or 0
+        plugin["DownloadCount"] = int(download_count)
     return pluginmaster
 
 
