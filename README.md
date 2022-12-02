@@ -19,7 +19,7 @@ Yet another xlweb service provider written in python &amp; fastapi
 
 ## Use
 
-### Python
+### Python & Requirements
 
 Developed in Python 3.9.9, better to try Python 3.11.
 
@@ -32,18 +32,23 @@ Create a `.env` file with env vars like:
 ```
 CACHE_CLEAR_KEY=''
 GITHUB_TOKEN=''
-DALAMUD_REPO=''
-DISTRIB_REPO=''
-PLUGIN_REPO=''
-ASSET_REPO=''
-XIVL_REPO=''
-HOSTED_URL=''
-PLUGIN_API_LEVEL=7
+DALAMUD_REPO='https://github.com/ottercorp/Dalamud.git'
+DISTRIB_REPO='https://github.com/ottercorp/dalamud-distrib.git'
+PLUGIN_REPO='https://github.com/ottercorp/PluginDistD17.git'
+ASSET_REPO='https://github.com/ottercorp/DalamudAssets.git'
+XIVL_REPO='https://github.com/ottercorp/FFXIVQuickLauncher.git'
+HOSTED_URL='https://aonyx.ffxiv.wang/'
+PLUGIN_API_LEVEL='7'
+API_NAMESPACE='{"7": "plugin-PluginDistD17-main"}'
 ```
 
 For the `*_REPO` vars, both `https://github.com/xxx/yyy.git` and `git@github.com:xxx/yyy.git` are supported.
 
 For other available settings please check [the config file](/app/config/__init__.py).
+
+### Run
+
+`python main.py`
 
 ### Caching & Regen
 
