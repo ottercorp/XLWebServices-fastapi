@@ -203,7 +203,7 @@ def regen_dalamud(redis_client = None):
         version_json['track'] = track
         if track == 'release':
             version_json['changelog'] = []
-        if 'key' not in version_json:
+        if 'key' not in version_json and 'Key' not in version_json:
             version_json['key'] = None
         redis_client.hset(f'{settings.redis_prefix}dalamud', f'dist-{track}', json.dumps(version_json))
         if track == 'release':
