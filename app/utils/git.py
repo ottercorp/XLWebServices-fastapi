@@ -13,9 +13,15 @@ def get_git_hash(repo_path: str = '', short_sha: bool = True, check_dirty: bool 
     return f'{sha}{dirty}'
 
 
+def get_user_repo_name(git_url: str):
+    s = re.search(r'[\/:](?P<user>[^\/]+)\/(?P<repo>[^\/]+)\.git', git_url)
+    user, repo_name = s.group('user'), s.group('repo')
+    return user, repo_name
+
+
 def get_repo_dir(git_url: str):
     settings = get_settings()
-    repo_name = re.search(r'\/(?P<name>[^\/]*?)\.git', git_url).group('name')
+    (_, repo_name) = get_user_repo_name(git_url)
     repo_root_dir = os.path.join(settings.root_path, settings.repo_cache_dir)
     repo_dir = os.path.join(repo_root_dir, repo_name)
     if not os.path.exists(repo_dir) or not os.path.isdir(repo_dir):

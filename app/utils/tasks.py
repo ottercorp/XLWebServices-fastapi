@@ -10,7 +10,7 @@ import concurrent.futures
 import commentjson
 from collections import defaultdict
 from .common import get_settings, cache_file, download_file
-from .git import update_git_repo, get_repo_dir
+from .git import update_git_repo, get_repo_dir, get_user_repo_name
 from .redis import Redis
 from github import Github
 from termcolor import colored
@@ -71,10 +71,11 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
     if not repo_url:
         repo_url = settings.plugin_repo
     is_dip17 = True  # default to be using dip17
-    repo_name = re.search(r'\/(?P<name>.*)\.git', repo_url).group('name')
+    (_, repo_name) = get_user_repo_name(repo_url)
     (_, repo) = update_git_repo(repo_url)
     branch = repo.active_branch.name
     plugin_namespace = f"plugin-{repo_name}-{branch}"
+    print(f"plugin_namespace: {plugin_namespace}")
     plugin_repo_dir = get_repo_dir(repo_url)
     cahnnel_map = {
         'stable': 'stable',
@@ -229,8 +230,7 @@ def regen_dalamud_changelog(redis_client = None):
         redis_client = Redis.create_client()
     settings = get_settings()
     dalamud_repo_url = settings.dalamud_repo
-    s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', dalamud_repo_url)
-    user, repo_name = s.group('user'), s.group('repo')
+    user, repo_name = get_user_repo_name(dalamud_repo_url)
     gh = Github(None if not settings.github_token else settings.github_token)
     repo = gh.get_repo(f'{user}/{repo_name}')
     tags = repo.get_tags()
