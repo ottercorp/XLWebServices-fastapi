@@ -19,7 +19,7 @@ def get_repo_dir(git_url: str):
     repo_root_dir = os.path.join(settings.root_path, settings.repo_cache_dir)
     repo_dir = os.path.join(repo_root_dir, repo_name)
     if not os.path.exists(repo_dir) or not os.path.isdir(repo_dir):
-        os.mkdir(repo_dir)
+        os.makedirs(repo_dir, exist_ok=True)
     return repo_dir
 
 
