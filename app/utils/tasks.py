@@ -7,12 +7,12 @@ import codecs
 import hashlib
 import toml
 import concurrent.futures
+import commentjson
 from collections import defaultdict
 from .common import get_settings, cache_file, download_file
 from .git import update_git_repo, get_repo_dir
 from .redis import Redis
 from github import Github
-from jsoncomment import JsonComment
 from termcolor import colored
 
 
@@ -91,7 +91,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
     pluginmaster = []
     stable_dir = os.path.join(plugin_repo_dir, cahnnel_map['stable'])
     testing_dir = os.path.join(plugin_repo_dir, cahnnel_map['testing'])
-    jsonc = JsonComment(json)
+    jsonc = commentjson
     # Load categories
     category_tags = defaultdict(list)
     category_path = os.path.join(settings.root_path, 'app/utils/categoryfallbacks.json')
