@@ -19,6 +19,14 @@ Yet another xlweb service provider written in python &amp; fastapi
 
 ## Use
 
+### Python
+
+Developed in Python 3.9.9, better to try Python 3.11.
+
+Install dependencies by `pip install -r requirements.txt`
+
+### Config & Env
+
 Create a `.env` file with env vars like:
 
 ```
@@ -33,4 +41,12 @@ HOSTED_URL=''
 PLUGIN_API_LEVEL=''
 ```
 
+For the `*_REPO` vars, both `https://github.com/xxx/yyy.git` and `git@github.com:xxx/yyy.git` are supported.
+
 For other available settings please check [the config file](/app/config/__init__.py).
+
+### Caching & Regen
+
+Run `python regen.py` for the first generation, additional parameters can also be added for partial re-generation.
+
+Valid parameters are: `dalamud dalamud_changelog plugin asset xivlauncher`.
