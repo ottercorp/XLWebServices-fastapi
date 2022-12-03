@@ -1,7 +1,7 @@
 import os
 import json
 from pydantic import BaseSettings
-from typing import Dict
+from typing import Dict, List
 
 class Settings(BaseSettings):
     app_name: str = "XLWebServices-fastapi"
@@ -14,23 +14,27 @@ class Settings(BaseSettings):
     hosted_url: str = 'https://aonyx.ffxiv.wang'
     github_token: str = ''
     cache_clear_key: str = ''
+    xivl_repo: str = ''
     dalamud_repo: str = ''
     distrib_repo: str = ''
     dalamud_format: str = 'zip'
     asset_repo: str = ''
     plugin_repo: str = ''
     plugin_api_level: int = 7
-    xivl_repo: str = ''
     api_namespace: Dict[int, str] = {
         7: 'plugin-PluginDistD17-main'
     }
+    cdn_list: List[str] = []
+    cf_token: str = ''
+    ctcdn_ak: str = ''
+    ctcdn_sk: str = ''
 
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'
 
 
-SENSITIVE_FIELDS = ['github_token', 'cache_clear_key']
+SENSITIVE_FIELDS = ['github_token', 'cache_clear_key', 'cf_token', 'ctcdn_ak', 'ctcdn_sk']
 settings_json = Settings().dict()
 for field in SENSITIVE_FIELDS:
     if field in settings_json:

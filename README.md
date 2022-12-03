@@ -7,13 +7,14 @@ Yet another xlweb service provider written in python &amp; fastapi
 - [x] Dalamud Assets
 - [x] Dalamud Runtime
 - [x] Dalamud Distribution
-- [x] Dalamud Core Changelog (why is it in /Plugin)
+- [x] Dalamud Core Changelog
 - [x] Plugin Master
 - [x] Multiple Plugin Master (D17 & old)
 - [x] Plugin Download Count
 - [x] XIVLauncher Distribution
 - [x] XIVLauncher Changelog
 - [x] XIVLauncher Download Count
+- [x] CDN Refresh (CF, CTCDN)
 - [ ] Webhook (Discord & OtterBot)
 - [ ] Bleatbot
 

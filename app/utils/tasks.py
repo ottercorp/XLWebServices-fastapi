@@ -9,14 +9,20 @@ import toml
 import concurrent.futures
 import commentjson
 from collections import defaultdict
+from itertools import product
+from typing import Union, Tuple
 from .common import get_settings, cache_file, download_file
 from .git import update_git_repo, get_repo_dir, get_user_repo_name
 from .redis import Redis
+from .cdn.cloudflare import CloudFlareCDN
+from .cdn.ctcdn import CTCDN
 from github import Github
 from termcolor import colored
 
 
 def regen(task_list: list[str]):
+    settings = get_settings()
+
     print(f"Started regeneration tasks: {task_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(regen_task, task_list)
@@ -25,6 +31,24 @@ def regen(task_list: list[str]):
             ok = colored("ok", "green") if result else colored("failed", "red")
             results_str += f"{task}: {ok}\n"
         print(f"Regeneration tasks finished with results:\n{results_str.strip()}")
+
+    cdn_client_list = []
+    for cdn in settings.cdn_list:
+        if cdn == 'cloudflare':
+            cdn_client_list.append(CloudFlareCDN())
+        elif cdn == 'ctcdn':
+            cdn_client_list.append(CTCDN())
+    task_cdn_list = list(product(task_list, cdn_client_list))
+
+    print(f"Started CDN refresh tasks: {task_list}.")
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = executor.map(refresh_cdn_task, task_cdn_list)
+        results_str = ""
+        for (task_cdn, result) in zip(task_cdn_list, results):
+            task, cdn = task_cdn
+            ok = colored("ok", "green") if result else colored("failed", "red")
+            results_str += f"{task}-{cdn}: {ok}\n"
+        print(f"CDN refresh tasks finished with results:\n{results_str.strip()}")
 
 def regen_task(task: str):
     print(f"Started regeneration task: {task}.")
@@ -49,6 +73,33 @@ def regen_task(task: str):
     except Exception as e:
         print(e)
         print(f"Regeneration task {task} failed.")
+        return False
+
+
+def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN]]):
+    task, cdn = task_cdn
+    print(f"Started CDN refresh task: {cdn}-{task}.")
+    try:
+        settings = get_settings()
+        path_map = {
+            'dalamud': ['/Dalamud/Release/VersionInfo'] + \
+                [f'/Release/VersionInfo?track={x}' for x in ['release', 'staging', 'stg', 'canary']],
+            'dalamud_changelog': ['/Plugin/CoreChangelog'],
+            'plugin': ['/Plugin/PluginMaster'],
+            'asset': ['/Dalamud/Asset/Meta'],
+            'xl': ['/Proxy/Meta'],
+            'xivl': ['/Proxy/Meta'],
+            'xivlauncher': ['/Proxy/Meta'],
+        }
+        if task in path_map:
+            cdn.purge(path_map[task])
+        else:
+            raise RuntimeError("Invalid task")
+        print(f"CDN refresh task {cdn}-{task} finished.")
+        return True
+    except Exception as e:
+        print(e)
+        print(f"CDN refresh task {cdn}-{task} failed.")
         return False
 
 
