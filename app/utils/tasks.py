@@ -40,7 +40,7 @@ def regen(task_list: list[str]):
             cdn_client_list.append(CTCDN())
     task_cdn_list = list(product(task_list, cdn_client_list))
 
-    print(f"Started CDN refresh tasks: {task_list}.")
+    print(f"Started CDN refresh tasks: {task_cdn_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(refresh_cdn_task, task_cdn_list)
         results_str = ""
