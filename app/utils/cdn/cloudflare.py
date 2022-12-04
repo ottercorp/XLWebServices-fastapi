@@ -22,6 +22,8 @@ class CloudFlareCDN(CDN):
 
     def purge_urls(self, urls: List[str]):
         zone_name = CloudFlareCDN.get_zone_name(urls[0])
+        if self.config.cf_host_overwrite:
+            zone_name = self.config.cf_host_overwrite
         zones = self.client.zones.get(params = {'name':zone_name,'per_page':100})
         if not zones:
             raise RuntimeError(f'Cannot get zone name: {zone_name}')

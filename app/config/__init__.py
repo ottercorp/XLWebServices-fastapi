@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     cf_token: str = ''
     ctcdn_ak: str = ''
     ctcdn_sk: str = ''
+    cf_host_overwrite: str = ''
 
     class Config:
         env_file = '.env'
