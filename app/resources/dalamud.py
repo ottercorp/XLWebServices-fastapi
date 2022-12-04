@@ -31,6 +31,19 @@ async def dalamud_release(settings: Settings = Depends(get_settings), track: str
     return version_json
 
 
+@router.get("/Release/Meta")
+async def dalamud_release_meta(settings: Settings = Depends(get_settings)):
+    meta_json = {}
+    r = Redis.create_client()
+    for track in ['release', 'stg', 'canary']:
+        version_str = r.hget(f'{settings.redis_prefix}dalamud', f'dist-{track}')
+        if not version_str:
+            continue
+        version_json = json.loads(version_str)
+        meta_json[track] = version_json
+    return meta_json
+
+
 @router.get("/Release/Runtime/{kind_version:path}")
 async def dalamud_runtime(kind_version: str, settings: Settings = Depends(get_settings)):
     if len(kind_version.split('/')) != 2:
