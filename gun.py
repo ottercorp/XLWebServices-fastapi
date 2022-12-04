@@ -13,7 +13,7 @@ import multiprocessing
 
 debug = False
 loglevel = 'info'
-bind = '0.0.0.0:6000'
+bind = '0.0.0.0:8080'
 pidfile = 'logs/gunicorn.pid'
 logfile = 'logs/debug.log'
 
