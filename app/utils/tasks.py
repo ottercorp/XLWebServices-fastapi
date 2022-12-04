@@ -82,7 +82,7 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN]]):
     try:
         settings = get_settings()
         path_map = {
-            'dalamud': ['/Dalamud/Release/VersionInfo'] + \
+            'dalamud': ['/Dalamud/Release/VersionInfo', '/Dalamud/Release/Meta'] + \
                 [f'/Release/VersionInfo?track={x}' for x in ['release', 'staging', 'stg', 'canary']],
             'dalamud_changelog': ['/Plugin/CoreChangelog'],
             'plugin': ['/Plugin/PluginMaster'],
