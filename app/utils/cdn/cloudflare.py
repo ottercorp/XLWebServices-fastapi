@@ -10,22 +10,29 @@ class CloudFlareCDN(CDN):
 
 
     @staticmethod
-    def get_zone_name(url: str):
-        zone_name = url
+    def get_host_name(url: str):
+        host_name = url
         prefix_removal = ['http://', 'https://']
         for rem in prefix_removal:
-            if zone_name.startswith(rem):
-                zone_name = zone_name[len(rem):]
-        zone_name = zone_name.split('/')[0]
-        return zone_name
+            if host_name.startswith(rem):
+                host_name = host_name[len(rem):]
+        host_name = host_name.split('/')[0]
+        return host_name
+
+    
+    def get_zone_id(self, url: str):
+        if self.config.cf_zone_id:
+            return self.config.cf_zone_id
+        host_name = CloudFlareCDN.get_host_name(url)
+        zones = self.client.zones.get(params = {'per_page':100})
+        if not zones:
+            raise RuntimeError('Cannot get zones.')
+        for zone in zones:
+            if zone['name'] in host_name:
+                return zone['id']
+        raise RuntimeError(f'Cannot get zone name for \"{host_name}\".')
 
 
     def purge_urls(self, urls: List[str]):
-        zone_name = CloudFlareCDN.get_zone_name(urls[0])
-        if self.config.cf_host_overwrite:
-            zone_name = self.config.cf_host_overwrite
-        zones = self.client.zones.get(params = {'name':zone_name,'per_page':100})
-        if not zones:
-            raise RuntimeError(f'Cannot get zone name: {zone_name}')
-        zone = zones[0]
-        self.client.zones.purge_cache.post(zone['id'], data={'files':urls})
+        zone_id = self.get_zone_id(urls[0])
+        self.client.zones.purge_cache.post(zone_id, data={'files':urls})
