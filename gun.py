@@ -5,10 +5,6 @@
 # @Author  : subjadeites
 # @File    : gun.py
 
-import gevent.monkey
-
-gevent.monkey.patch_all()
-
 import multiprocessing
 
 debug = False
@@ -19,6 +15,6 @@ logfile = 'logs/debug.log'
 
 # 启动的进程数
 workers = multiprocessing.cpu_count()
-worker_class = 'gunicorn.workers.ggevent.GeventWorker'
+worker_class = 'uvicorn.workers.UvicornH11Worker'
 
 x_forwarded_for_header = 'X-FORWARDED-FOR'
