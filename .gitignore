@@ -130,5 +130,6 @@ dmypy.json
 
 cache/*
 repo/*
+translations/*
 
 .idea/

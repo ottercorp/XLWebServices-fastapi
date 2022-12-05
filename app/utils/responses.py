@@ -7,7 +7,7 @@ class PrettyJSONResponse(Response):
     def render(self, content) -> bytes:
         return json.dumps(
             content,
-            ensure_ascii=False,
+            ensure_ascii=True,
             allow_nan=False,
             indent=2,
             separators=(", ", ": "),

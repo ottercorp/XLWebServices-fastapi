@@ -49,10 +49,22 @@ async def pluginmaster(apiLevel: int = 0, settings: Settings = Depends(get_setti
     if not pluginmaster_str:
         raise HTTPException(status_code=404, detail="Pluginmaster not found")
     pluginmaster = json.loads(pluginmaster_str)
+    translations = {}
+    if settings.default_pm_lang != 'en-US':
+        desc_str = r.hget(f'{settings.redis_prefix}crowdin', f'plugin-description-{settings.default_pm_lang}') or '{}'
+        punchline_str = r.hget(f'{settings.redis_prefix}crowdin', f'plugin-punchline-{settings.default_pm_lang}') or '{}'
+        translations = {
+            'description': json.loads(desc_str),
+            'punchline': json.loads(punchline_str)
+        }
+    print(translations)
     for plugin in pluginmaster:
         plugin_name = plugin['InternalName']
         download_count = r.hget(f'{settings.redis_prefix}plugin-count', plugin_name) or 0
         plugin["DownloadCount"] = int(download_count)
+        if translations:
+            plugin['Description'] = translations['description'].get(plugin_name, plugin.get('Description'))
+            plugin['Punchline'] = translations['punchline'].get(plugin_name, plugin.get('Punchline'))
     return pluginmaster
 
 

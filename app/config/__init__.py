@@ -24,18 +24,23 @@ class Settings(BaseSettings):
     api_namespace: Dict[int, str] = {
         7: 'plugin-PluginDistD17-main'
     }
+    # CDN
     cdn_list: List[str] = []
     cf_token: str = ''
     cf_zone_id: str = ''
     ctcdn_ak: str = ''
     ctcdn_sk: str = ''
+    # Crowdin
+    crowdin_token: str = ''
+    crowdin_project_name: str = 'Dalamud Plugins'
+    default_pm_lang: str = 'en-US' # Locale
 
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'
 
 
-SENSITIVE_FIELDS = ['github_token', 'cache_clear_key', 'cf_token', 'ctcdn_ak', 'ctcdn_sk']
+SENSITIVE_FIELDS = ['github_token', 'cache_clear_key', 'cf_token', 'ctcdn_ak', 'ctcdn_sk', 'crowdin_token']
 settings_json = Settings().dict()
 for field in SENSITIVE_FIELDS:
     if field in settings_json:
