@@ -71,6 +71,8 @@ class Crowdin():
         loc_folder = os.path.join(root_path, f'translations/{lang}')
         if not os.path.exists(loc_folder) or not os.path.isdir(loc_folder):
             return
+        if lang == 'en-US':
+            return
         desc_path = os.path.join(loc_folder, 'description.json')
         with codecs.open(desc_path, 'r', 'utf8') as f:
             desc = json.load(f)
