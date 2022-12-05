@@ -15,7 +15,7 @@ Yet another xlweb service provider written in python &amp; fastapi
 - [x] XIVLauncher Changelog
 - [x] XIVLauncher Download Count
 - [x] CDN Refresh (CF, CTCDN)
-- [x] Crowdin (trandlation for plugin description & punchline)
+- [x] Crowdin (translation for plugin description & punchline)
 - [ ] Webhook (Discord & OtterBot)
 - [ ] Bleatbot
 
