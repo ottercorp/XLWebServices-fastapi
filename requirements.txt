@@ -55,6 +55,7 @@ uvloop==0.17.0
 watchfiles==0.18.1
 websockets==10.4
 wrapt==1.14.1
+crowdin-api-client==1.7.0
 
 
 # 部署相关
