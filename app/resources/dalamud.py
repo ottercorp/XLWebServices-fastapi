@@ -23,6 +23,8 @@ async def dalamud_assets(settings: Settings = Depends(get_settings)):
 async def dalamud_release(settings: Settings = Depends(get_settings), track: str = "release"):
     if track == "staging":
         track = "stg"
+    if not track:
+        track = "release"
     r = Redis.create_client()
     version_str = r.hget(f'{settings.redis_prefix}dalamud', f'dist-{track}')
     if not version_str:
