@@ -176,7 +176,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             except FileNotFoundError:
                 logger.error(f"Cannot find plugin meta file for {plugin}")
                 continue
-            except json.decoder.JSONDecodeError:
+            except:
                 try:
                     with codecs.open(os.path.join(plugin_dir, f'{plugin}/{plugin}.json'), 'r', 'utf-8-sig') as f:
                         plugin_meta = jsonc.load(f)
