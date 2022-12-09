@@ -33,7 +33,7 @@ def init_server_func(args):
     from regen import regen_main
     regen_main()
     from app.utils.tasks import regen_pluginmaster
-    regen_pluginmaster(repo_url=" https://github.com/ottercorp/DalamudPlugins.git")
+    regen_pluginmaster(repo_url="https://github.com/ottercorp/DalamudPlugins.git")
 
 
 if __name__ == '__main__':
