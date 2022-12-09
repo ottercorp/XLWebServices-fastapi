@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import json
@@ -19,18 +20,20 @@ from .cdn.ctcdn import CTCDN
 from github import Github
 from termcolor import colored
 
+from logs import logger
+
 
 def regen(task_list: list[str]):
     settings = get_settings()
 
-    print(f"Started regeneration tasks: {task_list}.")
+    logger.info(f"Started regeneration tasks: {task_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(regen_task, task_list)
         results_str = ""
         for (task, result) in zip(task_list, results):
             ok = colored("ok", "green") if result else colored("failed", "red")
             results_str += f"{task}: {ok}\n"
-        print(f"Regeneration tasks finished with results:\n{results_str.strip()}")
+        logger.info(f"Regeneration tasks finished with results: {results_str.strip()}")
 
     cdn_client_list = []
     for cdn in settings.cdn_list:
@@ -40,7 +43,7 @@ def regen(task_list: list[str]):
             cdn_client_list.append(CTCDN())
     task_cdn_list = list(product(task_list, cdn_client_list))
 
-    print(f"Started CDN refresh tasks: {task_cdn_list}.")
+    logger.info(f"Started CDN refresh tasks: {task_cdn_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(refresh_cdn_task, task_cdn_list)
         results_str = ""
@@ -48,10 +51,10 @@ def regen(task_list: list[str]):
             task, cdn = task_cdn
             ok = colored("ok", "green") if result else colored("failed", "red")
             results_str += f"{task}-{cdn}: {ok}\n"
-        print(f"CDN refresh tasks finished with results:\n{results_str.strip()}")
+        logger.info(f"CDN refresh tasks finished with results: {results_str.strip()}")
 
 def regen_task(task: str):
-    print(f"Started regeneration task: {task}.")
+    logger.info(f"Started regeneration task: {task}.")
     try:
         redis_client = Redis.create_client()
         task_map = {
@@ -68,17 +71,17 @@ def regen_task(task: str):
             func(redis_client)
         else:
             raise RuntimeError("Invalid task")
-        print(f"Regeneration task {task} finished.")
+        logger.info(f"Regeneration task {task} finished.")
         return True
     except Exception as e:
-        print(e)
-        print(f"Regeneration task {task} failed.")
+        logger.error(e)
+        logger.error(f"Regeneration task {task} failed.")
         return False
 
 
 def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN]]):
     task, cdn = task_cdn
-    print(f"Started CDN refresh task: {cdn}-{task}.")
+    logger.info(f"Started CDN refresh task: {cdn}-{task}.")
     try:
         settings = get_settings()
         path_map = {
@@ -95,11 +98,11 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN]]):
             cdn.purge(path_map[task])
         else:
             raise RuntimeError("Invalid task")
-        print(f"CDN refresh task {cdn}-{task} finished.")
+        logger.info(f"CDN refresh task {cdn}-{task} finished.")
         return True
     except Exception as e:
-        print(e)
-        print(f"CDN refresh task {cdn}-{task} failed.")
+        logger.error(e)
+        logger.error(f"CDN refresh task {cdn}-{task} failed.")
         return False
 
 
@@ -115,7 +118,7 @@ DEFAULT_META = {
 }
 
 def regen_pluginmaster(redis_client = None, repo_url: str = ''):
-    print("Start regenerating pluginmaster.")
+    logger.info("Start regenerating pluginmaster.")
     settings = get_settings()
     if not redis_client:
         redis_client = Redis.create_client()
@@ -126,7 +129,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
     (_, repo) = update_git_repo(repo_url)
     branch = repo.active_branch.name
     plugin_namespace = f"plugin-{repo_name}-{branch}"
-    print(f"plugin_namespace: {plugin_namespace}")
+    logger.info(f"plugin_namespace: {plugin_namespace}")
     plugin_repo_dir = get_repo_dir(repo_url)
     cahnnel_map = {
         'stable': 'stable',
@@ -171,17 +174,17 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
                 with codecs.open(os.path.join(plugin_dir, f'{plugin}/{plugin}.json'), 'r', 'utf8') as f:
                     plugin_meta = jsonc.load(f)
             except FileNotFoundError:
-                print(f"Cannot find plugin meta file for {plugin}")
+                logger.error(f"Cannot find plugin meta file for {plugin}")
                 continue
             except json.decoder.JSONDecodeError:
                 try:
                     with codecs.open(os.path.join(plugin_dir, f'{plugin}/{plugin}.json'), 'r', 'utf-8-sig') as f:
                         plugin_meta = jsonc.load(f)
                 except Exception as e:
-                    print(f"Cannot parse plugin meta file for {plugin}")
+                    logger.error(f"Cannot parse plugin meta file for {plugin}")
                     continue
             except Exception as e:
-                print(f"Cannot parse plugin meta file for {plugin}")
+                logger.error(f"Cannot parse plugin meta file for {plugin}")
                 continue
             for key, value in DEFAULT_META.items():
                 if key not in plugin_meta:
@@ -211,7 +214,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
 
 
 def regen_asset(redis_client = None):
-    print("Start regenerating dalamud assets.")
+    logger.info("Start regenerating dalamud assets.")
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
@@ -232,7 +235,7 @@ def regen_asset(redis_client = None):
 
 
 def regen_dalamud(redis_client = None):
-    print("Start regenerating dalamud distribution.")
+    logger.info("Start regenerating dalamud distribution.")
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
@@ -274,7 +277,7 @@ def regen_dalamud(redis_client = None):
 
 
 def regen_dalamud_changelog(redis_client = None):
-    print("Start regenerating dalamud changelog.")
+    logger.info("Start regenerating dalamud changelog.")
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
@@ -309,7 +312,7 @@ def regen_dalamud_changelog(redis_client = None):
 
 
 def regen_xivlauncher(redis_client = None):
-    print("Start regenerating xivlauncher distribution.")
+    logger.info("Start regenerating xivlauncher distribution.")
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()

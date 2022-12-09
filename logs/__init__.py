@@ -3,3 +3,5 @@
 # cython:language_level=3
 # @Time    : 2022/12/4 13:22
 # @File    : __init__.py.py
+
+from .logger import logger

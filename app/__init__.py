@@ -30,7 +30,7 @@ def get_app() -> FastAPI:
         GZipMiddleware,
         minimum_size=500
     )
-    
+
     @app.middleware("http")
     async def add_process_time_header(request: Request, call_next):
         start_time = time.time()
@@ -46,7 +46,6 @@ def get_app() -> FastAPI:
             # print(route.path_regex.pattern)
             route.path_regex = re.compile(route.path_regex.pattern, re.IGNORECASE)
 
-    
     # No database needs, for now
     # @app.on_event("startup")
     # async def startup():

@@ -11,6 +11,7 @@ from ..config import Settings
 from functools import cache
 from fastapi import Depends
 
+from logs import logger
 
 @cache
 def get_settings():
@@ -34,13 +35,13 @@ def cache_file(file_path: str):
         with open(file_path,"rb") as f:
             bs = f.read()
     except FileNotFoundError:
-        print("File not found: " + file_path)
+        logger.error("File not found: " + file_path)
         return None
     sha256_hash = hashlib.sha256(bs).hexdigest()
     s = re.search(r'(?P<name>[^/\\&\?]+)\.(?P<ext>\w+)', file_path)
     hashed_name = f"{s.group('name')}.{sha256_hash}.{s.group('ext')}"
     hashed_path = os.path.join(file_cache_dir, hashed_name)
-    print(f"Caching {file_path} -> {hashed_path}")
+    logger.info(f"Caching {file_path} -> {hashed_path}")
     shutil.copy(file_path, hashed_path)
     return hashed_name, hashed_path
 
@@ -55,9 +56,9 @@ def download_file(url, dst="", force: bool = False):
     local_filename = url.split('/')[-1]
     filepath = os.path.join(dst, local_filename)
     if os.path.exists(filepath) and not force:
-        print(f"File {filepath} exists, skipping download")
+        logger.info(f"File {filepath} exists, skipping download")
         return filepath
-    print(f"Downloading {url} -> {filepath}")
+    logger.info(f"Downloading {url} -> {filepath}")
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(filepath, 'wb') as f:

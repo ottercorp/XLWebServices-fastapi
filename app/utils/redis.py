@@ -1,5 +1,6 @@
 import redis
 from .common import get_settings
+from logs import logger
 
 class Redis():
     @staticmethod
@@ -15,7 +16,7 @@ def load_plugin_count(plugin_count):
     for (plugin, count) in plugin_count.items():
         total += count
         r.hset(f'{settings.redis_prefix}plugin-count', plugin, count)
-        print(f'Setting plugin download counter of {plugin} to {count}')
+        logger.info(f'Setting plugin download counter of {plugin} to {count}')
     r.hset(f'{settings.redis_prefix}plugin-count', 'accumulated', total)
 
 
