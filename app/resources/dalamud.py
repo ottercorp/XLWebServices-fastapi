@@ -7,6 +7,8 @@ from app.utils.redis import Redis
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse
 
+from app.utils.tasks import regen
+
 router = APIRouter()
 
 @router.get("/Asset/Meta")
