@@ -48,8 +48,8 @@ settings_json = Settings().dict()
 for field in SENSITIVE_FIELDS:
     if field in settings_json:
         settings_json[field] = '*' * len(settings_json[field])
-is_show_settings = False # Preventing duplicate displays of settings
-if not is_show_settings:
+
+if 'is_show_settings' not in globals().keys():# Preventing duplicate displays of settings
     logger.info("Loading settings as:")
     logger.info(json.dumps(settings_json, indent=2))
     is_show_settings = True
