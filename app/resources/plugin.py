@@ -57,7 +57,7 @@ async def pluginmaster(apiLevel: int = 0, settings: Settings = Depends(get_setti
             'description': json.loads(desc_str),
             'punchline': json.loads(punchline_str)
         }
-    print(translations)
+    # print(translations)
     for plugin in pluginmaster:
         plugin_name = plugin['InternalName']
         download_count = r.hget(f'{settings.redis_prefix}plugin-count', plugin_name) or 0

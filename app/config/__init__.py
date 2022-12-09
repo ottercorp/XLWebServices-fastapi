@@ -3,6 +3,9 @@ import json
 from pydantic import BaseSettings
 from typing import Dict, List
 
+from logs import logger
+
+
 class Settings(BaseSettings):
     app_name: str = "XLWebServices-fastapi"
     root_path: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -17,7 +20,7 @@ class Settings(BaseSettings):
     xivl_repo: str = ''
     dalamud_repo: str = ''
     distrib_repo: str = ''
-    dalamud_format: str = 'zip' # zip or 7z
+    dalamud_format: str = 'zip'  # zip or 7z
     asset_repo: str = ''
     plugin_repo: str = ''
     plugin_api_level: int = 7
@@ -33,7 +36,7 @@ class Settings(BaseSettings):
     # Crowdin
     crowdin_token: str = ''
     crowdin_project_name: str = 'Dalamud Plugins'
-    default_pm_lang: str = 'en-US' # Locale
+    default_pm_lang: str = 'en-US'  # Locale
 
     class Config:
         env_file = '.env'
@@ -45,5 +48,8 @@ settings_json = Settings().dict()
 for field in SENSITIVE_FIELDS:
     if field in settings_json:
         settings_json[field] = '*' * len(settings_json[field])
-print("Loading settings as:")
-print(json.dumps(settings_json, indent=2))
+is_show_settings = False # Preventing duplicate displays of settings
+if not is_show_settings:
+    logger.info("Loading settings as:")
+    logger.info(json.dumps(settings_json, indent=2))
+    is_show_settings = True
