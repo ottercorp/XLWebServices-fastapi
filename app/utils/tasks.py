@@ -193,7 +193,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             api_level = int(plugin_meta.get("DalamudApiLevel", 0))
             download_count = redis_client.hget(f'{settings.redis_prefix}plugin-count', plugin) or 0
             plugin_meta["DownloadCount"] = int(download_count)
-            plugin_meta["LastUpdate"] = last_updated.get(plugin, 0) if plugin !='SonarPlugin' else plugin_meta.get("LastUpdate", 0)
+            plugin_meta["LastUpdate"] = last_updated.get(plugin, plugin_meta.get("LastUpdate", 0))
             plugin_meta["CategoryTags"] = category_tags[plugin]
             plugin_meta["DownloadLinkInstall"] = settings.hosted_url.rstrip('/') \
                 + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=False&branch=api{api_level}"
