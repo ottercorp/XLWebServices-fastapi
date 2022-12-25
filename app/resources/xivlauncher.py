@@ -6,6 +6,7 @@ from typing import Union
 from app.config import Settings
 from app.utils.common import get_settings
 from app.utils.redis import Redis
+from app.utils.tasks import regen
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse, PlainTextResponse
 
