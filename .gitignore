@@ -133,3 +133,5 @@ repo/*
 translations/*
 
 .idea/
+
+logs/app.log*
