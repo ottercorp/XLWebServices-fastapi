@@ -4,6 +4,7 @@ import re
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.staticfiles import StaticFiles
 from starlette.routing import Route
 
 from .resources import router
@@ -40,6 +41,8 @@ def get_app() -> FastAPI:
         return response
 
     app.include_router(router)
+
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
     for route in app.router.routes:
         if isinstance(route, Route):
