@@ -46,12 +46,13 @@ def regen(task_list: list[str]):
     logger.info(f"Started CDN refresh tasks: {task_cdn_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(refresh_cdn_task, task_cdn_list)
-        results_str = ""
+        results_list = []
         for (task_cdn, result) in zip(task_cdn_list, results):
             task, cdn = task_cdn
             ok = colored("ok", "green") if result else colored("failed", "red")
-            results_str += f"{task}-{cdn}: {ok}\n"
-        logger.info(f"CDN refresh tasks finished with results: {results_str.strip()}")
+            results_list.append(f"{task}-{cdn}: {ok}")
+        for i in results_list:
+            logger.info(f"CDN refresh tasks finished with results: {i.strip()}")
 
 def regen_task(task: str):
     logger.info(f"Started regeneration task: {task}.")
