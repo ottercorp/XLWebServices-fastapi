@@ -1,6 +1,8 @@
 import abc
 import traceback
 from typing import Union, List
+
+from logs import logger
 from ..common import get_settings
 
 class CDN(metaclass=abc.ABCMeta):
@@ -21,14 +23,14 @@ class CDN(metaclass=abc.ABCMeta):
         url_list = [self.path_to_url(paths)] if type(paths) is str else [
             self.path_to_url(x) for x in paths
         ]
-        print(f"Purging urls of {self}: {url_list}")
+        logger.info(f"Purging urls of {self}: {url_list}")
         try:
             self.purge_urls(url_list)
         except Exception as e:
             traceback.print_exc()
-            print("Purging failed.")
+            logger.error("Purging failed.")
             raise e
-        print("Purging finished.")
+        logger.info("Purging finished.")
 
     @abc.abstractmethod
     def purge_urls(self, url: List[str]):
