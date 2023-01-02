@@ -21,6 +21,7 @@ class Logger:
         Returns:
             None
         """
+        logging.captureWarnings(True) # Capture warning messages
         self.logger = logging.getLogger(path)
         self.logger.setLevel(logging.DEBUG)
         fmt = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
