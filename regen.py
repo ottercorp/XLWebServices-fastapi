@@ -1,5 +1,5 @@
 import sys
-from app.utils.tasks import *
+from app.utils.tasks import regen
 
 
 def regen_main():
