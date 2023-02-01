@@ -43,6 +43,8 @@ def get_app() -> FastAPI:
     app.include_router(router)
 
     app.mount("/static", StaticFiles(directory="static"), name="static")
+    app.mount("/", StaticFiles(directory="artifact"), name="artifact")
+    app.mount("/faq", StaticFiles(directory="artifact/faq"), name="faq")
 
     for route in app.router.routes:
         if isinstance(route, Route):

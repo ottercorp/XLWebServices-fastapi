@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+    <title>Using Visual Studio debugger to figure out game crash reason. | faq</title>
+    <meta name="generator" content="Jekyll v3.9.2"/>
+    <meta property="og:title" content="Using Visual Studio debugger to figure out game crash reason."/>
+    <meta property="og:locale" content="en_US"/>
+    <meta name="description" content="卫月框架常见问题解答和知识库"/>
+    <meta property="og:description" content="卫月框架常见问题解答和知识库"/>
+    <link rel="canonical" href="/faq/debug.html"/>
+    <meta property="og:url" content="/faq/debug.html"/>
+    <meta property="og:site_name" content="faq"/>
+    <meta property="og:type" content="website"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta property="twitter:title" content="Using Visual Studio debugger to figure out game crash reason."/>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "description": "卫月框架常见问题解答和知识库",
+            "headline": "Using Visual Studio debugger to figure out game crash reason.",
+            "url": "/faq/debug.html"
+        }</script>
+    <!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style"
+          type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/faq/assets/css/style.css?v=545445c1b5606335a65518c9b282efaebf1b727a">
+
+    <style>
+        .page-header {
+            background-image: linear-gradient(120deg, #132f46, #378dff) !important;
+            background-color: #378dff !important;
+        }
+
+        .main-content h1,
+        .main-content h2,
+        .main-content h3,
+        .main-content h4,
+        .main-content h5,
+        .main-content h6 {
+            color: #2f89d6 !important;
+        }
+    </style>
+</head>
+
+<body>
+<header class="page-header" role="banner">
+    <h1 class="project-name"><a href="#" style="text-decoration: none;color: #fff;">XIVLauncherCN 问答与帮助</a></h1>
+    <h2 class="project-tagline">卫月框架常见问题解答和知识库</h2>
+
+    <a href="https://goatcorp.github.io/" class="btn">XIVLauncher 项目主页（国际服）</a>
+    <a href="/Launcher/Download" class="btn">下载 XIVLauncherCN</a>
+    <a href="https://bbs.tggfl.com/topic/32/dalamud" class="btn">下载卫月框架（国服）</a>
+    <a href="/faq/" class="btn">问答与帮助</a>
+
+
+</header>
+
+<main id="content" class="main-content" role="main">
+    <h1 id="using-visual-studio-debugger-to-figure-out-game-crash-reason">Using Visual Studio debugger to figure out game crash reason.</h1>
+
+    <h2 id="installing-visual-studio">Installing Visual Studio.</h2>
+    <p>First of all you need to install Visual Studio. In this guide I will be using Visual Studio 2022, however 2019 will work as well.</p>
+
+    <p>Download it here: https://visualstudio.microsoft.com/vs/preview/#download-preview</p>
+
+    <p>Select “Visual Studio Community” and run downloaded executable. Wait until visual studio installer gets installed. Then go to “Individual components”, select “Just-In-Time debugger” and press
+        “Install” button. You only need this component, however, if you wish, you may install any additional ones.</p>
+
+    <p><img src="/faq/images/debug/1_install_vs.png" alt="image_451"/></p>
+
+    <p>If it gives you any confirmations, just press “Continue”. Now wait until it will install. Reboot if it will ask you to do so.</p>
+
+    <h2 id="configuring-visual-studio">Configuring Visual Studio.</h2>
+    <p>Before you will start debugging, you will need to perform some configuration. Launch Visual Studio. It will ask you to log in; you may do so or skip - it doesn’t matters.</p>
+
+    <p>Select “Continue without code” on starting screen.</p>
+
+    <p><img src="/faq/images/debug/2_startup_window.png" alt="image_452"/></p>
+
+    <p>Navigate to “Debug - Options - Debugging - General” and disable “Enable Just My Code” option. Don’t forget to press “Ok” button.</p>
+
+    <p><img src="/faq/images/debug/3_config.png" alt="image_453"/></p>
+
+    <h2 id="configuring-dalamud">Configuring Dalamud.</h2>
+    <p>Before you will be able to attach a debugger, you will need to disable anti-debug protection. Type <code class="language-plaintext highlighter-rouge">/xldev</code> in game, open “Dalamud” menu
+        and select “Enable Anti-debug” menu item if it’s unchecked.</p>
+
+    <p><img src="/faq/images/debug/4_dalamud_config.png" alt="image_454"/></p>
+
+    <h2 id="attaching-a-debugger">Attaching a debugger.</h2>
+    <p>Navigate to “Debug - Attach to process”. In “Attach to” section click on “Select” button, check “Debug these code types” checkbox, and check “Managed (.NET core, .NET 5+)” and “Native”
+        checkboxes. Press “Ok” button and then find “ffxiv_dx11.exe” process in process list. Select it and click “Attach” button.</p>
+
+    <p><img src="/faq/images/debug/5_attach_debugger.png" alt="image"/></p>
+
+    <p>Debugging session should begin now. Navigate to “Debug - Windows - Exception settings” and uncheck “Common Language Runtime Exceptions”. We don’t need them.</p>
+
+    <p><img src="/faq/images/debug/6_exception_settings.png" alt="image"/></p>
+
+    <h2 id="crash">Crash.</h2>
+    <p>When a crash occurs, you will see it in Visual Studio. It may prompt you to load source or PDB file for crashed module, in that case just close that window.</p>
+
+    <p>You will see something like this:</p>
+
+    <p><img src="/faq/images/debug/7_crash.png" alt="image_456"/></p>
+
+    <p>You can close exception alert modal window. We don’t need it. Look on a Call stack. If you don’t see Call stack window, navigate to “Debug - Windows - Call stack”. You can see crash happened on
+        a Test plugin function call. Usually there will be some plugin mentioned there, but not always.</p>
+
+    <p>Generally, try to disable that plugin and reproduce the crash again. If you can confirm that the crash stopped happening, please report the crash to a plugin developer.</p>
+
+    <h2 id="reporting-a-problem">Reporting a problem.</h2>
+    <p>You will need to include following things into your report:</p>
+    <h3 id="call-stack">Call stack.</h3>
+    <p>Right click any call stack entry, select “Select all”, right click again, “Copy” (or Ctrl+A - Ctrl+C).</p>
+    <h3 id="exception">Exception.</h3>
+    <p>Navigate to “Debug - Windows - Output”, find last error and copy it. It will look like this:
+        <img src="/faq/images/debug/8_output.png" alt="image_457"/></p>
+    <h3 id="base-address">Base address.</h3>
+    <p>Please include process base address. Navigate to “Debug - Windows - Modules”, find <code class="language-plaintext highlighter-rouge">ffxiv_dx11.exe</code>, right click on it, select “Copy”.
+        The information copied will contain process base address. <strong>Please note that you must copy base address from the same game session, base address changes every game restart</strong>.</p>
+
+    <p><img src="/faq/images/debug/9_base_address.png" alt="image_458"/></p>
+
+    <h3 id="dalamud-log">Dalamud log</h3>
+    <p>As always, include your usual dalamud log.</p>
+
+    <h2 id="exiting-debugger">Exiting debugger.</h2>
+    <p>To detach a debugger, navigate to “Debug - Stop debugging”.</p>
+
+
+    <footer class="site-footer">
+      
+      <span><a href="https://github.com/ottercorp/faq">faq</a> 受 <a
+              href="https://github.com/ottercorp">ottercorp</a> 维护。 <b><a
+              href="/faq/support">支持我们！</a></b></span>
+
+    </footer>
+</main>
+</body>
+
+</html>
