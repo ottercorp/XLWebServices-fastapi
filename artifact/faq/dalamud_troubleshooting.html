@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+    <title>Dalamud FAQ | faq</title>
+    <meta name="generator" content="Jekyll v3.9.2"/>
+    <meta property="og:title" content="Dalamud FAQ"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta name="description" content="卫月框架常见问题解答和知识库"/>
+    <meta property="og:description" content="卫月框架常见问题解答和知识库"/>
+    <link rel="canonical" href="/faq/dalamud_troubleshooting.html"/>
+    <meta property="og:url" content="/faq/dalamud_troubleshooting.html"/>
+    <meta property="og:site_name" content="faq"/>
+    <meta property="og:type" content="website"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta property="twitter:title" content="Dalamud FAQ"/>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "description": "卫月框架常见问题解答和知识库",
+            "headline": "Dalamud FAQ",
+            "url": "/faq/dalamud_troubleshooting.html"
+        }</script>
+    <!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style"
+          type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/faq/assets/css/style.css?v=545445c1b5606335a65518c9b282efaebf1b727a">
+
+    <style>
+        .page-header {
+            background-image: linear-gradient(120deg, #132f46, #378dff) !important;
+            background-color: #378dff !important;
+        }
+
+        .main-content h1,
+        .main-content h2,
+        .main-content h3,
+        .main-content h4,
+        .main-content h5,
+        .main-content h6 {
+            color: #2f89d6 !important;
+        }
+    </style>
+</head>
+
+<body>
+<header class="page-header" role="banner">
+    <h1 class="project-name"><a href="#" style="text-decoration: none;color: #fff;">XIVLauncherCN 问答与帮助</a></h1>
+    <h2 class="project-tagline">卫月框架常见问题解答和知识库</h2>
+
+    <a href="https://goatcorp.github.io/" class="btn">XIVLauncher 项目主页（国际服）</a>
+    <a href="/Launcher/Download" class="btn">下载 XIVLauncherCN</a>
+    <a href="https://bbs.tggfl.com/topic/32/dalamud" class="btn">下载卫月框架（国服）</a>
+    <a href="/faq/" class="btn">问答与帮助</a>
+
+
+</header>
+
+<main id="content" class="main-content" role="main">
+    <h1 id="dalamud-faq">Dalamud FAQ</h1>
+
+    <h3 id="table-of-contents">Table of Contents</h3>
+    <p><a href="#q-how-do-i-installenable-plugins">How do I install/enable plugins?</a> <br/>
+        <a href="#q-how-do-i-enable-plugin-test-builds">How do I enable plugin test builds?</a> <br/>
+        <a href="#q-what-is-the-command-for-insert-plugin-here">What is the command for &lt;insert plugin here&gt;?</a> <br/>
+        <a href="#q-how-do-i-turn-dalamud-staging-on-or-off">How do I turn Dalamud Staging on or off?</a> <br/>
+        <a href="#q-do-not-expect-xldalamudplugin-updates-on-patch-day-releases">Do not expect XL/Dalamud/Plugin updates on patch day releases</a> <br/>
+        <a href="#q-i-get-an-error-message-when-trying-to-installupdatedisable-a-plugin">I get an error message when trying to install/update/disable a plugin</a> <br/>
+        <a href="#q-reshade-and-its-variants-dont-work-or-dalamud-ui-fails">Reshade and its variants don’t work or Dalamud UI fails</a> <br/>
+        <a href="#q-how-do-i-fix-plugins-that-rely-on-dalamud-provided-opcodes">How do I fix plugins that rely on Dalamud provided opcodes?</a> <br/>
+        <a href="#q-outdated-plugins-list">Outdated Plugins List</a> <br/>
+        <a href="#q-all-my-plugins-basically-stopped-working">All my plugins basically stopped working</a> <br/>
+        <a href="#q-remember-the-patches-no-matter-how-small-can-break-plugins">Remember the patches, no matter how small, can break plugins</a> <br/>
+        <a href="#q-how-do-i-reset-dalamudplugin-window-locations">How do I reset dalamud/plugin window locations?</a> <br/>
+        <a href="#q-how-do-i-manually-delete-plugins">How do I manually delete plugins?</a> <br/></p>
+    <hr/>
+
+    <hr/>
+
+    <h3 id="q如何安装启用插件">Q：如何安装/启用插件？</h3>
+    <p>不知道如何安装插件？ 只需在你看到游戏中的已加载信息后后键入 <code class="language-plaintext highlighter-rouge">/xlplugins</code>。</p>
+
+    <hr/>
+
+    <h3 id="q如何启用插件测试版本">Q：如何启用插件测试版本？</h3>
+    <ol>
+        <li>在游戏中输入 <code class="language-plaintext highlighter-rouge">/xlsetting</code>。</li>
+        <li>转到 <code class="language-plaintext highlighter-rouge">实验性</code> 标签</li>
+        <li>点击 <code class="language-plaintext highlighter-rouge">获取插件测试版本</code></li>
+        <li>点击 <code class="language-plaintext highlighter-rouge">保存</code> / <code class="language-plaintext highlighter-rouge">保存并关闭</code></li>
+    </ol>
+
+    <p>**请注意，测试插件可能会有bug，并且在最终发布之前可能会发生巨大的变化。 尤其是在较新的插件上，它们可能会导致游戏崩溃。 **</p>
+
+    <p>如需疑难解答，请将问题/评论/问题保留在我们 discord 服务器上的 <a href="https://discord.com/channels/581875019861328007/719513457988337724">plugin-testing</a> 频道中。</p>
+
+    <hr/>
+
+    <h3 id="q--的命令是什么">Q: \的命令是什么？</h3>
+    <p>虽然某些插件会从插件安装窗口列出它们的命令，但使用 <code class="language-plaintext highlighter-rouge">/xlhelp</code> 列出它们的命令和描述。</p>
+
+    <p>您也可以查看 <a href="https://github.com/goatcorp/DalamudPlugins/wiki/Plugin-Gallery">插件库</a> 来查看是否有一些快速文档，或者查看插件的repo 以获取阅读信息。</p>
+    <hr/>
+
+    <h3 id="q不要指望-dalamudplugin-在游戏更新日发布更新">Q：不要指望 Dalamud/Plugin 在游戏更新日发布更新。</h3>
+
+    <p>请记住，许多开发人员都有学校/工作/两者兼而有之，并且生活在不同的时区。 可能随时会更新 “XL可以随时消失”的概念仍然存在。（删除）</p>
+    <hr/>
+
+    <h3 id="q在尝试安装更新禁用插件时收到错误消息">Q：在尝试安装/更新/禁用插件时收到错误消息</h3>
+    <p>请向我们提供更多的信息，以便我们能够帮助解答为什么会发生这种情况。</p>
+
+    <ol>
+        <li>哪个插件？</li>
+        <li>先前的版本是否起作用，您是否知道它是什么版本？</li>
+        <li>是否删除插件并尝试重新安装能否工作？</li>
+        <li>您可以提供您的 dalamud.txt 文件吗？</li>
+    </ol>
+    <hr/>
+
+    <h3 id="qreshade-及其变体不起作用或-dalamud-ui-失败">Q：Reshade 及其变体不起作用或 Dalamud UI 失败</h3>
+    <ol>
+        <li>转到 <code class="language-plaintext highlighter-rouge">&lt;your game installation folder&gt;\FINAL FANTASY XIV\game</code></li>
+        <li>确保游戏已关闭</li>
+        <li>如果有一个名为<code class="language-plaintext highlighter-rouge">d3d11.dll</code>或<code class="language-plaintext highlighter-rouge">dinput8.dll</code>的文件<strong>重命名</strong>为<code
+                class="language-plaintext highlighter-rouge">dxgi.dll</code></li>
+        <li>重新启动</li>
+    </ol>
+
+    <p>如果这不起作用，请在我们的 Discord 服务器上联系我们。</p>
+
+    <hr/>
+
+    <h3 id="q如何修复依赖-dalamud-提供的操作码的插件">Q：如何修复依赖 Dalamud 提供的操作码的插件？</h3>
+    <p>某些插件和功能(Universalis 更新、PennyPincher 等) 需要了解 FFXIV 客户端的当前opcode。 这些会更改每个补丁，有时可能需要更多时间才能在新补丁的 Dalamud 更新准备好之前进行整理。</p>
+
+    <p>如果您需要在更新后刷新您的opcode 信息，请重新启动游戏。 Dalamud 将在启动时检查更新的定义。</p>
+
+    <hr/>
+
+    <h3 id="q过时的插件列表">Q：过时的插件列表</h3>
+    <p>在过旧的版本, 时间/或者与兴趣的因素下，这些差价目前没有更新，开发者也知道这些。 如果您想帮助维护插件，我们可以帮助您找到他们的 repo 并联系他们（如果他们仍然活跃）。</p>
+
+    <p><strong>Chat Extender</strong> <br/> 停止版本：5.3 <br/> 状态：分成多个单独的插件，可以单独维护。 (ChatBubbles 和Chat Translator是其中两个插件) <br/></p>
+
+    <p><strong>VoidList</strong> <br/> 停止版本： 5.4 <br/> 状态: 由 SheepGoMeh 完全替换为 Visibility。 使用 /xlplugins 命令来安装它。 <br/></p>
+    <hr/>
+
+    <h3 id="q我的所有插件基本停止工作">Q：我的所有插件基本停止工作</h3>
+    <p>可能有许多事情导致这一点，我们需要从你那里获得更多信息！</p>
+
+    <p>如果可能，请加入我们的 <a href="https://discord.gg/3NMcUV5">Discord 服务器</a> 并在 #xivlauncher_issues 频道中请求支持。</p>
+
+    <p>我们可能需要您的 <code class="language-plaintext highlighter-rouge">output.log</code> 或 <code class="language-plaintext highlighter-rouge">dalamud.log</code> 文件来调查原因。</p>
+
+    <p>了解您是否还有任何附加插件/注入器/模组，如reshade/gshade、rivatuner/rtss/msi afesburner， 任何屏幕显示/叠加层或通过 Texttool安装的模组，因为它们也可能导致崩溃或冲突。</p>
+    <hr/>
+
+    <h3 id="q只要游戏更新无论更新大小都可以导致插件无法正常工作">Q:只要游戏更新，无论更新大小都可以导致插件无法正常工作</h3>
+    <p>如果您在 Dalamud 被列入补丁白名单后遇到崩溃，您将需要禁用/删除插件并等待更新。</p>
+
+    <p>依赖opcode的插件可能比依赖hook的插件花费稍长一些。 但这最终取决于ffxiv客户端发生了多少变化。</p>
+    <hr/>
+
+    <h3 id="q如何重置-dalamudplugin-窗口位置">Q：如何重置 dalamud/plugin 窗口位置？</h3>
+    <ol>
+        <li>关闭游戏</li>
+        <li>转到 注入器目录下的 xivlauncher文件夹</li>
+        <li>删除dalamudUI.ini</li>
+        <li>启动游戏</li>
+    </ol>
+
+    <hr/>
+
+    <h3 id="q-how-do-i-manually-delete-plugins">Q: How do I manually delete plugins?</h3>
+    <ol>
+        <li>Close the game and xivlauncher</li>
+        <li>Go to %AppData%\XIVLauncher\installedPlugins</li>
+        <li>Remove the folder[s] for the plugin[s]</li>
+        <li>Go to %AppData%\XIVLauncher\devPlugins</li>
+        <li>Remove all manually installed plugins. (Check if they have a third party repo or reinstall later)</li>
+        <li>Start the game</li>
+    </ol>
+
+    <hr/>
+
+    <p>想要添加一个新的常见问题解答？ 请使用下面的模板，PR 到主 <a href="https://github.com/goatcorp/faq">常见问题</a></p>
+
+    <div class="language-plaintext highlighter-rouge">
+        <div class="highlight"><pre class="highlight"><code>### Q: Basic Title
+FAQ content
+&lt;hr&gt;
+</code></pre>
+        </div>
+    </div>
+    <p>然后使用“[Name/Title here]（#anchor here）将其添加到目录中<br/></p>
+
+    <p><a href="#table-of-contents">返回到顶部</a><br/> <a href="https://goatcorp.github.io/faq">返回主页</a></p>
+
+
+    <footer class="site-footer">
+      
+      <span><a href="https://github.com/ottercorp/faq">faq</a> 受 <a
+              href="https://github.com/ottercorp">ottercorp</a> 维护。 <b><a
+              href="/faq/support">支持我们！</a></b></span>
+
+    </footer>
+</main>
+</body>
+
+</html>
