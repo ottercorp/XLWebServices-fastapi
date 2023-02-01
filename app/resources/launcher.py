@@ -11,17 +11,18 @@ router = APIRouter()
 
 SEMVER_REGEX = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$|^$"
 
+
 @router.get("/GetLease")
 async def launcher(
-    user_agent: Union[str, None] = Header(default="XIVLauncher"),
-    x_xl_track: Union[str, None] = Header(default="Release"),
-    x_xl_lv: Union[str, None] = Header(default="0"),
-    x_xl_haveversion: Union[str, None] = Header(default="", regex=SEMVER_REGEX),
-    x_xl_haveaddon: Union[str, None] = Header(default="", regex=r"yes|no"),
-    x_xl_firststart: Union[str, None] = Header(default="no", regex=r"yes|no"),
-    x_xl_havewine: Union[str, None] = Header(default="no", regex=r"yes|no"),
-    accept: Union[str, None] = Header(default="*/*"),
-    settings: Settings = Depends(get_settings)
+        user_agent: Union[str, None] = Header(default="XIVLauncher"),
+        x_xl_track: Union[str, None] = Header(default="Release"),
+        x_xl_lv: Union[str, None] = Header(default="0"),
+        x_xl_haveversion: Union[str, None] = Header(default="", regex=SEMVER_REGEX),
+        x_xl_haveaddon: Union[str, None] = Header(default="", regex=r"yes|no"),
+        x_xl_firststart: Union[str, None] = Header(default="no", regex=r"yes|no"),
+        x_xl_havewine: Union[str, None] = Header(default="no", regex=r"yes|no"),
+        accept: Union[str, None] = Header(default="*/*"),
+        settings: Settings = Depends(get_settings)
 ):
     r = Redis.create_client()
     if x_xl_track == 'Release':
@@ -48,16 +49,16 @@ async def launcher(
 
 @router.get("/GetFile/{file}")
 async def launcher_file(
-    file: str,
-    user_agent: Union[str, None] = Header(default="XIVLauncher"),
-    x_xl_track: Union[str, None] = Header(default="Release"),
-    x_xl_lv: Union[str, None] = Header(default="0"),
-    x_xl_haveversion: Union[str, None] = Header(default="", regex=SEMVER_REGEX),
-    x_xl_haveaddon: Union[str, None] = Header(default="", regex=r"yes|no"),
-    x_xl_firststart: Union[str, None] = Header(default="no", regex=r"yes|no"),
-    x_xl_havewine: Union[str, None] = Header(default="no", regex=r"yes|no"),
-    accept: Union[str, None] = Header(default="*/*"),
-    settings: Settings = Depends(get_settings)
+        file: str,
+        user_agent: Union[str, None] = Header(default="XIVLauncher"),
+        x_xl_track: Union[str, None] = Header(default="Release"),
+        x_xl_lv: Union[str, None] = Header(default="0"),
+        x_xl_haveversion: Union[str, None] = Header(default="", regex=SEMVER_REGEX),
+        x_xl_haveaddon: Union[str, None] = Header(default="", regex=r"yes|no"),
+        x_xl_firststart: Union[str, None] = Header(default="no", regex=r"yes|no"),
+        x_xl_havewine: Union[str, None] = Header(default="no", regex=r"yes|no"),
+        accept: Union[str, None] = Header(default="*/*"),
+        settings: Settings = Depends(get_settings)
 ):
     r = Redis.create_client()
     if x_xl_track == 'Release':
@@ -87,3 +88,10 @@ async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), set
         raise HTTPException(status_code=400, detail="Cache clear key not match")
     background_tasks.add_task(regen, ['xivlauncher'])
     return {'message': 'Background task was started.'}
+
+
+@router.get("/Download")
+async def xivlauncher_download(settings: Settings = Depends(get_settings)):
+    r = Redis.create_client()
+    hashed_name = r.hget(f'{settings.redis_prefix}xivlauncher', 'release-Setup.exe')
+    return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
