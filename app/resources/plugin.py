@@ -115,7 +115,7 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
         'context': context,
         'email': email,
         'status': 'open',  # status：open waiting closed
-        'reply_log': []  # 回复记录
+        'reply_log': json.dumps([])  # 回复记录
     }
     order_id = r.incr(f'{settings.redis_prefix}feedback-order-id')  # 自增生成唯一id
     r_fb.hincrby(f'{settings.redis_prefix}feedback-count', plugin_name)  # 记录每个插件现有的反馈数
