@@ -8,6 +8,12 @@ class Redis():
         settings = get_settings()
         return redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0, decode_responses=True)
 
+class RedisFeedBack():
+    @staticmethod
+    def create_client():
+        settings = get_settings()
+        return redis.Redis(host=settings.redis_host, port=settings.redis_port, db=1, decode_responses=True)
+
 
 def load_plugin_count(plugin_count):
     settings = get_settings()
