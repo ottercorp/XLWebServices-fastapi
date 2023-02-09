@@ -95,8 +95,9 @@ class FeedBack(BaseModel):
     email: str
     plugin_name: str
     plugin_version: str
-    level:str
+    level: str
     context: str
+    exception: str
 
 
 @router.post('/Feedback')
@@ -109,7 +110,8 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
     plugin_name = feedback.plugin_name
     plugin_version = feedback.plugin_version
     context = feedback.context
-    level =feedback.level
+    level = feedback.level
+    exception = feedback.exception
     if not context:
         return HTTPException(status_code=400, detail="Context is empty")
     feedback_dict = {  # 存储反馈信息
@@ -117,8 +119,9 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
         'context': context,
         'level': level,
         'email': email,
+        'exception': exception, # 异常信息(base64)
         'status': 'open',  # status：open waiting closed
-        'reply_log': json.dumps([])  # 回复记录
+        'reply_log': json.dumps([]),  # 回复记录
     }
     order_id = r.incr(f'{settings.redis_prefix}feedback-order-id')  # 自增生成唯一id
     r_fb.hincrby(f'{settings.redis_prefix}feedback-count', plugin_name)  # 记录每个插件现有的反馈数
