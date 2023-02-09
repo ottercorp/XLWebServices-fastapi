@@ -95,6 +95,7 @@ class FeedBack(BaseModel):
     email: str
     plugin_name: str
     plugin_version: str
+    level:str
     context: str
 
 
@@ -108,16 +109,18 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
     plugin_name = feedback.plugin_name
     plugin_version = feedback.plugin_version
     context = feedback.context
+    level =feedback.level
     if not context:
         return HTTPException(status_code=400, detail="Context is empty")
     feedback_dict = {  # 存储反馈信息
         'version': plugin_version,
         'context': context,
+        'level': level,
         'email': email,
         'status': 'open',  # status：open waiting closed
         'reply_log': json.dumps([])  # 回复记录
     }
     order_id = r.incr(f'{settings.redis_prefix}feedback-order-id')  # 自增生成唯一id
     r_fb.hincrby(f'{settings.redis_prefix}feedback-count', plugin_name)  # 记录每个插件现有的反馈数
-    r_fb.hmset(f'feedback|{plugin_name}|{order_id}', feedback_dict)
+    r_fb.hmset(f'feedback|{level}|{plugin_name}|{order_id}', feedback_dict)
     return {'message': 'Feedback was submitted.', 'order_id': order_id}
