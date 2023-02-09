@@ -92,7 +92,7 @@ async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), set
 
 
 class FeedBack(BaseModel):
-    email: str
+    email: str = ''
     plugin_name: str
     plugin_version: str
     level: str
