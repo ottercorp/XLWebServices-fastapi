@@ -2,13 +2,13 @@
 
 ## 安装
 
-### 在您的 Steam Deck 上安装 Steam 版本的 FFXIV
+<!-- ### 在您的 Steam Deck 上安装 Steam 版本的 FFXIV
 
 要使用 XIVLauncherCN，FFXIV 免费试用版或完整版 FFXIV 必须安装在您的 Steam Deck 的 **内部存储器** 中。 您无需启动它，也无需创建 Steam 版本的 SE 帐户，只需安装即可。 如果您在 Steam 上没有 FFXIV，请安装免费试用版。
 
 要安装试用版，您需要在 Steam 商店中查找。 根据您之前是否在此帐户上安装了试用版，它可能会从搜索结果中隐藏。 在这种情况下，在桌面模式下寻找最终幻想系列中的 demo，或 [使用此链接进入试用版](https://store.steampowered.com/app/312060/FINAL_FANTASY_XIV_Online_Free_Trial/)。
 
-这是在游戏模式下查看游戏窗口所必需的。
+这是在游戏模式下查看游戏窗口所必需的。 -->
 
 ### 切换到桌面模式
 
@@ -56,11 +56,11 @@
 
 ### Q: 我的配置文件保存在哪里？
 
-配置文件保存到`~/.xlcore_cn`。
+配置文件保存在`~/.xlcore_cn`。
 
 ### Q: 游戏随机消失，休眠后无法恢复
 
-请确保 Steam 商店的 FFXIV 或 FFXIV 免费试用版已安装在您的 Steam Deck 的 **内部存储器** 中。
+请确保 Steam 商店的 [FINAL FANTASY XIV Online](https://store.steampowered.com/app/39210/FINAL_FANTASY_XIV_Online/) 或 [FINAL FANTASY XIV Online Free Trial](https://store.steampowered.com/app/312060/FINAL_FANTASY_XIV_Online_Free_Trial/) 已安装在您的 Steam Deck 的 **内部存储器** 中。
 
 ### Q: 我的音频有爆裂声/失真
 
@@ -68,7 +68,7 @@
 
 ### Q: 我无法控制我的游戏
 
-更改 SteamOS 认为 FFXIV 正在运行的游戏的控制布局。 这意味着 “FINAL FANTASY XIV Online Free Trial”。
+请在 Steam 中更改 “FINAL FANTASY XIV Online Free Trial” 的控制器布局，**而不是**更改 XIVLauncher 的控制器布局。
 
 ### Q: Final Fantasy XIV 无法正常关闭 / Steam 一直认为 Final Fantasy XIV 正在运行
 
