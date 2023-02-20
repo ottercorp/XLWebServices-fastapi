@@ -6,12 +6,14 @@ from functools import cache
 from app.config import Settings
 from app.utils.common import get_settings, get_apilevel_namespace_map
 from app.utils.responses import PrettyJSONResponse
-from app.utils.redis import Redis
+from app.utils.redis import Redis, RedisFeedBack
 from app.utils.tasks import regen
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel, Field
 
 router = APIRouter()
+
 
 @router.get("/Download/{plugin}")
 async def plugin_download(plugin: str, isUpdate: bool = False, isTesting: bool = False, branch: str = '', settings: Settings = Depends(get_settings)):
@@ -87,3 +89,41 @@ async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), set
         raise HTTPException(status_code=400, detail="Cache clear key not match")
     background_tasks.add_task(regen, ['plugin'])
     return {'message': 'Background task was started.'}
+
+
+class FeedBack(BaseModel):
+    email: str = ''
+    plugin_name: str
+    plugin_version: str
+    level: str
+    context: str
+    exception: str
+
+
+@router.post('/Feedback')
+async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings)):
+    r = Redis.create_client()
+    r_fb = RedisFeedBack.create_client()
+    email = feedback.email
+    if not re.match(r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email):
+        email = ''
+    plugin_name = feedback.plugin_name
+    plugin_version = feedback.plugin_version
+    context = feedback.context
+    level = feedback.level
+    exception = feedback.exception
+    if not context:
+        return HTTPException(status_code=400, detail="Context is empty")
+    feedback_dict = {  # 存储反馈信息
+        'version': plugin_version,
+        'context': context,
+        'level': level,
+        'email': email,
+        'exception': exception, # 异常信息(base64)
+        'status': 'open',  # status：open waiting closed
+        'reply_log': json.dumps([]),  # 回复记录
+    }
+    order_id = r.incr(f'{settings.redis_prefix}feedback-order-id')  # 自增生成唯一id
+    r_fb.hincrby(f'{settings.redis_prefix}feedback-count', plugin_name)  # 记录每个插件现有的反馈数
+    r_fb.hmset(f'feedback|{level}|{plugin_name}|{order_id}', feedback_dict)
+    return {'message': 'Feedback was submitted.', 'order_id': order_id}

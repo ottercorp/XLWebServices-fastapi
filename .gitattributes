@@ -1,1 +1,5 @@
-artifact/* linguist-detectable=false
+artifact/*.html linguist-vendored
+artifact/assets/css/*.css linguist-vendored
+
+artifact/faq/*.html linguist-vendored
+artifact/faq/assets/css/*.css linguist-vendored
