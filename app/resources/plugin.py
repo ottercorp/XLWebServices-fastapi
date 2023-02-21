@@ -4,6 +4,7 @@ import json
 import codecs
 from functools import cache
 from app.config import Settings
+from app.utils import httpx_client
 from app.utils.common import get_settings, get_apilevel_namespace_map
 from app.utils.responses import PrettyJSONResponse
 from app.utils.redis import Redis, RedisFeedBack
@@ -101,11 +102,12 @@ async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), set
 
 class FeedBack(BaseModel):
     content: str = ''
-    name: str
-    dhash: str
-    version: str
+    name: str  # plugin name
+    dhash: str  # dalamud hash
+    version: str  # plugin version
     reporter: str
     exception: str
+
 
 @router.post('/Feedback')
 async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings)):
@@ -116,21 +118,22 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
     #     email = ''
     name = feedback.name
     version = feedback.version
-    context = feedback.content
+    content = feedback.content
     dhash = feedback.dhash
     exception = feedback.exception
-    if not context:
+    if not content:
         return HTTPException(status_code=400, detail="Context is empty")
     feedback_dict = {  # 存储反馈信息
         'version': version,
-        'context': context,
+        'content': content,
         'dhash': dhash,
         'reporter': reporter,
-        'exception': exception, # 异常信息(base64)
+        'exception': exception,  # 异常信息(base64)
         'status': 'open',  # status：open waiting closed
         'reply_log': json.dumps([]),  # 回复记录
     }
     order_id = r.incr(f'{settings.redis_prefix}feedback-order-id')  # 自增生成唯一id
     r_fb.hincrby(f'{settings.redis_prefix}feedback-count', name)  # 记录每个插件现有的反馈数
     r_fb.hmset(f'feedback|{dhash}|{name}|{order_id}', feedback_dict)
+    await httpx_client.post('https://xn--v9x.net/dalamud/feedback', json={'content': content, 'name': name, 'dhash': dhash, 'version': version, 'reporter': reporter})
     return {'message': 'Feedback was submitted.', 'order_id': order_id}
