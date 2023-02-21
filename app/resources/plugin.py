@@ -91,39 +91,46 @@ async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), set
     return {'message': 'Background task was started.'}
 
 
-class FeedBack(BaseModel):
-    email: str = ''
-    plugin_name: str
-    plugin_version: str
-    level: str
-    context: str
-    exception: str
+# class FeedBack(BaseModel):
+#     email: str = ''
+#     plugin_name: str
+#     plugin_version: str
+#     level: str
+#     context: str
+#     exception: str
 
+class FeedBack(BaseModel):
+    content: str = ''
+    name: str
+    dhash: str
+    version: str
+    reporter: str
+    exception: str
 
 @router.post('/Feedback')
 async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
     r_fb = RedisFeedBack.create_client()
-    email = feedback.email
-    if not re.match(r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email):
-        email = ''
-    plugin_name = feedback.plugin_name
-    plugin_version = feedback.plugin_version
-    context = feedback.context
-    level = feedback.level
+    reporter = feedback.reporter
+    # if not re.match(r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email):
+    #     email = ''
+    name = feedback.name
+    version = feedback.version
+    context = feedback.content
+    dhash = feedback.dhash
     exception = feedback.exception
     if not context:
         return HTTPException(status_code=400, detail="Context is empty")
     feedback_dict = {  # 存储反馈信息
-        'version': plugin_version,
+        'version': version,
         'context': context,
-        'level': level,
-        'email': email,
+        'dhash': dhash,
+        'reporter': reporter,
         'exception': exception, # 异常信息(base64)
         'status': 'open',  # status：open waiting closed
         'reply_log': json.dumps([]),  # 回复记录
     }
     order_id = r.incr(f'{settings.redis_prefix}feedback-order-id')  # 自增生成唯一id
-    r_fb.hincrby(f'{settings.redis_prefix}feedback-count', plugin_name)  # 记录每个插件现有的反馈数
-    r_fb.hmset(f'feedback|{level}|{plugin_name}|{order_id}', feedback_dict)
+    r_fb.hincrby(f'{settings.redis_prefix}feedback-count', name)  # 记录每个插件现有的反馈数
+    r_fb.hmset(f'feedback|{dhash}|{name}|{order_id}', feedback_dict)
     return {'message': 'Feedback was submitted.', 'order_id': order_id}
