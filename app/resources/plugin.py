@@ -122,7 +122,7 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
     dhash = feedback.dhash
     exception = feedback.exception
     if not content:
-        return HTTPException(status_code=400, detail="Context is empty")
+        return {'message': 'Content is empty', 'status': 'error', 'order_id': None}
     feedback_dict = {  # 存储反馈信息
         'version': version,
         'content': content,
@@ -136,4 +136,4 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
     r_fb.hincrby(f'{settings.redis_prefix}feedback-count', name)  # 记录每个插件现有的反馈数
     r_fb.hmset(f'feedback|{dhash}|{name}|{order_id}', feedback_dict)
     await httpx_client.post('https://xn--v9x.net/dalamud/feedback', json={'content': content, 'name': name, 'dhash': dhash, 'version': version, 'reporter': reporter})
-    return {'message': 'Feedback was submitted.', 'order_id': order_id}
+    return {'message': 'Feedback was submitted.', 'status': 'success', 'order_id': order_id}
