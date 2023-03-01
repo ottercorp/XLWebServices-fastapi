@@ -93,6 +93,7 @@ class Analytics(BaseModel):
     Banned_Plugin_Length: str
     reporter: str
     exception: str
+    os: str
 
 
 api_secret = "CWTvRIdaTJuLmiZjAZ3L9w"
@@ -102,19 +103,21 @@ measurement_id = "G-W3HJPGVM1J"
 @router.post("/Analytics/Start")
 async def analytics_start(analytics: Analytics, settings: Settings = Depends(get_settings)):
     url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
-    # 设置UA
     data = {
-        "client_id": analytics.client_id,  # 平台+IP
-        "user_id": analytics.user_id,  # 游戏内标识符hash
+        "client_id": analytics.client_id,
+        "user_id": analytics.user_id,
         "user_properties": {
             "HomeWorld": {
-                "value": analytics.HomeWorld  # 服务器ID
+                "value": analytics.HomeWorld
             },
             "Banned_Plugin_Length": {
-                "value": analytics.Banned_Plugin_Length  # banned length
+                "value": analytics.Banned_Plugin_Length
             },
             "Client": {
                 "value": analytics.client_id,
+            },
+            "os":{
+                "value": analytics.os,
             }
         },
         'events': [{
