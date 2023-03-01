@@ -1,15 +1,18 @@
 import os, sys
 import json
 import codecs
+from app.utils import httpx_client
 from app.config import Settings
 from app.utils.common import get_settings
 from app.utils.redis import Redis
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel, Field
 
 from app.utils.tasks import regen
 
 router = APIRouter()
+
 
 @router.get("/Asset/Meta")
 async def dalamud_assets(settings: Settings = Depends(get_settings)):
@@ -74,9 +77,54 @@ async def release_clear_cache(background_tasks: BackgroundTasks, key: str = Quer
     background_tasks.add_task(regen, ['dalamud', 'dalamud_changelog'])
     return {'message': 'Background task was started.'}
 
+
 @router.post("/Asset/ClearCache")
 async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(), settings: Settings = Depends(get_settings)):
     if key != settings.cache_clear_key:
         raise HTTPException(status_code=400, detail="Cache clear key not match")
     background_tasks.add_task(regen, ['asset'])
     return {'message': 'Background task was started.'}
+
+
+class Analytics(BaseModel):
+    client_id: str
+    user_id: str
+    HomeWorld: str
+    Banned_Plugin_Length: str
+    reporter: str
+    exception: str
+
+
+api_secret = "CWTvRIdaTJuLmiZjAZ3L9w"
+measurement_id = "G-W3HJPGVM1J"
+
+
+@router.post("/Analytics/Start")
+async def analytics_start(analytics: Analytics, settings: Settings = Depends(get_settings)):
+    url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
+    # 设置UA
+    data = {
+        "client_id": analytics.client_id,  # 平台+IP
+        "user_id": analytics.user_id,  # 游戏内标识符hash
+        "user_properties": {
+            "HomeWorld": {
+                "value": analytics.HomeWorld  # 服务器ID
+            },
+            "Banned_Plugin_Length": {
+                "value": analytics.Banned_Plugin_Length  # banned length
+            },
+            "Client": {
+                "value": analytics.client_id,
+            }
+        },
+        'events': [{
+            'name': 'start_dalamud',
+            "params": {
+                "server_id": analytics.HomeWorld,
+                "engagement_time_msec": "100",
+                "session_id": analytics.user_id  # 复用user_id，确保会话角色唯一
+            }
+        }]
+    }
+    await httpx_client.post(url, json=data, verify=True)
+    return {'message': 'OK'}
