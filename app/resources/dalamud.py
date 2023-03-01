@@ -127,5 +127,5 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             }
         }]
     }
-    await httpx_client.post(url, json=data, verify=True)
+    await httpx_client.post(url, json=data)
     return {'message': 'OK'}
