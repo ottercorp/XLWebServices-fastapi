@@ -89,10 +89,8 @@ async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(
 class Analytics(BaseModel):
     client_id: str
     user_id: str
-    HomeWorld: str
-    Banned_Plugin_Length: str
-    reporter: str
-    exception: str
+    server_id: str
+    banned_plugin_length: str
     os: str
 
 
@@ -108,10 +106,10 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
         "user_id": analytics.user_id,
         "user_properties": {
             "HomeWorld": {
-                "value": analytics.HomeWorld
+                "value": analytics.server_id
             },
             "Banned_Plugin_Length": {
-                "value": analytics.Banned_Plugin_Length
+                "value": analytics.banned_plugin_length
             },
             "Client": {
                 "value": analytics.client_id,
@@ -123,7 +121,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
         'events': [{
             'name': 'start_dalamud',
             "params": {
-                "server_id": analytics.HomeWorld,
+                "server_id": analytics.server_id,
                 "engagement_time_msec": "100",
                 "session_id": analytics.user_id  # 复用user_id，确保会话角色唯一
             }
