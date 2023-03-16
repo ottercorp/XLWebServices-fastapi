@@ -92,7 +92,7 @@ class Analytics(BaseModel):
     server_id: str
     banned_plugin_length: str
     os: str
-    dalamud_version:str
+    dalamud_version:str = ""
 
 
 api_secret = "CWTvRIdaTJuLmiZjAZ3L9w"
