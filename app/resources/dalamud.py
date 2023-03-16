@@ -92,6 +92,7 @@ class Analytics(BaseModel):
     server_id: str
     banned_plugin_length: str
     os: str
+    dalamud_version:str = ""
 
 
 api_secret = "CWTvRIdaTJuLmiZjAZ3L9w"
@@ -116,6 +117,9 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             },
             "os":{
                 "value": analytics.os,
+            },
+            "dalamud_version":{
+                "value": analytics.dalamud_version
             }
         },
         'events': [{
