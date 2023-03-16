@@ -119,7 +119,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
                 "value": analytics.os,
             },
             "dalamud_version":{
-                "value": analytics.dalamud_version if analytics.dalamud_version is not None else ""
+                "value": analytics.dalamud_version
             }
         },
         'events': [{
