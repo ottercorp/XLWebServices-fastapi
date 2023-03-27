@@ -135,3 +135,5 @@ translations/*
 .idea/
 
 logs/app.log*
+
+tests/
