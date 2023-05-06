@@ -92,10 +92,11 @@ class Analytics(BaseModel):
     server_id: str
     banned_plugin_length: str
     os: str
-    dalamud_version:str = ""
+    dalamud_version: str = ""
+    is_testing: bool = None
 
 
-api_secret = "CWTvRIdaTJuLmiZjAZ3L9w"
+api_secret = get_settings().ga_api_secret
 measurement_id = "G-W3HJPGVM1J"
 
 
@@ -115,11 +116,14 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             "Client": {
                 "value": analytics.client_id,
             },
-            "os":{
+            "os": {
                 "value": analytics.os,
             },
-            "dalamud_version":{
+            "dalamud_version": {
                 "value": analytics.dalamud_version
+            },
+            "is_testing": {
+                "value": analytics.is_testing
             }
         },
         'events': [{
