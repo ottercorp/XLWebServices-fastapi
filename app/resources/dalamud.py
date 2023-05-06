@@ -96,7 +96,7 @@ class Analytics(BaseModel):
     is_testing: bool = None
 
 
-api_secret = "CWTvRIdaTJuLmiZjAZ3L9w"
+api_secret = get_settings().ga_api_secret
 measurement_id = "G-W3HJPGVM1J"
 
 

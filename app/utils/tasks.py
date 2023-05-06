@@ -89,7 +89,7 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN]]):
             'dalamud': ['/Dalamud/Release/VersionInfo', '/Dalamud/Release/Meta'] + \
                 [f'/Release/VersionInfo?track={x}' for x in ['release', 'staging', 'stg', 'canary']],
             'dalamud_changelog': ['/Plugin/CoreChangelog'],
-            'plugin': ['/Plugin/PluginMaster',f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}'],
+            'plugin': ['/Plugin/PluginMaster',f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level_test}'],
             'asset': ['/Dalamud/Asset/Meta'],
             'xl': ['/Proxy/Meta'],
             'xivl': ['/Proxy/Meta'],
