@@ -15,7 +15,7 @@ from app.utils.tasks import regen
 router = APIRouter()
 
 
-@router.post("/RegisterMessageId", dependencies=[Depends(check_auth_header)])
+@router.post("/RegisterMessageId")
 async def register_message_id(
     key: str,
     prNumber: str,
@@ -36,7 +36,7 @@ async def get_message_ids(prNumber: str, settings: Settings = Depends(get_settin
     return ids
 
 
-@router.post("/RegisterVersionPrNumber", dependencies=[Depends(check_auth_header)])
+@router.post("/RegisterVersionPrNumber")
 async def register_version_pr_number(
     key: str,
     internalName: str,
