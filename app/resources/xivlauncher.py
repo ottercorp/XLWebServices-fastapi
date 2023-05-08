@@ -12,6 +12,8 @@ from fastapi.responses import RedirectResponse, PlainTextResponse
 
 router = APIRouter()
 
+SEMVER_REGEX = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(\.(0|[1-9]\d*))?(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$|^$"
+
 @router.get("/Meta")
 async def xivlauncher_meta(settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
@@ -29,8 +31,6 @@ async def xivlauncher_meta(settings: Settings = Depends(get_settings)):
     }
     return version_info
 
-
-SEMVER_REGEX = r"^^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
 @router.get("/Update/{track_file:path}")
 async def xivlauncher(track_file: str, localVersion: Union[str, None] = None, settings: Settings = Depends(get_settings)):

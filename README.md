@@ -23,7 +23,7 @@ Yet another xlweb service provider written in python &amp; fastapi
 
 ### Python & Requirements
 
-Developed in Python 3.9.9, better to try Python 3.11.
+Developed in Python 3.10.4, better to try Python 3.11.
 
 Install dependencies by `pip install -r requirements.txt`
 
