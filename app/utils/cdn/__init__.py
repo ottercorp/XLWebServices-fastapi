@@ -20,7 +20,7 @@ class CDN(metaclass=abc.ABCMeta):
         return url
 
     def purge(self, paths: Union[str, List[str]]):
-        url_list = [self.path_to_url(paths)] if type(paths) is str else [
+        url_list = [self.path_to_url(paths)] if isinstance(paths, str) else [
             self.path_to_url(x) for x in paths
         ]
         logger.info(f"Purging urls of {self}: {url_list}")

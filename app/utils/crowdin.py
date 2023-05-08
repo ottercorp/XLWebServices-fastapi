@@ -2,10 +2,8 @@ import os
 import json
 import tempfile
 import codecs
-from typing import Union, List
 from .common import get_settings
 from crowdin_api import CrowdinClient
-from crowdin_api import exceptions as crowdin_exceptions
 from .redis import Redis
 
 class Crowdin():
