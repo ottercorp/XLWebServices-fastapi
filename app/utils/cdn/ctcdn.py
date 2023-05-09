@@ -4,7 +4,6 @@ import hmac
 import json
 import time
 import requests
-import urllib3
 from typing import List
 from . import CDN
 

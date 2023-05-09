@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -7,9 +7,9 @@ from .file import router as router_file
 from .plugin import router as router_plugin
 from .xivlauncher import router as router_xivl
 from .launcher import router as router_launcher
+from .plogon import router as router_plogon
 from .faq import router as router_faq
 
-from app.utils.git import get_git_hash
 
 router = APIRouter()
 
@@ -18,6 +18,7 @@ router.include_router(router_dalamud, tags=["dalamud"], prefix="/Dalamud")
 router.include_router(router_plugin, tags=["plugin"], prefix="/Plugin")
 router.include_router(router_xivl, tags=["xivlauncher"], prefix="/Proxy")
 router.include_router(router_launcher, tags=["launcher"], prefix="/Launcher")
+router.include_router(router_plogon, tags=["plogon"], prefix="/Plogon")
 router.include_router(router_faq, tags=["faq"], prefix="/faq")
 
 # @router.get("/", response_class=HTMLResponse)

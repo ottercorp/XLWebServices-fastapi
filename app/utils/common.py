@@ -1,15 +1,10 @@
 import os
 import re
-import json
 import shutil
-import redis
-import codecs
 import hashlib
-import git
 import requests
 from ..config import Settings
 from functools import cache
-from fastapi import Depends
 
 from logs import logger
 

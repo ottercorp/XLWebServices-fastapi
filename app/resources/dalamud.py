@@ -1,17 +1,27 @@
-import os, sys
 import json
-import codecs
+from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
+from fastapi.responses import RedirectResponse
 from app.utils import httpx_client
 from app.config import Settings
 from app.utils.common import get_settings
 from app.utils.redis import Redis
-from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
-from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, Field
 
 from app.utils.tasks import regen
 
 router = APIRouter()
+
+api_secret = get_settings().ga_api_secret
+measurement_id = "G-W3HJPGVM1J"
+
+class Analytics(BaseModel):
+    client_id: str
+    user_id: str
+    server_id: str
+    banned_plugin_length: str
+    os: str
+    dalamud_version: str = ""
+    is_testing: bool = None
 
 
 @router.get("/Asset/Meta")
@@ -84,20 +94,6 @@ async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(
         raise HTTPException(status_code=400, detail="Cache clear key not match")
     background_tasks.add_task(regen, ['asset'])
     return {'message': 'Background task was started.'}
-
-
-class Analytics(BaseModel):
-    client_id: str
-    user_id: str
-    server_id: str
-    banned_plugin_length: str
-    os: str
-    dalamud_version: str = ""
-    is_testing: bool = None
-
-
-api_secret = get_settings().ga_api_secret
-measurement_id = "G-W3HJPGVM1J"
 
 
 @router.post("/Analytics/Start")

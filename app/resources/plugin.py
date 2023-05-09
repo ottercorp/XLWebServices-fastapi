@@ -1,8 +1,5 @@
-import os, sys
 import re
 import json
-import codecs
-from functools import cache
 from app.config import Settings
 from app.utils import httpx_client
 from app.utils.common import get_settings, get_apilevel_namespace_map
@@ -11,7 +8,7 @@ from app.utils.redis import Redis, RedisFeedBack
 from app.utils.tasks import regen
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 router = APIRouter()
 
