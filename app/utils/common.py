@@ -1,5 +1,6 @@
 import os
 import re
+import codecs
 import shutil
 import hashlib
 import requests
@@ -19,6 +20,19 @@ def get_apilevel_namespace_map():
 @cache
 def get_namespace_apilevel_map():
     return dict([(v, k) for (k, v) in get_settings().api_namespace.items()])
+
+@cache
+def get_tos_content():
+    tos_path = os.path.join(get_settings().root_path, "ToS")
+    with codecs.open(tos_path, "r", "utf8") as f:
+        tos_content = f.read()
+    return tos_content
+
+@cache
+def get_tos_hash():
+    tos_content = get_tos_content()
+    tos_hash = hashlib.sha256(tos_content.encode()).hexdigest()
+    return tos_hash
 
 
 def cache_file(file_path: str):
@@ -60,4 +74,3 @@ def download_file(url, dst="", force: bool = False):
             for chunk in r.iter_content(chunk_size=8192): 
                 f.write(chunk)
     return filepath
-

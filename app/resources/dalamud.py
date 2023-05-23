@@ -1,10 +1,11 @@
+import os
 import json
 from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse
 from app.utils import httpx_client
 from app.config import Settings
-from app.utils.common import get_settings
+from app.utils.common import get_settings, get_tos_content, get_tos_hash
 from app.utils.redis import Redis
 
 from app.utils.tasks import regen
@@ -131,9 +132,18 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             "params": {
                 "server_id": analytics.server_id,
                 "engagement_time_msec": "100",
-                "session_id": analytics.user_id  # 复用user_id，确保会话角色唯一
+                "session_id": analytics.client_id
             }
         }]
     }
     await httpx_client.post(url, json=data)
     return {'message': 'OK'}
+
+
+@router.post("/TOS")
+async def dalamud_tos(tosHash: bool=false, settings: Settings = Depends(get_settings)):
+    if tosHash:
+        tos_hash = get_tos_hash()
+        return {'message': 'OK', 'tosHash': tos_hash}
+    tos_content = get_tos_content()
+    return PlainTextResponse(tos_content)
