@@ -104,7 +104,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
     r = Redis.create_client()
     cheatplugin_hash = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash')
     cheat_banned_hash_valid = cheatplugin_hash and analytics.cheat_banned_hash and \
-        cheatplugin_hash = analytics.cheat_banned_hash
+        cheatplugin_hash == analytics.cheat_banned_hash
     data = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,
