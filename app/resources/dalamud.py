@@ -22,6 +22,7 @@ class Analytics(BaseModel):
     os: str
     dalamud_version: str = ""
     is_testing: bool = None
+    plugin_count: str
 
 
 @router.get("/Asset/Meta")
@@ -99,6 +100,10 @@ async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(
 @router.post("/Analytics/Start")
 async def analytics_start(analytics: Analytics, settings: Settings = Depends(get_settings)):
     url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
+    try:
+        plugin_count = int(analytics.plugin_count)
+    except ValueError:
+        plugin_count = 0
     data = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,
@@ -120,6 +125,9 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             },
             "is_testing": {
                 "value": analytics.is_testing
+            },
+            "plugin_count": {
+                "value": plugin_count
             }
         },
         'events': [{
