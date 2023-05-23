@@ -2,7 +2,7 @@ import os
 import json
 from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, PlainTextResponse
 from app.utils import httpx_client
 from app.config import Settings
 from app.utils.common import get_settings, get_tos_content, get_tos_hash
