@@ -22,6 +22,7 @@ class Analytics(BaseModel):
     os: str
     dalamud_version: str = ""
     is_testing: bool = None
+    plugin_count: int
 
 
 @router.get("/Asset/Meta")
@@ -120,6 +121,9 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             },
             "is_testing": {
                 "value": analytics.is_testing
+            },
+            "plugin_count": {
+                "value": analytics.plugin_count
             }
         },
         'events': [{
