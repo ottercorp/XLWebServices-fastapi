@@ -19,8 +19,8 @@ class Analytics(BaseModel):
     client_id: str
     user_id: str
     server_id: str
-    banned_plugin_length: str
     os: str
+    cheat_banned_hash: str = ""
     dalamud_version: str = ""
     is_testing: bool = None
     plugin_count: int
@@ -101,6 +101,10 @@ async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(
 @router.post("/Analytics/Start")
 async def analytics_start(analytics: Analytics, settings: Settings = Depends(get_settings)):
     url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
+    r = Redis.create_client()
+    cheatplugin_hash = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash')
+    cheat_banned_hash_valid = cheatplugin_hash and analytics.cheat_banned_hash and \
+        cheatplugin_hash = analytics.cheat_banned_hash
     data = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,
@@ -108,8 +112,8 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             "HomeWorld": {
                 "value": analytics.server_id
             },
-            "Banned_Plugin_Length": {
-                "value": analytics.banned_plugin_length
+            "Cheat_Banned_Hash_Valid": {
+                "value": cheat_banned_hash_valid
             },
             "Client": {
                 "value": analytics.client_id,
@@ -144,6 +148,6 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
 async def dalamud_tos(tosHash: bool=False, settings: Settings = Depends(get_settings)):
     if tosHash:
         tos_hash = get_tos_hash()
-        return {'message': 'OK', 'tosHash': tos_hash}
+        return {'message': 'OK', 'tosHash': tos_hash.upper()}
     tos_content = get_tos_content()
     return PlainTextResponse(tos_content)
