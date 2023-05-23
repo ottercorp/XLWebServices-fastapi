@@ -141,7 +141,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
 
 
 @router.post("/TOS")
-async def dalamud_tos(tosHash: bool=false, settings: Settings = Depends(get_settings)):
+async def dalamud_tos(tosHash: bool=False, settings: Settings = Depends(get_settings)):
     if tosHash:
         tos_hash = get_tos_hash()
         return {'message': 'OK', 'tosHash': tos_hash}
