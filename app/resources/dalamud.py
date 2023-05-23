@@ -103,7 +103,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
     try:
         plugin_count = int(analytics.plugin_count)
     except ValueError:
-        plugin_count = 0
+        plugin_count = -1
     data = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,
