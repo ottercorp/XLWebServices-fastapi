@@ -152,3 +152,14 @@ async def dalamud_tos(tosHash: bool=False, settings: Settings = Depends(get_sett
         return {'message': 'OK', 'tosHash': tos_hash.upper()}
     tos_content = get_tos_content()
     return PlainTextResponse(tos_content)
+
+
+class StgCode(BaseModel):
+    code: str
+
+
+@router.post("/Check/StgCode")
+async def check_stg_code(StgCode: StgCode, settings: Settings = Depends(get_settings)):
+    if StgCode.code != settings.stg_code:
+        raise HTTPException(status_code=400, detail="Invalid code")
+    return {'message': 'OK'}

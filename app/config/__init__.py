@@ -42,6 +42,8 @@ class Settings(BaseSettings):
     ga_api_secret: str = ''
     # Plogon
     plogon_api_key: str = ''
+    # stg code
+    stg_code: str = ''
 
     class Config:
         env_file = '.env'
