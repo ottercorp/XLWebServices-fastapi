@@ -103,8 +103,9 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
     url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
     r = Redis.create_client()
     cheatplugin_hash = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash')
-    cheat_banned_hash_valid = cheatplugin_hash and analytics.cheat_banned_hash and \
-        cheatplugin_hash == analytics.cheat_banned_hash
+    cheatplugin_hash_sha256 = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash_sha256')
+    cheat_banned_hash_valid = analytics.cheat_banned_hash and \
+        (cheatplugin_hash == analytics.cheat_banned_hash or cheatplugin_hash_sha256 == analytics.cheat_banned_hash)
     data = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,

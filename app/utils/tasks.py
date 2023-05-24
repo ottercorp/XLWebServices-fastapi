@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import hashlib
 import codecs
 import toml
 import concurrent.futures
@@ -231,6 +232,11 @@ def regen_asset(redis_client = None):
     redis_client.hset(f'{settings.redis_prefix}asset', 'meta', json.dumps(asset_json))
     if cheatplugin_hash:
         redis_client.hset(f'{settings.redis_prefix}asset', 'cheatplugin_hash', cheatplugin_hash)
+        with open(os.path.join(asset_repo_dir, "UIRes/cheatplugin.json"), "rb") as f:
+            bs = f.read()
+            cheatplugin_hash_sha256 = hashlib.sha256(bs).hexdigest().upper()
+            redis_client.hset(f'{settings.redis_prefix}asset', 'cheatplugin_hash_sha256', cheatplugin_hash_sha256)
+        
 
 
 def regen_dalamud(redis_client = None):
