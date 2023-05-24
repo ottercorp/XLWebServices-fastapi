@@ -217,15 +217,20 @@ def regen_asset(redis_client = None):
     with codecs.open(os.path.join(asset_repo_dir, "asset.json"), "r") as f:
         asset_json = json.load(f)
     asset_list = []
+    cheatplugin_hash = ""
     for asset in asset_json["Assets"]:
         file_path = os.path.join(asset_repo_dir, asset["FileName"])
         (hashed_name, _) = cache_file(file_path)
         if "github" in asset["Url"]:  # only replace the github urls
             asset["Url"] = settings.hosted_url.rstrip('/') + '/File/Get/' + hashed_name
+        if "cheatplugin.json" in asset["FileName"]:
+            cheatplugin_hash = asset["Hash"]
         asset_list.append(asset)
     asset_json["Assets"] = asset_list
     # print("Regenerated Assets: \n" + str(json.dumps(asset_json, indent=2)))
     redis_client.hset(f'{settings.redis_prefix}asset', 'meta', json.dumps(asset_json))
+    if cheatplugin_hash:
+        redis_client.hset(f'{settings.redis_prefix}asset', 'cheatplugin_hash', cheatplugin_hash)
 
 
 def regen_dalamud(redis_client = None):
