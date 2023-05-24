@@ -134,3 +134,8 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
     r_fb.hmset(f'feedback|{dhash}|{name}|{order_id}', feedback_dict)
     await httpx_client.post('https://xn--v9x.net/dalamud/feedback', json={'content': content, 'name': name, 'dhash': dhash, 'version': version, 'reporter': reporter})
     return {'message': 'Feedback was submitted.', 'status': 'success', 'order_id': order_id}
+
+
+@router.post('/History/{plugin}')
+async def history(plugin: str, track: str = ''):
+    return {'versions': []}
