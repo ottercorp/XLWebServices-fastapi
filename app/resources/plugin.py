@@ -136,6 +136,6 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
     return {'message': 'Feedback was submitted.', 'status': 'success', 'order_id': order_id}
 
 
-@router.post('/History/{plugin}')
+@router.get('/History/{plugin}')
 async def history(plugin: str, track: str = ''):
     return {'versions': []}
