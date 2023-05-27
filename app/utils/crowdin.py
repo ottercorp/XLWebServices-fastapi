@@ -6,6 +6,8 @@ from .common import get_settings
 from crowdin_api import CrowdinClient
 from .redis import Redis
 
+from logs import logger
+
 class Crowdin():
     config = get_settings()
     
@@ -34,6 +36,9 @@ class Crowdin():
             })
         r.hset(f'{self.config.redis_prefix}crowdin', 'plugin-description', json.dumps(desc_json))
         r.hset(f'{self.config.redis_prefix}crowdin', 'plugin-punchline', json.dumps(punchline_json))
+        if json.dumps(desc_json) != desc_str or json.dumps(punchline_json) != punchline_str:
+            uploaded_files = self.upload_resources()
+            logger.info(f"Crowdin uploaded: {uploaded_files}.")
 
 
     def upload_resource(self, resource_name: str, resource_content: str):
@@ -60,6 +65,7 @@ class Crowdin():
         punchline_str = r.hget(f'{self.config.redis_prefix}crowdin', 'plugin-punchline') or '{}'
         desc_file = self.upload_resource('description.json', desc_str)
         punchline_file = self.upload_resource('punchline.json', punchline_str)
+        return [desc_file, punchline_file]
 
 
     def load_translations(self):

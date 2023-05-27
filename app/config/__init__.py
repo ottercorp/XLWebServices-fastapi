@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     ctcdn_ak: str = ''
     ctcdn_sk: str = ''
     # Crowdin
+    crowdin_pm_namespace: str = ''
     crowdin_token: str = ''
     crowdin_project_name: str = 'Dalamud Plugins'
     default_pm_lang: str = 'en-US'  # Locale

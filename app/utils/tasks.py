@@ -12,6 +12,7 @@ from typing import Union, Tuple
 from .common import get_settings, cache_file, download_file
 from .git import update_git_repo, get_repo_dir, get_user_repo_name
 from .redis import Redis
+from .crowdin import Crowdin
 from .cdn.cloudflare import CloudFlareCDN
 from .cdn.ctcdn import CTCDN
 from github import Github
@@ -205,6 +206,13 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', plugin_name, hashed_name)
             pluginmaster.append(plugin_meta)
     redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
+    logger.info(f"PM \"{plugin_namespace}\" is regenerated.")
+    if not settings.crowdin_pm_namespace or settings.crowdin_pm_namespace == plugin_namespace:
+        try:
+            crowdin = Crowdin()
+            crowdin.update_redis(pluginmaster)
+        except:
+            logger.error("Crowdin update failed.")
     # print(f"Regenerated Pluginmaster for {plugin_namespace}: \n" + str(json.dumps(pluginmaster, indent=2)))
 
 
