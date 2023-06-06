@@ -7,25 +7,25 @@
     <meta charset="UTF-8">
 
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-    <title>XIVLauncher FAQ | 问题解答</title>
+    <title>XIVLauncher 常见问题解答 | faq</title>
     <meta name="description" content="最终幻想14国服第三方启动器、最终幻想14国服卫月框架下载与帮助，卫月框架常见问题解答和知识库">
     <meta name="keywords" content="最终幻想14,FFXIV,ff14,Dalamud,XIVLauncher,卫月框架,最终幻想14插件,卫月,插件小店,ff14插件,ff14启动器,蓝月亮">
-    <meta name="generator" content="Jekyll v3.9.2"/>
-    <meta property="og:title" content="XIVLauncher FAQ"/>
     <meta property="og:locale" content="zh-CN"/>
+    <meta name="generator" content="Jekyll v3.9.3"/>
+    <meta property="og:title" content="XIVLauncher 常见问题解答"/>
     <meta property="og:description" content="卫月框架常见问题解答和知识库"/>
-    <link rel="canonical" href="/faq/xl_troubleshooting.html"/>
-    <meta property="og:url" content="/faq/xl_troubleshooting.html"/>
+    <link rel="canonical" href="https://aonyx.ffxiv.wang/faq/dalamud_troubleshooting.html"/>
+    <meta property="og:url" content="https://aonyx.ffxiv.wang/faq/dalamud_troubleshooting.html"/>
     <meta property="og:site_name" content="faq"/>
     <meta property="og:type" content="website"/>
     <meta name="twitter:card" content="summary"/>
-    <meta property="twitter:title" content="XIVLauncher FAQ"/>
+    <meta property="twitter:title" content="XIVLauncher 常见问题解答"/>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "WebPage",
             "description": "卫月框架常见问题解答和知识库",
-            "headline": "XIVLauncher FAQ",
+            "headline": "XIVLauncher 常见问题解答",
             "url": "/faq/xl_troubleshooting.html"
         }</script>
     <!-- End Jekyll SEO tag -->
@@ -36,7 +36,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="/faq/assets/css/style.css?v=545445c1b5606335a65518c9b282efaebf1b727a">
+    <link rel="stylesheet" href="/faq/assets/css/style.css?v=b24ab2bb544fed315cacd9ddbf8391a6e2e45f38">
 
     <style>
         .page-header {
@@ -69,84 +69,105 @@
 </header>
 
 <main id="content" class="main-content" role="main">
-    <h1 id="xivlauncher-faq">XIVLauncher FAQ</h1>
+    <h1 id="xivlauncher-常见问题解答">XIVLauncher 常见问题解答</h1>
 
-    <h3 id="table-of-contents">Table of Contents</h3>
-    <!-- [How do I disable autologin?](#q-how-do-i-disable-autologin) <br> -->
-    <!-- [不要用管理员权限运行 XIVLauncher CN](#q-do-not-run-xivlauncher-as-admin) <br> -->
-    <p><a href="#q-使用-xivlauncher-dalamud-和其中的插件安全吗">使用 XIVLauncher, Dalamud 和其中的插件安全吗？</a> <br/>
-        <a href="#q-打开程序时我收到一条错误消息提示-xivlauncher-无法检查更新">打开程序时，我收到一条错误消息，提示 XIVLauncher 无法检查更新</a> <br/>
-        <a href="#q-我在-linux-上并且不断收到xivlauncher-无法更新错误">我在 Linux 上，并且不断收到“XIVLauncher 无法更新”错误</a> <br/>
-        <a href="#q-为什么游戏内插件-dalamud-不起作用或插件不显示">为什么游戏内插件 (Dalamud) 不起作用或插件不显示？</a> <br/>
-        <a href="#q-如何卸载-xiv-launcher">如何卸载 XIV Launcher？</a> <br/>
-        <a href="#q-如何修复依赖-dalamud-提供的操作码的插件">如何修复依赖 Dalamud 提供的操作码的插件？</a> <br/>
-        <a href="#q-我如何将-xivlauncher-和-dalamud-加入我的杀毒程序白名单">我如何将 XIVLauncher 和 Dalamud 加入我的杀毒程序白名单？</a> <br/>
-        <a href="#q-xiv-isnt-saving-my-new-password--how-do-i-clear-my-saved-password">XIV isn’t saving my new password / how do I clear my saved password?</a> <br/>
-        <a href="#q-i-think-xivlauncher-is-giving-me-a-blue-screen-of-death-what-information-would-help-narrow-this-down">I think XIVLauncher is giving me a Blue Screen of Death. What information
-            would help narrow this down?</a> <br/>
-        <a href="#q-how-can-i-fix-crashes-on-startup">How can I fix crashes on startup?</a> <br/>
-        <a href="#q-will-pluginsxivlauncher-work-on-patch-day">Will plugins/XIVLauncher work on patch day?</a> <br/>
-        <a href="#q-can-i-login-early-to-titlescreen-before-patch-live">Can I log in early with this, before the servers go live?</a> <br/>
-        <a href="#q-xl-environment-variables">XL Environment Variables</a> <br/>
-        <a href="#q-outdated-plugins-list">Outdated Plugins List</a> <br/>
-        <a href="#q-the-launcher-shows-a-red-world-icon-and-an-error-message-when-trying-to-log-in-and-the-official-launcher-doesnt-open">The launcher shows a red world icon and an error message when
-            trying to log in, and the official launcher doesn’t open</a> <br/>
-        <a href="#q-the-official-launcher-isnt-working--xivlauncher-failed-to-check-for-updates--patch-files-could-not-be-verified">The Official Launcher isn’t working / XIVLauncher failed to check
-            for updates / Patch files could not be verified</a> <br/>
-        <a href="#q-wtfast-config">WTFast Config</a> <br/>
-        <a href="#q-nvidia-driver-issue-7th-of-january">NVIDIA Driver issue (7th of January)</a> <br/>
-        <a href="#q-how-to-set-an-injection-delay-in-rivatunerrtss">How to set an injection delay in rivaTuner/RTSS</a> <br/>
-        <a href="#q-where-can-i-find-my-ffxiv-installation">Where can I find my FFXIV Installation?</a> <br/>
-        <a href="#q-how-do-i-migrate-ffxiv-andor-xivlauncher-files-from-an-old-wine-prefix-to-a-new-one-linux">How do I migrate ffxiv and/or xivlauncher files from an old Wine prefix to a new one?
-            [Linux]</a> <br/>
-        <a href="#q-how-do-i-migrate-ffxiv-andor-xivlauncher-files-from-an-old-installation-to-a-new-one-windows">How do I migrate ffxiv and\or xivlauncher files from an old installation to a new one?
-            [Windows]</a> <br/>
-        <a href="#q-why-do-people-keep-asking-about-steam-so-much">Why do people keep asking about Steam so much?</a> <br/>
-        <a href="#q-can-i-repair-my-ffxiv-installation">Can I repair my FFXIV installation?</a> <br/>
-        <a href="#q-how-do-i-fix-a-version-check-error-when-trying-to-update-ffxiv">How do I fix a version check error when trying to update FFXIV?</a> <br/>
-        <a href="#q-how-can-i-stop-gshade-or-reshade-shaders-from-affecting-plugin-windows">How can I stop GShade or ReShade shaders from affecting plugin windows?</a> <br/>
-        <a href="#q-i-updated-my-game-with-textools-mods-installed-how-do-i-fix-crashes">I updated my game with TexTools mods installed. How do I fix crashes?</a> <br/></p>
+    <h2 id="目录">目录</h2>
+
+    <h3 id="信息">信息</h3>
+
+    <!--(- [如何禁用自动登录？](#q-how-do-i-disable-autologin)-->
+
+    <ul>
+        <li><a href="#q-xivlauncherdalamud-和-dalamud-插件是否安全可靠">XIVLauncher、Dalamud 和 Dalamud 插件是否安全可靠？</a></li>
+        <li><a href="#q-如何卸载-xivlauncher">如何卸载 XIVLauncher？</a></li>
+        <li><a href="#q-插件-xivlauncher-是否在更新日可用">插件/ XIVLauncher 是否在更新日可用？</a></li>
+        <li><a href="#q-我能在补丁上线之前使用-xivlauncher-提前登录吗">我能在补丁上线之前使用 XIVLauncher 提前登录吗？</a></li>
+        <li><a href="q-我在哪里可以找到我的-ffxiv-安装路径">我在哪里可以找到我的 FFXIV 安装路径？</a></li>
+    </ul>
+
+    <!-- - [如何将旧的 Wine 前缀中的 FFXIV 和/或 XIVLauncher 文件迁移到新的前缀中？ [Linux]](#q-how-do-i-migrate-ffxiv-andor-xivlauncher-files-from-an-old-wine-prefix-to-a-new-one-linux) -->
+
+    <ul>
+        <li><a href="#q-如何将-ffxiv-和或-xivlauncher-文件从旧的安装迁移到新的安装windows">如何将 FFXIV 和/或 XIVLauncher 文件从旧的安装迁移到新的安装？[Windows]</a></li>
+    </ul>
+
+    <!-- - [关于 Steam 支持有什么需要注意的事项？](#q-whats-the-deal-with-steam-support) -->
+
+    <h3 id="故障排除">故障排除</h3>
+
+    <ul>
+        <li><a href="#q-打开程序时我收到一条错误消息提示-xivlauncher-无法检查更新">打开程序时，我收到一条错误消息，提示 XIVLauncher 无法检查更新</a></li>
+        <li><a href="#q-我在-linux-上不断收到xivlauncher-失败无法更新的错误">我在 Linux 上不断收到“XIVLauncher 失败，无法更新”的错误</a></li>
+        <li><a href="#q-为什么游戏内插件-dalamud-不起作用或插件不显示">为什么游戏内插件 (Dalamud) 不起作用或插件不显示？</a></li>
+        <li><a href="#q-如何将-xivlauncher-和-dalamud-加入防病毒白名单以免受到防病毒软件的干扰">如何将 XIVLauncher 和 Dalamud 加入防病毒白名单，以免受到防病毒软件的干扰？</a></li>
+        <li><a href="#q-xivlauncher-不保存我的新密码--如何清除保存的密码">XIVLauncher 不保存我的新密码 / 如何清除保存的密码？</a></li>
+        <li><a href="#q-我认为-xivlauncher-导致了蓝屏死机哪些信息有助于缩小问题范围">我认为 XIVLauncher 导致了蓝屏死机。哪些信息有助于缩小问题范围？</a></li>
+        <li><a href="#q-如何解决启动时的崩溃问题">如何解决启动时的崩溃问题？</a></li>
+        <li><a href="#q-网络连接正常但是无法更新xivlauncher_cndalamud或者无法加载主库插件列表">网络连接正常但是无法更新XIVLauncher_CN、Dalamud或者无法加载主库插件列表</a></li>
+        <li><a href="#qq-官方启动器无法工作--xivlauncher_cn-在检查更新时失败--无法验证补丁文件">官方启动器无法工作 / XIVLauncher_CN 在检查更新时失败 / 无法验证补丁文件</a></li>
+        <li><a href="#q-如何在-rivatunerrtss-中设置注入延迟">如何在 RivaTuner/RTSS 中设置注入延迟</a></li>
+        <li><a href="#q-我可以修复我的ffxiv安装吗">我可以修复我的FFXIV安装吗？</a></li>
+        <li><a href="#q-在尝试更新ffxiv时如何修复版本检查错误">在尝试更新FFXIV时，如何修复版本检查错误？</a></li>
+        <li><a href="#q-我在安装了-textools-的情况下更新了游戏如何修复崩溃问题">我在安装了 TexTools 的情况下更新了游戏。如何修复崩溃问题？</a></li>
+    </ul>
+
+    <h3 id="其他">其他</h3>
+
+    <!-- [请勿以管理员身份运行 XIVLauncher](#do-not-run-xivlauncher-as-admin)\-->
+    <ul>
+        <li><a href="#q-xl-环境变量">XL 环境变量</a></li>
+        <li><a href="#q-wtfast-配置">WTFast 配置</a></li>
+    </ul>
+
     <hr/>
 
-    <!-- ### Q: How do I disable autologin?
-    Keep the shift key held down while you open XIVLauncher. Keep it held down until the main window appears.
-    <hr> -->
+    <!-- ### Q: 如何禁用自动登录？
 
-    <!-- ### Q: 不要用管理员权限运行 XIVLauncher CN
-    对的，你没有听错！ **请不要用管理员权限运行 XIVLauncher CN。** （除此之外，也请不要以管理员权限手动注入 Dalamud，除非你的游戏是管理员启动的。） You should also never let FFXIV run as admin as it can and __will result in your game configuration data becoming write-protected by your own user__. This can result in you being unable to save character config, hotbars, settings, and take screenshots, with no easy solution beyond trying to fix broken permissions or deleting all config and starting over. (SE does not handle file permissions very well)
-    <hr> -->
+    打开 XIVLauncher 时，按住 Shift 键直到主窗口出现。
+    -->
+    <hr/>
 
-    <h3 id="q-使用-xivlauncher-dalamud-和其中的插件安全吗">Q: 使用 XIVLauncher, Dalamud 和其中的插件安全吗？</h3>
+    <h3 id="q-xivlauncherdalamud-和-dalamud-插件是否安全可靠">Q: XIVLauncher、Dalamud 和 Dalamud 插件是否安全可靠？</h3>
 
-    <p>是的！在 Goatcorp（和 Ottercorp），我们非常重视安全。 使用我们的软件绝不应该让其他玩家可以检测到您正在使用第三方修改。 目前，我们没有理由相信史克威尔艾尼克斯会采取任何措施来检测任何形式的客户端修改。
-        正如我们所使用的 ReShade/GShade、ACT、Teamcraft 和其他社区项目一样。</p>
+    <p>是的！在 Goatcorp（和 Ottercorp），我们非常认真对待安全性。使用我们的软件不会让其他玩家察觉到您正在使用第三方修改。我们目前没有任何理由认为 Square Enix 会以任何形式检测客户端修改。 正如我们所使用的
+        ReShade/GShade、ACT、Teamcraft 和其他社区项目一样。</p>
 
     <h4 id="一般免责声明">一般免责声明</h4>
-    <p>你不应该提及在游戏中使用 XIVLauncher 或插件，就像你不应该承认使用 <em>任何</em> 第三方修改一样，因为它在技术上违反最终幻想14的服务条款。我们没有收到户因使用 XIVLauncher、Dalamud
-        或其中插件而被封禁的案例，但您仍应谨慎行事。所有官方支持的插件都经过代码审查，以确保它们不会利用游戏或做任何会导致您的游戏客户端向游戏服务器发送无效数据的行为。 <strong>我们不能认可来自第三方插件库的任何非官方插件。您使用第三方插件风险自负。</strong>
-    </p>
 
-    <p>此外，XIVLauncher 完全是一个 <strong>用爱发电项目</strong>。我们这样做是因为它对我们来说很有趣，而不是因为我们从中获利。这意味着我们始终尽最大努力做到专业和响应迅速，但这也意味着我们为您提供的一切都是基于“尽最大努力”
-        - 维护这样的软件需要大量时间，而我们也是如大家一样的普通人 ：）</p>
+    <p>在游戏中，您不应提及使用 XIVLauncher 或插件，就像您不应承认使用<em>任何</em>第三方修改一样，因为从技术上讲，这违反了《最终幻想XIV》的服务条款。我们没有收到任何用户因使用 XIVLauncher、Dalamud 或 Dalamud
+        插件而被封禁的报告，但仍然建议您谨慎使用。所有官方支持的插件都经过代码审查，以确保它们不会利用游戏或以任何方式发送无效数据到游戏服务器。**我们无法为来自第三方插件存储库的非官方插件提供支持。您使用这些插件时需要自行承担风险。
+        **</p>
+
+    <p>此外，XIVLauncher 完全是一个__用爱发电项目__
+        。我们之所以这样做是因为我们觉得有趣，并非因为有报酬。这意味着我们始终尽力以专业和积极的态度迅速响应，但同时也意味着我们提供给您的所有内容都基于“尽力而为”的原则 -
+        维护这样的软件需要大量的时间，而且我们也只是普通人 :)</p>
 
     <p>如果您对 XIVLauncher、Dalamud 或其中插件有任何疑问，请随时在我们的 <a
-            href="https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;inviteCode=CZtWN&amp;from=181074&amp;biz=ka&amp;shareSource=5">QQ频道</a> 中提问。我们是一个主要讲中文的社区，对其他语言的支持可能有限。
-    </p>
+            href="https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;inviteCode=CZtWN&amp;from=181074&amp;biz=ka&amp;shareSource=5">QQ频道</a>
+        中提问。我们是一个主要讲中文的社区，对其他语言的支持可能有限。</p>
 
     <h4 id="xivlauncher-安全细节">XIVLauncher 安全细节</h4>
-    <p>以下是有关 XIVLauncher 本身的一些其他详细信息。</p>
+
+    <p>以下是关于 XIVLauncher 自身的一些附加细节。</p>
 
     <ol>
-        <li>XIVLauncher 是开源的。 您可以在我们的开源仓库 <a href="https://github.com/ottercorp/FFXIVQuickLauncher/">XIVLauncher GitHub Repo</a> 中审核代码。</li>
-        <li>XIVLauncher 版本现在直接构建在 GitHub 上，您下载的任何内容都可以确定它来自 GitHub 存储库中列出的开源代码版本。 XIVLauncher 版本检查文件被缓存到私有云存储上，以帮助减少您达到 GitHub API
-            速率限制和特定国家/地区的 ISP 限制的机会。 文件下载将显示我们的代理域（<code class="language-plaintext highlighter-rouge">ffxiv.wang</code>），但这会重定向到 GitHub 或中国大陆的 CDN/云存储
-            （如果需要的话）。 您可以使用您选择的网络分析工具来验证此行为。 代理 使用腾讯云CDN缓存数据，并且只有极少部分开发者可以通过控制台进行访问。
+        <li>XIVLauncher 是开源的。您可以在我们的开源仓库 <a href="https://github.com/ottercorp/FFXIVQuickLauncher/">XIVLauncher GitHub Repo</a> 中审核代码。</li>
+        <li>XIVLauncher 的发布版本现在直接在 GitHub 上构建。您下载的任何内容都可以确保来自于 GitHub 仓库中所列出的开源代码版本。XIVLauncher 版本检查文件被缓存到私有的 VPS 上，以帮助减少遇到 GitHub API
+            限制和特定国家
+            ISP 阻止的可能性。文件下载会显示我们的代理域名（<code class="language-plaintext highlighter-rouge">ffxiv.wang</code>），但这会重定向到 GitHub 或中国大陆的 CDN/云存储 （如果需要的话）。
+            您可以使用您选择的网络分析工具来验证此行为。并且只有极少部分开发者可以通过控制台进行访问。
         </li>
         <li>如果 XIVLauncher 已被修改，或者您正在运行用于开发的版本，它将清楚地表明它是调试版本或其他测试/不受支持的版本。 <img src="/faq/images/xivlauncher_unsupported.png"
                                                                                                                              alt="unsupported xivlauncher build"/>.
         </li>
         <li>XIVLauncher 使用 Windows 凭据管理器安全地存储您的帐户凭据（包括密码和快速登录凭据）。 您的密码和凭据已加密，只能由授权程序访问。
             但是，这确实意味着如果有人设法访问您的计算机，他们可以从技术上提取您的密码与凭据。（但这种情况下您需要优先考虑的或许不只是账号安全的问题。）
+            <ul>
+                <li>XLCore（Linux 原生版 XIVLauncher）使用 <code class="language-plaintext highlighter-rouge">libsecret</code> 安全存储您的帐户凭据。<code class="language-plaintext highlighter-rouge">gnome-keyring</code>、<code
+                        class="language-plaintext highlighter-rouge">kwallet</code>（提供 KDE Framework 版本 5.97.0 或更新版本）以及其他实现了 <code class="language-plaintext highlighter-rouge">org.freedesktop.secrets</code>
+                    的密钥管理器可以用于存储和管理这些凭据。
+                </li>
+            </ul>
         </li>
         <li>XIVLauncher 仅与我们的安全代理、GitHub 和最终幻想14官方网站进行通信。</li>
         <li>XIVLauncher 旨在完全复制与官方启动器相同的登录和授权过程。 已采取措施确保它始终与官方匹配，直至遇到相同的登录问题。
@@ -155,87 +176,245 @@
     </ol>
 
     <h4 id="dalamud-安全细节">Dalamud 安全细节</h4>
-    <p>以下是有关 Dalamud 的一些其他详细信息。</p>
+
+    <p>以下是关于 Dalamud 的一些附加细节。</p>
 
     <ol>
-        <li>Dalamud <strong>是一个代码注入框架</strong>。根据定义，它的外观和行为都类似于病毒程序。您的防病毒软件甚至可能认为它是有害或潜在有害的软件！您可以在常见问题解答的其他地方阅读更多关于 <a
-                href="#q-我如何将-xivlauncher-和-dalamud-加入我的杀毒程序白名单">将 Dalamud 列入白名单</a> 的信息。
-            <strong>我们建议加入白名单以获得最佳体验，但您的电脑环境可能并不需要。</strong></li>
-        <li>Dalamud 允许您读取游戏内存和网络数据包。 您可以将此行为与使用 ACT 进行类比。</li>
+        <li>Dalamud <strong>是一个代码注入框架</strong>。按定义，它看起来和行为类似于病毒程序。您的杀毒软件甚至可能将其视为有害或潜在有害软件！您可以在 FAQ
+            中的<a href="#q-如何将-xivlauncher-和-dalamud-加入防病毒白名单以免受到防病毒软件的干扰">将 Dalamud 列入白名单</a>，将 Dalamud 添加到白名单。**我们建议将其添加到白名单以获得最佳体验，但是您的计算环境可能不需要这样做
+            **。
+        </li>
+        <li>Dalamud 允许您读取游戏内存和网络数据包。 您可以将此行为与使用 ACT （Advanced Combat Tracker） 进行类比。</li>
         <li>Dalamud 框架自带修改游戏内存/Hook游戏客户端内存的能力和插件可以调用的函数。 然而，我们仅在官方 <a href="https://goatcorp.github.io/Dalamud/api/index.html">Dalamud 游戏数据 API</a>
             中提供对游戏数据的只读访问（在适用的情况下）。
         </li>
     </ol>
 
     <h4 id="插件安全细节">插件安全细节</h4>
-    <p>以下是有关 Dalamud 插件的一些其他详细信息。</p>
+
+    <p>以下是关于 Dalamud 插件的一些额外细节。</p>
 
     <ol>
         <li>我们官方插件库中的插件已被我们视为“可以安全使用”。</li>
         <li>官方支持的插件应始终从<code class="language-plaintext highlighter-rouge">/xlplugins</code>插件安装程序直接下载/安装在游戏中。您无需手动下载或手动安装它们。</li>
-        <li>Dalamud 支持第三方插件库，但是支持有限：
-            <ul>
-                <li>我们不会为非官方插件提供技术支持。</li>
-                <li>
-                    虽然许多非官方插件可以安全使用，但某些插件可能会利用游戏或创建不安全的状态，以将无效数据发送到游戏服务器从而导致账号封禁。在启用不受支持的插件之前，请谨慎行事。我们不为第三方插件开发者承担任何责任。
-                </li>
-                <li>不支持的插件的故障排除和问题应提交给对应插件的开发人员或其相关社区。请不要在我们的官方频道为这些插件寻求官方支持，即使它们没有另外的支持渠道。</li>
-            </ul>
-        </li>
+        <li>Dalamud 不支持第三方插件库，请阅读以下补充说明以了解：</li>
     </ol>
 
+    <ul>
+        <li>我们不会为非官方插件提供技术支持。</li>
+        <li>
+            虽然许多非官方插件可以安全使用，但某些插件可能会利用游戏或创建不安全的状态，以将无效数据发送到游戏服务器从而导致账号封禁。在启用不受支持的插件之前，请谨慎行事。我们不为第三方插件开发者承担任何责任。
+        </li>
+        <li>不支持的插件的故障排除和问题应提交给对应插件的开发人员或其相关社区。请不要在我们的官方频道为这些插件寻求官方支持，即使它们没有另外的支持渠道。</li>
+    </ul>
+
     <h4 id="网络安全细节">网络安全细节</h4>
+
     <p>除了最终幻想14官方网站外，您可能也看到以下列表的网络流量。所有连接都尽可能使用 HTTPS。（Square-Enix 和盛趣很笨，他们的一些服务不使用 HTTPS。我们不喜欢这样，但无法控制它。）</p>
 
-    <p>您可以在此处找到我们其他 Web 服务的源代码，国服可能并没有完全使用：<a href="https://github.com/goatcorp/XLWebServices/tree/master/XLWebServices">https://github.com/goatcorp/XLWebServices/tree/master/XLWebServices</a>
-    </p>
+    <p>您可以在<a href="https://github.com/ottercorp/XLWebServices-fastapi">此处</a>找到我们其他 Web 服务的源代码，国服可能并没有完全使用：</p>
 
     <ol>
-        <li><code class="language-plaintext highlighter-rouge">ffxiv.wang</code> - 这是 XIVLauncher CN 背后的私有 VPS，由 XIVLauncher CN 的维护者运行，用于代理和缓存 XIVLauncher 和 Dalamud
-            检查其版本的一些常用文件。它被用来减少到 GitHub 的网络连接数量，这样用户就不必担心达到速率限制和连接不良/被他们国家的防火墙阻止，然后根据需要将流量引导到 GitHub。 VPS
+        <li><code class="language-plaintext highlighter-rouge">ffxiv.wang</code> - 这是 XIVLauncher CN 背后的私有 VPS，由 XIVLauncher_CN 的维护者运行，用于代理和缓存 XIVLauncher 和 Dalamud
+            检查其版本的一些常用文件。它被用来减少到 GitHub
+            的网络连接数量，这样用户就不必担心达到速率限制和连接不良/被他们国家的防火墙阻止，然后根据需要将流量引导到 GitHub。 VPS
             使用国内的CDN/云服务依次缓存数据，并且只有极少部分开发者可以通过控制台进行访问。此外，插件的使用情况和统计信息也会发送到本VPS，用于用户数据分析和制定相应的对策（敏感的用户信息将始终进行哈希处理）。
         </li>
         <li><code class="language-plaintext highlighter-rouge">github.com</code>、<code class="language-plaintext highlighter-rouge">raw.githubusercontent.com</code> 和 <code
-                class="language-plaintext highlighter-rouge">ottercorp.github.io</code> - 它是 GitHub。你现在正在访问的就是！
+                class="language-plaintext highlighter-rouge">ottercorp.github.io</code> - 这是 GitHub。
         </li>
         <li><code class="language-plaintext highlighter-rouge">act1.ff.sdo.com</code> - 检查服务器状态的盛趣站点。</li>
     </ol>
+
     <hr/>
 
+    <h3 id="q-如何卸载-xivlauncher">Q: 如何卸载 XIVLauncher？</h3>
+
+    <p>您可以通过控制面板或 Windows 10 设置应用程序像任何普通 Windows 程序一样卸载 XIVLauncher。 如果要清除它的任何痕迹，请检查并删除这些文件夹。</p>
+
+    <p>程序安装和旧版本：
+        <code class="language-plaintext highlighter-rouge">%localappdata%\XIVLauncher</code>（国际服）
+        <code class="language-plaintext highlighter-rouge">%localappdata%\goatsoft</code>（如果存在）</p>
+
+    <p>设置/插件和其他用户配置
+        <code class="language-plaintext highlighter-rouge">%appdata%\XIVLauncher</code>（国际服）
+        <code class="language-plaintext highlighter-rouge">安装目录\Roaming\</code>（国服）</p>
+
+    <hr/>
+
+    <h3 id="q-插件-xivlauncher-是否在更新日可用">Q: 插件/ XIVLauncher 是否在更新日可用？</h3>
+
+    <p>请记住，许多开发者有学业/工作/两者兼顾，并且分布在各种时区。更新将在可以进行时进行。”XL 随时可能消失” 的观念仍然存在。<strong>我们无法预测任何可能的补丁需要多少工作/时间，也无法给出任何预计时间 -
+        这是不可能的。</strong>
+        请不要催促我们，我们在补丁日需要提供更多的支持，这样我们就无法解决问题。</p>
+
+    <h4 id="xivlauncher_cn">XIVLauncher_CN：</h4>
+
+    <ul>
+        <li>用户不需要采取任何预防措施来保证 XIVLauncher 与新补丁的兼容性。</li>
+        <li>除非 SE 决定彻底更改身份验证或补丁下载/更新的工作方式，否则启动器将在补丁日正常工作。</li>
+    </ul>
+
+    <h4 id="dalamud">Dalamud：</h4>
+
+    <p><strong>请留意我们的<a href="https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;inviteCode=CZtWN&amp;from=181074&amp;biz=ka&amp;shareSource=5">QQ频道</a> 公告，在公告宣布支持之前使用注入器注入可能会导致游戏崩溃。</strong>
+    </p>
+
+    <ul>
+        <li>Dalamud 有一个内部机制，用于检查客户端版本和一个已列入白名单的兼容性文件。</li>
+        <li>如果客户端版本与白名单不匹配，Dalamud 将不会加载。</li>
+        <li>一旦 Dalamud 被列入白名单，下次使用 XIVLauncher 启动时它将加载。（我们也会在 Discord 上发布公告）</li>
+        <li>Dalamud 可能或可能不需要更新以与当前客户端兼容。这取决于内部有多少变化，我们无法提供任何关于列入白名单所需时间的估计。</li>
+    </ul>
+
+    <h4 id="插件">插件：</h4>
+
+    <ul>
+        <li>预计每个补丁都会导致所有插件停止工作。</li>
+        <li>一旦 Dalamud 被列入白名单以适应新补丁，它将尝试加载插件。</li>
+        <li>完全有可能一个补丁对 Dalamud 没有问题，但却破坏了一个插件。（如果发生这种情况，您需要禁用/移除插件，直到其更新为止）</li>
+    </ul>
+
+    <hr/>
+
+    <h3 id="q-我能在补丁上线之前使用-xivlauncher-提前登录吗">Q: 我能在补丁上线之前使用 XIVLauncher 提前登录吗？</h3>
+
+    <p><strong>不能。</strong></p>
+
+    <p>与每次补丁维护一样，大厅服务器通常会像往常一样下线。即使您在维护期间下载和应用了补丁，您的授权几乎肯定会在系统恢复之前过期。</p>
+
+    <p>您可以使用 XIVLauncher 的“等待维护结束”功能，坐等启动补丁（无需登录），然后在补丁一般可用时提示您登录进行游戏补丁。</p>
+
+    <p>“等待维护结束”功能还可以每 ~15 秒检查服务器是否在线，以便您在服务器启动后立即登录。</p>
+
+    <p>与任何补丁一样，<strong>在 Dalamud 更新以适应新的补丁内容之前，游戏内插件将被自动禁用</strong>。请不要手动将 Dalamud 注入为启动应用程序，除非您想让客户端崩溃！</p>
+    <hr/>
+
+    <h3 id="q-我在哪里可以找到我的-ffxiv-安装路径">Q: 我在哪里可以找到我的 FFXIV 安装路径？</h3>
+
+    <p>（也就是说，XIVLauncher 的“游戏路径”是什么意思？）</p>
+
+    <p>FFXIV 的安装位置取决于您是使用官方安装程序还是 Steam，安装时间以及是否安装了免费试用版等因素。这里是一些常见的路径。</p>
+
+    <p>无论如何，请勿选择 <code class="language-plaintext highlighter-rouge">boot</code> 或 <code class="language-plaintext highlighter-rouge">game</code> 文件夹。但是，如果您已经安装了 FFXIV
+        的副本，您需要选择包含它们的文件夹。</p>
+
+    <p>官方启动器：</p>
+
+    <ul>
+        <li><code class="language-plaintext highlighter-rouge">C:\Program Files (x86)\上海数龙科技有限公司\最终幻想XIV\</code></li>
+    </ul>
+
+    <p><img src="/faq/images/xivlaunchersSettings.png" alt="示例"/></p>
+
+    <hr/>
+
+    <!--
+    ### Q: 如何将 FFXIV 和/或 XIVLauncher 文件从旧的 Wine 前缀迁移到新的前缀？\[Linux\]
+
+    在创建了新的基于 XIVLauncher 的前缀之后，您可以从旧的 FFXIV 前缀中复制以下文件：
+
+    #### 将 FFXIV 安装从一个前缀复制到另一个前缀（或根据需要移动/创建符号链接）
+
+    - 从此处复制：`~/Games/<旧前缀>/drive_c/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn`
+    - 复制到：
+      - (Lutris) `~/Games/<新前缀>/drive_c/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn`
+      - (Proton) `~/.steam/steam/steamapps/steamapps/common/FINAL FANTASY XIV Online`
+      - (XLCore) `~/.xlcore/ffxiv`
+
+    #### 复制用户/角色设置
+
+    - 从此处复制：`~/Games/<旧前缀>/drive_c/users/<用户名>/My Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`
+    - 复制到：
+      - (Lutris) `~/Games/<新前缀>/drive_c/users/<用户名>/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`
+      - (Proton) `~/.local/share/Steam/steamapps/compatdata/39210/pfx/drive_c/users/steamuser/My Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`
+      - (XLCore) `~/.xlcore/ffxivConfig`
+
+    #### 复制 XIVLauncher 配置（请重新安装插件）
+
+    - 从此处复制：`~/Games/<旧前缀>/drive_c/users/<用户名>/Application Data/XIVLauncher/pluginConfigs`
+    - 复制到：
+      - (Lutris) `~/Games/<新前缀>/drive_c/users/<用户名>/AppData/Roaming/XIVLauncher/pluginConfigs`
+      - (XLCore) `~/.xlcore/pluginConfigs`
+
+    ### 复制其他文件和程序到 Wine 前缀
+
+    - 从此处复制：`~/Games/<旧前缀>/drive_c`
+    - 复制到：
+      - (Lutris) `~/Games/<新前缀>/drive_c`
+      - (XLCore) `~/.xlcore/wineprefix/drive_c`
+
+    ---
+    -->
+
+    <h3 id="q-如何将-ffxiv-和或-xivlauncher-文件从旧的安装迁移到新的安装windows">Q: 如何将 FFXIV 和/或 XIVLauncher 文件从旧的安装迁移到新的安装？[Windows]</h3>
+
+    <h4 id="复制-ffxiv-安装文件">复制 FFXIV 安装文件</h4>
+
+    <p>就大部分而言，FFXIV 是可移植的。您只需确保已根据需要安装了 DirectX。我建议先使用 SE 的安装程序安装启动器，然后如果您不想打补丁，再用备份文件替换它。</p>
+
+    <p><strong>注意</strong>：如果您安装了 TexTools，则不应执行此操作。或者至少在执行之前，请确保还原索引/修复游戏，因为 TexTools 可能会破坏您的客户端。</p>
+
+    <ul>
+        <li>复制用户/角色设置：<code class="language-plaintext highlighter-rouge">\上海数龙科技有限公司\最终幻想XIV\game\My Games</code></li>
+        <li>复制 XIVLauncher 配置（请重新安装插件）：<code class="language-plaintext highlighter-rouge">[XIVLauncher_CN安装目录]\Roaming\pluginConfigs</code>
+            <ul>
+                <li><strong>注意</strong>：请不要复制其他配置或文件夹，因为这些是特定于该计算机的。您应该根据每台计算机进行设置。</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr/>
+    <!--
+    ### Q: Steam 支持是怎么回事？
+
+    在 Steam 上购买 FFXIV 的玩家需要在官方启动器中将他们的 Steam 帐户与 Square Enix 帐户关联起来。我们无法绕过这一点，因此如果您拥有 Steam 服务账户，您需要确保 Steam 已经登录到正确的账户。
+
+    如果您想在非 Steam 服务账户上使用 Steam 的交互界面，请通过 Steam 将 XIVLauncher 添加为非 Steam 游戏。如果您想让 Steam 统计 FFXIV 的游戏时间，您可以在 Steam 的游戏库中右键点击该游戏，选择“属性”，然后在“启动选项”中设置为 `C:\Users\**YOUR USERNAME HERE**\AppData\Local\XIVLauncher\XIVLauncher.exe %command%`。
+    ---
+    -->
+
     <h3 id="q-打开程序时我收到一条错误消息提示-xivlauncher-无法检查更新">Q: 打开程序时，我收到一条错误消息，提示 XIVLauncher 无法检查更新</h3>
+
     <p>XIVLauncher 无法打开有几个不同的原因。 这里有几个常见的。</p>
 
     <h4 id="xivlauncher-被防病毒防火墙阻止">XIVLauncher 被防病毒/防火墙阻止</h4>
-    <p>有关如何将 XIVLauncher 列入白名单，请参阅 <a href="#">杀毒程序</a> FAQ 帖子。</p>
+
+    <p>有关如何将 XIVLauncher 列入白名单，请参阅<a href="#q-如何将-xivlauncher-和-dalamud-加入防病毒白名单以免受到防病毒软件的干扰">防病毒 FAQ 帖子</a>，了解如何将 XIVLauncher 加入白名单。</p>
 
     <!-- #### GitHub Rate Limits
     If you've made a lot of queries to github recently, it's possible they may have rate-limited you. This is usually a combined effort of XIVLauncher, Dalamud, Dalamud plugin updates, Gshade, etc all being done in rapid succession, which shouldn't happen under normal circumstances.
-    
+
     1. Try to visit <https://api.github.com/rate_limit> and see if the post loads (or downloads a json file)
     2. Look for `resources.core.remaining`. If it's 0, you've hit GitHub's rate limit
     3. If you've hit the limit, grab the timestamp number from resources.core.reset and convert the UTC timestamp into a human-readable date. <https://www.unixtimestamp.com/> works great for this.
     4. Wait the alloted time before launching again, or the timeout period could be extended (if you absolutely need to get in game, use the official launcher during this time) -->
 
+    <h4 id="网络原因">网络原因？</h4>
+
+    <p>请尝试访问我们的<a href="https://aonyx.ffxiv.wang/Proxy/Update/Release/RELEASES">Web API</a>，如果可以在浏览器访问，请自行排查本地网络设置（如代理）。</p>
+
     <h4 id="仍未解决">仍未解决？</h4>
-    <p>为了获得最快的支持，请前往 <a href="https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;inviteCode=CZtWN&amp;from=181074&amp;biz=ka&amp;shareSource=5">QQ频道</a> 并在 <b>#xivlauncher
-        问答帮助</b> 频道中发布您遇到的错误、屏幕截图（如果可能）以及可以在 <code class="language-plaintext highlighter-rouge">Roaming</code>中 找到的 <code
+
+    <p>为了获得最快的支持，请前往 QQ频道 并在 #xivlauncher 问答帮助 频道中发布您遇到的错误、屏幕截图（如果可能）以及可以在 <code class="language-plaintext highlighter-rouge">Roaming</code>中 找到的 <code
             class="language-plaintext highlighter-rouge">output.log</code> 文件。</p>
     <hr/>
 
-    <h3 id="q-我在-linux-上并且不断收到xivlauncher-无法更新错误">Q: <strong>我在 Linux 上，并且不断收到“XIVLauncher 无法更新”错误</strong></h3>
+    <h3 id="q-我在-linux-上不断收到xivlauncher-失败无法更新的错误">Q: 我在 Linux 上不断收到“XIVLauncher 失败，无法更新”的错误</h3>
 
-    <p>在一些较新的 Linux 发行版上，TLS 1.0 和 1.1 已被禁用。 这会导致 Wine 和 FFXIV/XIVLauncher 出现问题，因为它可能并不总是正确地协商 TLS。</p>
+    <p>在一些较新的 Linux 发行版上，已禁用了 TLS 1.0 和 1.1。这会导致 Wine 和 FFXIV/XIVLauncher 出现问题，因为它们可能无法正确协商 TLS。</p>
 
-    <p>如果还没有，您可以通过将 <code class="language-plaintext highlighter-rouge">dssenh</code> DLL 覆盖设置为本机来解决此问题。 （dssenh=n 作为环境变量或在 Lutris 中）</p>
+    <p>您可以通过将 <code class="language-plaintext highlighter-rouge">dssenh</code> DLL 覆盖设置为 native 来解决此问题（作为环境变量或在 Lutris 中设置 <code
+            class="language-plaintext highlighter-rouge">dssenh=n</code>）。</p>
 
     <p>这也已添加到 xivlauncher Lutris 脚本中。</p>
 
-    <p>感谢 kainz0r 的提示！
+    <p>感谢 kainz0r 提供的提示！
         <img src="/faq/images/LinuxConfigScreenshot.png" alt="示例"/></p>
 
-    <p>在 <strong>Fedora</strong> 上？ 您需要运行 <code class="language-plaintext highlighter-rouge">sudo update-crypto-policies --set DEFAULT:FEDORA32</code> 以减轻安全策略，因为 Fedora 33 及更高版本具有更严格的
-        SSL/TLS 设置。 <code class="language-plaintext highlighter-rouge">FEDORA32</code> 没用？ 改用：<code class="language-plaintext highlighter-rouge">sudo update-crypto-policies --set LEGACY</code>
-    </p>
+    <p>在 <strong>Fedora</strong> 上？您需要运行 <code class="language-plaintext highlighter-rouge">sudo update-crypto-policies --set DEFAULT:FEDORA32</code> 以放宽安全策略，因为 Fedora 33 及更高版本的
+        SSL/TLS 设置更为严格。如果 <code class="language-plaintext highlighter-rouge">FEDORA32</code>
+        不起作用，请尝试：<code class="language-plaintext highlighter-rouge">sudo update-crypto-policies --set LEGACY</code>。</p>
     <hr/>
 
     <h3 id="q-为什么游戏内插件-dalamud-不起作用或插件不显示">Q: 为什么游戏内插件 (Dalamud) 不起作用或插件不显示？</h3>
@@ -243,6 +422,7 @@
     <p>与许多其他游戏工具一样，Dalamud 通过注入 FFXIV 进程并挂钩 DirectX 来工作。 有时，它会与其他工具发生冲突或因此而无法工作。</p>
 
     <p>一些可能导致问题的常见原因是：</p>
+
     <ul>
         <li><strong>常见的第三方杀毒</strong>程序。</li>
         <li><strong>FRAPS</strong> 请确保在打开 FFXIV 时 FRAPS 已关闭。它为 FPS 显示和/录制挂钩 DirectX。您可以在游戏运行后再打开它。</li>
@@ -250,469 +430,305 @@
         <li><strong>MacType</strong> 对 FFXIV 没有任何作用，因为游戏不使用系统字体。请阻止它与 FFXIV 挂钩，你会没事的。</li>
         <li><strong>MSI Afterburner</strong> 包含 RTSS。见下文。</li>
         <li><strong>OBS</strong> 一些直播模式涉及挂钩 DirectX 以获得更好的捕获。这可能导致插件在直播流中呈现或根本不呈现。您可能需要更改捕获方法。</li>
-        <li><strong>RivaTuner</strong>/<strong>RTSS</strong> 要么将 FFXIV 列入自动挂钩例外，要么 <a href="#q-how-to-set-an-injection-delay-in-rivatunerrtss">设置 RTSS 加载延迟</a>。 RTSS 可以在
+        <li><strong>RivaTuner</strong>/<strong>RTSS</strong> 要么将 FFXIV 列入自动挂钩例外，要么 <a href="#q-how-to-set-an-an-injection-delay-in-rivatunerrtss">设置 RTSS 加载延迟</a>。 RTSS 可以在
             Dalamud 加载后使用，没有问题。
         </li>
         <li><strong>SpecialK</strong> 这也注入到 DirectX 中，并且可以搞砸 Dalamud 的注入。它并不兼容，但您可能不应该使用它，除非您有办法在 Dalamud 加载后使其挂钩。</li>
         <li><strong>国服启动游戏时黑屏</strong> 可能是由于国服特有的游戏公约造成了游戏的实际启动时间落后，如果游戏启动马上注入有一定的可能造成游戏黑屏，请在 XIVLauncher 的设置界面设置 5～10 秒的注入延迟。
         </li>
     </ul>
+
     <hr/>
 
-    <h3 id="q-如何卸载-xiv-launcher">Q: 如何卸载 XIV Launcher？</h3>
+    <h3 id="q-如何将-xivlauncher-和-dalamud-加入防病毒白名单以免受到防病毒软件的干扰">Q: 如何将 XIVLauncher 和 Dalamud 加入防病毒白名单，以免受到防病毒软件的干扰？</h3>
 
-    <p>您可以通过控制面板或 Windows 10 设置应用程序像任何普通 Windows 程序一样卸载 XIVLauncher。 如果要清除它的任何痕迹，请检查并删除这些文件夹。</p>
+    <p>请将以下文件夹添加到例外（或白名单）列表中：</p>
 
-    <p>程序安装和旧版本：
-        <code class="language-plaintext highlighter-rouge">%localappdata%\XIVLauncher</code>
-        <code class="language-plaintext highlighter-rouge">%localappdata%\goatsoft</code>（如果存在）</p>
-
-    <p>设置/插件和其他用户配置
-        <code class="language-plaintext highlighter-rouge">%appdata%\XIVLauncher</code>（国际服）
-        <code class="language-plaintext highlighter-rouge">安装目录\XIVLauncher</code>（国服）</p>
-    <hr/>
-
-    <h3 id="q-如何修复依赖-dalamud-提供的操作码的插件">Q: 如何修复依赖 Dalamud 提供的操作码的插件？</h3>
-    <p>某些插件和功能（Universalis 更新、PennyPincher 等）需要了解 FFXIV 客户端的当前操作码。 所以每次更新 Dalamud 都需要对其进行测试与整理</p>
-
-    <p>如果更新后需要刷新操作码信息，请重新启动游戏。 Dalamud 将在启动时检查更新的定义。</p>
-    <hr/>
-
-    <h3 id="q-我如何将-xivlauncher-和-dalamud-加入我的杀毒程序白名单">Q: 我如何将 XIVLauncher 和 Dalamud 加入我的杀毒程序白名单？</h3>
-
-    <p>请将以下目录加入您的杀毒程序例外或白名单中：
-        国际服/XIVLauncher：</p>
     <ul>
-        <li><code class="language-plaintext highlighter-rouge">%localappdata%\XIVLauncher</code></li>
-        <li><code class="language-plaintext highlighter-rouge">%appdata%\XIVLauncher</code></li>
-        <li><code class="language-plaintext highlighter-rouge">Your FFXIV game installation folder</code></li>
+        <li><code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)</code></li>
+        <li><code class="language-plaintext highlighter-rouge">%AppData%\XIVLauncher</code></li>
+        <li>您的 FFXIV 游戏安装文件夹</li>
     </ul>
 
-    <p>国服/XIVLauncherCN：</p>
+    <p>之后请重新启动计算机。</p>
+
+    <p><strong>注意</strong>：大多数程序不允许您使用 <code class="language-plaintext highlighter-rouge">%localappdata%</code> 和 <code class="language-plaintext highlighter-rouge">%appdata%</code>
+        的缩写。您需要使用它们的完整/真实路径（通常是 <code class="language-plaintext highlighter-rouge">C:\Users\AppData</code>，后跟 <code class="language-plaintext highlighter-rouge">Local</code> 或
+        <code class="language-plaintext highlighter-rouge">Roaming</code>）。</p>
+
+    <h4 id="重置-dalamud">重置 Dalamud</h4>
+
+    <p>您可能还需要重置 Dalamud（插件系统）。要重置 Dalamud，请删除 <code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)\Roaming\addon\Hooks</code> 文件夹。</p>
+
+    <h4 id="额外的例外情况">额外的例外情况</h4>
+
+    <p>如果可能，请尝试将以下文件加入白名单：</p>
+
     <ul>
-        <li><code class="language-plaintext highlighter-rouge">安装目录\XIVLauncher</code></li>
-        <li><code class="language-plaintext highlighter-rouge">安装目录\XIVLauncher\Roaming</code></li>
-        <li><code class="language-plaintext highlighter-rouge">最终幻想14安装目录</code></li>
-    </ul>
-
-    <h3 id="之后也请重新启动您的计算机">之后也请重新启动您的计算机</h3>
-
-    <h4 id="您可能还需要重置-dalamud插件系统">您可能还需要重置 Dalamud（插件系统）</h4>
-    <p>要重置 dalamud，请删除您的 <code class="language-plaintext highlighter-rouge">安装目录\XIVLauncher\Roaming\addon\Hooks</code> 文件夹。 或者在QQ频道中输入 <code
-            class="language-plaintext highlighter-rouge">/faq 删除dalamud</code>，獭獭机器人将引导您完成。</p>
-
-    <h4 id="you-should-also-try-to-whitelist-the-following-files-if-possible">You should also try to whitelist the following files if possible:</h4>
-    <ol>
-        <li><code class="language-plaintext highlighter-rouge">&lt;your ffxiv installation&gt;\game\ffxiv_dx11.exe</code>
-            <strong>and</strong></li>
-        <li><code class="language-plaintext highlighter-rouge">%localappdata%\XIVLauncher\XIVLauncher.exe</code></li>
-        <li><code class="language-plaintext highlighter-rouge">%localappdata%\XIVLauncher\app-X.Y.Z\XIVLauncher.exe</code> NOTE: replace X.Y.Z with the latest version available. <strong>This changes
-            with every launcher update</strong></li>
-        <li><code class="language-plaintext highlighter-rouge">%appdata%\XIVLauncher\addon\Hooks\W.X.Y.Z\Dalamud.Injector.exe</code> NOTE: replace W.X.Y.Z with the latest version available. <strong>This
-            changes with every dalamud update</strong></li>
-        <li><code class="language-plaintext highlighter-rouge">%appdata%\XIVLauncher\addon\Hooks\W.X.Y.Z\Dalamud.dll</code> NOTE: replace W.X.Y.Z with the latest version available. <strong>This
-            changes with every dalamud update</strong></li>
-        <li><code class="language-plaintext highlighter-rouge">%appdata%\XIVLauncher\runtime</code></li>
-    </ol>
-
-    <h4 id="instructions-for-individual-av">Instructions for individual AV</h4>
-
-    <h4 id="avast">Avast:</h4>
-    <p><a href="https://support.avast.com/en-ww/article/Antivirus-scan-exclusions">https://support.avast.com/en-ww/article/Antivirus-scan-exclusions</a> <br/></p>
-
-    <h4 id="avg">AVG:</h4>
-    <p><a href="https://support.avg.com/SupportArticleView?l=en&amp;urlname=AVG-Antivirus-scan-exclusions">https://support.avg.com/SupportArticleView?l=en&amp;urlname=AVG-Antivirus-scan-exclusions</a>
-        <br/></p>
-
-    <h4 id="bitdefender">Bitdefender:</h4>
-    <p><a href="https://www.bitdefender.com/consumer/support/answer/13427/">https://www.bitdefender.com/consumer/support/answer/13427/</a> <br/>
-        <strong>NOTE</strong>: BitDefender users will also need to whitelist xivlauncher’s program files (local appdata stuff) through the <strong><a
-                href="https://www.bitdefender.com/consumer/support/answer/13425/">BitDefender firewall</a></strong>. Otherwise, XIVLauncher will fail to check for updates, possibly fail to apply
-        patches, and won’t be able to download plugins.</p>
-
-    <h4 id="kaspersky-internet-security">Kaspersky Internet Security</h4>
-    <p><a href="https://usa.kaspersky.com/blog/kaspersky-add-exclusion/11075/">https://usa.kaspersky.com/blog/kaspersky-add-exclusion/11075/</a> <br/>
-        <strong>NOTE 1</strong>: Please add <strong>file and folder</strong> exclusion in the <code class="language-plaintext highlighter-rouge">Threats and Exclusions</code> section for the Antivirus
-        component. See the lists above for all details. You may also need to explicitly manager which AV scanners need to be disabled.</p>
-
-    <details>
-        <summary>Example screenshot of AV settings</summary>
-
-        ![image](https://user-images.githubusercontent.com/10376708/131000436-35097d20-f186-4942-ab43-73e51ff77609.png)
-
-    </details>
-
-    <p><strong>NOTE 2</strong>: You may need to whitelist xivlauncher’s program files in the <strong><a href="https://support.kaspersky.com/15163">Kaspersky firewall</a></strong> Application Rules as
-        well. You’ll know if you need to do this if you receive error messages related to checking for updates, applying patches, or downloading plugins and your logs indicate an access permission
-        issue.</p>
-
-    <h4 id="mcafee">McAfee:</h4>
-    <p><a href="https://service.mcafee.com/webcenter/portal/cp/home/articleview?articleId=TS102056">https://service.mcafee.com/webcenter/portal/cp/home/articleview?articleId=TS102056</a> <br/>
-        <strong>NOTE</strong>: McAfee doesn’t allow you to whitelist folders. Instead, you’ll need to whitelist files, which is more annoying and also version-specific. See the list above.</p>
-
-    <h4 id="norton">Norton:</h4>
-    <p><a href="https://support.norton.com/sp/en/us/home/current/solutions/v3672136">https://support.norton.com/sp/en/us/home/current/solutions/v3672136</a> <br/>
-        or <a href="https://www.lifewire.com/exclude-files-from-norton-antivirus-scans-153348">https://www.lifewire.com/exclude-files-from-norton-antivirus-scans-153348</a> <br/>
-        NOTE: You may also need to make exclusions from active detection or another similarly named feature.</p>
-
-    <h4 id="windows-defender">Windows Defender:</h4>
-    <p><a href="https://support.microsoft.com/en-us/help/4028485/windows-10-add-an-exclusion-to-windows-security">https://support.microsoft.com/en-us/help/4028485/windows-10-add-an-exclusion-to-windows-security</a>
-        <br/></p>
-
-    <p>(<strong>PLEASE PROCEED WITH CAUTION</strong>. If you’re installing dev plugins, third-party plugins, or something outside of the normal /xlplugins method, we cannot be sure that the plugins
-        will work, be undetected in-game, and not cause harm to your computer)</p>
-    <hr/>
-
-    <h3 id="q-xiv-isnt-saving-my-new-password--how-do-i-clear-my-saved-password">Q: XIV isn’t saving my new password / how do I clear my saved password?</h3>
-
-    <p>XIV Launcher saves user credentials in the Windows Credential Manager. They will be appropriately labelled so you can find the exact one you want to edit/remove.</p>
-
-    <ol>
-        <li>Open the Windows Credential Manager application. The fastest method is to just start typing its name in the start menu.</li>
-        <li>Select button for Windows Credentials</li>
-        <li>Scroll down until you see an entry like FINAL FANTASY XIV-username and expand the entry</li>
-        <li>Delete the entry. XIVLauncher will no longer be able to load it.</li>
-        <li>Now open xivlauncher and try to login.</li>
-    </ol>
-
-    <p>If you need more help, a basic guide can be found on <a href="https://pureinfotech.com/credential-manager-windows-10/">https://pureinfotech.com/credential-manager-windows-10/</a></p>
-    <hr/>
-
-    <h3 id="q-i-think-xivlauncher-is-giving-me-a-blue-screen-of-death-what-information-would-help-narrow-this-down">Q: I think XIVLauncher is giving me a Blue Screen of Death. What information would
-        help narrow this down?</h3>
-    <p>(NOTE: It’s probably not XIV Launcher, but the following information will help us verify that)</p>
-
-    <ol>
-        <li>What stop code are you getting?</li>
-        <li>What is the faulting application or driver?</li>
-        <li>When did this start happening for you?</li>
-        <li>Which plugins do you have installed? Does it still happen if you disable them and selectively re-enable them one by one?</li>
-        <li>Have you done a full uninstall of XIVLauncher and reinstall? (see a few posts above for details)</li>
-    </ol>
-
-    <p>If unsure about some of those details or if the Windows Event Viewer doesn’t tell you, <a href="https://www.nirsoft.net/utils/blue_screen_view.html">Bluescreenview</a> can read the memory dump
-        (please let the computer finish it without hitting the reset button while it dumps your memory to hard drive)</p>
-    <hr/>
-
-    <h3 id="q-how-can-i-fix-crashes-on-startup">Q: How can I fix crashes on startup?</h3>
-    <p>Please try to install the VC Redist from Microsoft at <a href="https://github.com/abbodi1406/vcredist/releases/latest">https://github.com/abbodi1406/vcredist/releases/latest</a>, as well as the
-        .NET 4.8 Runtime <a href="https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer">https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer</a>.
-        If you are still facing issues, please message us in #xivlauncher_issues</p>
-    <hr/>
-
-    <h3 id="q-will-pluginsxivlauncher-work-on-patch-day">Q: Will plugins/XIVLauncher work on patch day?</h3>
-    <p>Please remember that many of the developers have school/jobs/both and live across a variety of time zones. Things will be updated when they can be. The notion that “XL could be gone at any
-        time” still exists. <strong>We have no clue how much work/time any possible patch may take and we can’t give you any ETAs - it’s impossible.</strong> Please don’t badger us about it, the more
-        support we have to do on patch days, the less work we can do to fix things.</p>
-
-    <p>XIVLauncher:</p>
-    <ul>
-        <li>Users do not need to take any preemptive actions for XIVLauncher compatibility with a new patch.</li>
-        <li>Unless SE decides to completely change how authentication or patch download/updating works, the launcher will work just fine on patch days.</li>
-    </ul>
-
-    <p>Dalamud:</p>
-    <ul>
-        <li>Dalamud has an internal mechanism that checks the client version and a whitelisted compatibility file.</li>
-        <li>If the client version does not match what’s whitelisted, Dalamud will not load.</li>
-        <li>Once Dalamud has been whitelisted, it will load the next time you launch with XIVLauncher. (We’ll also make an announcement on Discord)</li>
-        <li>Dalamud may or may not require updates to be made compatible with the current client. This ultimately depends on how much changed internally and we cannot provide any estimates on how long
-            it may take to whitelist as compatible.
-        </li>
-    </ul>
-
-    <p>Plugins:</p>
-    <ul>
-        <li>Expect all plugins to stop working every patch.</li>
-        <li>Once Dalamud has been whitelisted for a new patch, it will try to load plugins.</li>
-        <li>It’s entirely possible that a patch will be fine for Dalamud, but break a plugin. (If this happens, you’ll want to disable/remove the plugin until it’s updated)</li>
-    </ul>
-    <hr/>
-
-    <h3 id="q-can-i-login-early-to-titlescreen-before-patch-live">Q: CAN I LOGIN EARLY TO TITLESCREEN BEFORE PATCH LIVE????</h3>
-    <p>In theory, yes. But you’ll probably have expired authorization and have to login again anyways.</p>
-
-    <p>Like every patch maintenance, the lobby server will likely be taken offline as usual. Even assuming you get the patch downloaded and applied mid-maintenance, your authorization will almost
-        assuredly be expired before things are back up. <strong>Especially for housing patches as SE never ends those early.</strong></p>
-
-    <p>You can make use of XL’s “wait for maintenance to be over” features to sit and check for boot patches (no login required) and then prompt you to login for game patches as soon as they are
-        generally available.</p>
-
-    <p>The “wait for maintenance to be over” feature can also check for servers to be live every ~15 seconds to get you logged in as soon as things are live.</p>
-
-    <p>As with any patch, <strong>in-game addons will be automatically disabled until Dalamud is updated for new patch content</strong>. Do not manually inject Dalamud as a startup application unless
-        you’d like to crash your client</p>
-    <hr/>
-
-    <h3 id="q-xl-environment-variables">Q: XL Environment Variables</h3>
-
-    <p>You can set <code class="language-plaintext highlighter-rouge">XL_PRERELEASE=true</code> for testing a new release of xivlauncher if applicable.</p>
-
-    <p><strong>If you set this on without knowing what it does, we will not help you if something breaks</strong></p>
-
-    <p>Don’t use the wine env var anymore. Just use the properly working Lutris scripts that work with SquirrelSetup.</p>
-
-    <p><strong>Support will not be provided if you are not on the current version of XL, Dalamud, and plugins. Use with caution as outdated versions will likely crash.</strong></p>
-    <hr/>
-
-    <h3 id="q-outdated-plugins-list">Q: Outdated Plugins List</h3>
-    <p>Between patches breaking them, time, and/or interest, these plugins are not currently updated and the developers are aware. If you’d like to help maintain a plugin, we can help you find their
-        repo and contact if they’re still active.</p>
-
-    <h4 id="chat-extender">Chat Extender:</h4>
-    <p>Broken in: 5.4
-        Status: Being split into multiple separate plugins that can be maintained separately. (ChatBubbles and Chat Translator are two of these plugins)</p>
-    <hr/>
-
-    <h3 id="q-the-launcher-shows-a-red-world-icon-and-an-error-message-when-trying-to-log-in-and-the-official-launcher-doesnt-open">Q: The launcher shows a red world icon and an error message when
-        trying to log in, and the official launcher doesn’t open</h3>
-    <p>This is an issue with Square Enix servers that has been affecting players in the US for a while now, being caused by the login servers being hosted directly by SE in Japan and not taking care
-        of their routes to players.</p>
-
-    <p>To remedy it, you can either wait a while and try again then, or set your VPN to Japan until you are on the title screen. Then you should be able to play normally without a VPN. DNS changes
-        have also been said to help.</p>
-
-    <p>We can recommend mudfish as a VPN for playing FFXIV as it’s cheap and seems to work reliably.
-        If you get errors when patching, we recommend ProtonVPN or CloudFlare with Warp.</p>
-
-    <p>To troubleshoot, you can ping frontier.ffxiv.com, SE’s Japanese login server.</p>
-    <hr/>
-
-    <h3 id="q-the-official-launcher-isnt-working--xivlauncher-failed-to-check-for-updates--patch-files-could-not-be-verified">Q: The Official Launcher isn’t working / XIVLauncher failed to check for
-        updates / Patch files could not be verified</h3>
-
-    <p>Most likely, there’s an issue with your network connection or the route it’s taken to Square Enix’s servers and/or GitHub. The only information XIVLauncher really gets from this is “something
-        went wrong” though.</p>
-
-    <p>While this usually is a per-household kinda thing, there’s no guarantee that multiple computers in the same location would get load balanced onto the same servers (which is why one computer
-        worked and another didn’t).</p>
-
-    <p>If you’re sure this isn’t a firewall issue or a rate limit, here are some things you can try.</p>
-
-    <ol>
-        <li>Reboot the computer</li>
-        <li>Reboot the network equipment (modem and router)</li>
-        <li>Try different DNS
+        <li><code class="language-plaintext highlighter-rouge">(您的 FFXIV 安装路径)\game\ffxiv_dx11.exe</code></li>
+        <li><code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)\XIVLauncherCN.exe</code></li>
+        <li><code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)\app-X.Y.Z\XIVLauncher.exe</code>
             <ul>
-                <li>Google offers 8.8.8.8 and 8.8.4.4</li>
-                <li>CloudFlare offers 1.1.1.1 and 1.0.0.1</li>
-                <li>Level3 offers 4.2.2.2 and 4.2.2.4</li>
+                <li><strong>注意</strong>：将 X.Y.Z 替换为最新可用版本。<strong>每次启动器更新都会更改！</strong></li>
             </ul>
         </li>
-        <li>Try a VPN
+        <li><code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)\Roaming\addon\Hooks\W.X.Y.Z\Dalamud.Injector.exe</code>
             <ul>
-                <li>If you already connect using a VPN, try disconnecting it first</li>
-                <li>If you want to try a free VPN service, CloudFlare offers one at <a href="https://1.1.1.1/">https://1.1.1.1/</a> or you can try ProtonVPN for more control.</li>
-                <li>If you want to try a paid VPN service (still no guarantee) we’ve recommended MudFish in the past.</li>
+                <li><strong>注意</strong>：将 W.X.Y.Z 替换为最新可用版本。<strong>每次 Dalamud 更新都会更改！</strong></li>
             </ul>
         </li>
-        <li>Copy a working FFXIV install from another computer
+        <li><code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)\Roaming\addon\Hooks\W.X.Y.Z\DalamudCrashHandler.exe</code>
             <ul>
-                <li>The easiest method is to just copy the folder onto a large flash drive or external HD</li>
-                <li>If you’re familiar with setting up Windows Sharing, you can also share the drive/folder from a working computer and copy it over your network</li>
+                <li><strong>注意</strong>：将 X.Y.Z 替换为最新可用版本。<strong>每次启动器更新都会更改！</strong></li>
             </ul>
         </li>
-    </ol>
+        <li><code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)\Roaming\addon\Hooks\W.X.Y.Z\Dalamud.dll</code>
+            <ul>
+                <li><strong>注意</strong>：将 W.X.Y.Z 替换为最新可用版本。<strong>每次 Dalamud 更新都会更改！</strong></li>
+            </ul>
+        </li>
+        <li><code class="language-plaintext highlighter-rouge">(XIVLauncher_CN安装路径)\Roaming\runtime</code></li>
+    </ul>
 
-    <h3 id="q-wtfast-config">Q: WTFast Config</h3>
-    <p><img src="/faq/images/wtfastconfig.png" alt="wtfast config settings"/></p>
+    <h4 id="个别防病毒软件的操作指南">个别防病毒软件的操作指南</h4>
+
+    <ul>
+        <li>Avast: <a href="https://support.avast.com/en-ww/article/Antivirus-scan-exclusions">https://support.avast.com/en-ww/article/Antivirus-scan-exclusions</a></li>
+        <li>AVG: <a href="https://support.avg.com/SupportArticleView?l=en&amp;urlname=AVG-Antivirus-scan-exclusions">https://support.avg.com/SupportArticleView?l=en&amp;urlname=AVG-Antivirus-scan-exclusions</a>
+        </li>
+        <li>Bitdefender: <a href="https://www.bitdefender.com/consumer/support/answer/13427/">https://www.bitdefender.com/consumer/support/answer/13427/</a>
+            <ul>
+                <li><strong>注意</strong>：BitDefender 用户还需要通过<a href="https://www.bitdefender.com/consumer/support/answer/13425/">BitDefender 防火墙</a>将 XIVLauncher 的程序文件（<code
+                        class="language-plaintext highlighter-rouge">%LocalAppData%</code> 目录下的文件）添加到白名单中。否则，XIVLauncher
+                    将无法检查更新，可能无法应用补丁，并且无法下载插件。
+                </li>
+            </ul>
+        </li>
+        <li>Kaspersky Internet Security: <a href="https://usa.kaspersky.com/blog/kaspersky-add-exclusion/11075/">https://usa.kaspersky.com/blog/kaspersky-add-exclusion/11075/</a>
+            <ul>
+                <li><strong>注意</strong>：请在杀毒软件组件的“威胁和排除”部分添加<strong>文件和文件夹</strong>的排除项。有关详细信息，请参阅上述列表。您还可能需要明确管理需要禁用的 AV
+                    扫描程序。<a href="https://user-images.githubusercontent.com/10376708/131000436-35097d20-f186-4942-ab43-73e51ff77609.png">查看此图片示例</a>。
+                </li>
+                <li><strong>注意 2</strong>：您还可能需要在<strong><a href="https://support.kaspersky.com/15163">Kaspersky 防火墙</a></strong>的“应用程序规则”中将 XIVLauncher
+                    的程序文件添加到白名单中。如果您收到与检查更新、应用补丁或下载插件相关的错误消息，并且日志显示访问权限问题，那么您就需要执行此操作。
+                </li>
+            </ul>
+        </li>
+        <li>McAfee: <a href="https://service.mcafee.com/webcenter/portal/cp/home/articleview?articleId=TS102056">https://service.mcafee.com/webcenter/portal/cp/home/articleview?articleId=TS102056</a>
+            <ul>
+                <li><strong>注意</strong>：McAfee 不允许您将文件夹添加到白名单。相反，您需要将文件添加到白名单，这更麻烦，而且还与特定版本有关。请参阅上述列表。</li>
+            </ul>
+        </li>
+        <li>Norton: <a href="https://support.norton.com/sp/en/us/home/current/solutions/v3672136">https://support.norton.com/sp/en/us/home/current/solutions/v3672136</a> 或 <a
+                href="https://www.lifewire.com/exclude-files-from-norton-antivirus-scans-153348">https://www.lifewire.com/exclude-files-from-norton-antivirus-scans-153348</a>
+            <ul>
+                <li><strong>注意</strong>：您还可能需要从“主动检测”或其他类似名称的功能中进行排除。</li>
+            </ul>
+        </li>
+        <li>Windows Defender: <a href="https://support.microsoft.com/en-us/help/4028485/windows-10-add-an-exclusion-to-windows-security">https://support.microsoft.com/en-us/help/4028485/windows-10-add-an-exclusion-to-windows-security</a>
+        </li>
+    </ul>
+
+    <p>（<strong>请谨慎操作</strong>。如果您正在安装开发插件、第三方插件或其他非正常<code class="language-plaintext highlighter-rouge">/xlplugins</code>方法的内容，我们无法确保插件能正常工作、在游戏中不被检测到，并且不会对您的计算机造成损害。）
+    </p>
+
     <hr/>
 
-    <h3 id="q-nvidia-driver-issue-7th-of-january">Q: NVIDIA Driver issue (7th of January)</h3>
-    <p>If you experience crashes with the Nvidia driver from the 7th of January, please try rolling back to the last release before the holidays from the 15th of December.</p>
+    <h3 id="q-xivlauncher-不保存我的新密码--如何清除保存的密码">Q: XIVLauncher 不保存我的新密码 / 如何清除保存的密码？</h3>
 
-    <p>The release from the 7th seemingly introduced a change or bug that will cause FFXIV to crash under certain conditions when XL is loaded.</p>
-
-    <p>We are still looking into this.</p>
-    <hr/>
-
-    <h3 id="q-how-to-set-an-injection-delay-in-rivatunerrtss">Q: How to set an injection delay in RivaTuner/RTSS</h3>
+    <p>XIVLauncher 将用户凭据保存在 Windows 凭据管理器中。它们将被适当标记，以便您可以找到要编辑/删除的确切条目。</p>
 
     <ol>
-        <li>Go to <code class="language-plaintext highlighter-rouge">C:\Program Files (x86)\RivaTuner Statistics Server\Profiles\\</code></li>
-        <li>Open the <strong>ffxiv_dx11.exe.cfg</strong> file in your text editor of choice.</li>
-        <li>Find the <code class="language-plaintext highlighter-rouge">[Hooking]</code> section and change 2 parameters there:
-            <div class="language-plaintext highlighter-rouge">
-                <div class="highlight"><pre class="highlight"><code>InjectionDelay=15000
+        <li>打开 Windows 凭据管理器应用程序。最快的方法是在开始菜单中开始输入它的名称。</li>
+        <li>选择 Windows 凭据按钮。</li>
+        <li>滚动到看到类似 FINAL FANTASY XIV-username 的条目，并展开该条目。</li>
+        <li>删除该条目。XIVLauncher 将无法加载它。</li>
+        <li>现在打开 XIVLauncher 并尝试登录。</li>
+    </ol>
+
+    <p>如果需要更多帮助，可以在<a href="https://pureinfotech.com/credential-manager-windows-10/">https://pureinfotech.com/credential-manager-windows-10/</a>上找到基本指南。</p>
+
+    <hr/>
+
+    <h3 id="q-我认为-xivlauncher-导致了蓝屏死机哪些信息有助于缩小问题范围">Q: 我认为 XIVLauncher 导致了蓝屏死机。哪些信息有助于缩小问题范围？</h3>
+
+    <p>（注意：这可能不是 XIVLauncher 的问题，但以下信息将帮助我们验证。）</p>
+
+    <ol>
+        <li>您获得了什么停止代码？</li>
+        <li>哪个应用程序或驱动程序出现故障？</li>
+        <li>这个问题是什么时候开始的？</li>
+        <li>您安装了哪些插件？如果禁用它们，然后逐个选择重新启用它们，问题是否仍然存在？</li>
+        <li>您是否对 XIVLauncher 进行了完全卸载和重新安装？（请参阅上面的几个帖子以获取详细信息）</li>
+    </ol>
+
+    <p>如果对某些细节不确定或者如果 Windows 事件查看器没有提供相关信息，<a href="https://www.nirsoft.net/utils/blue_screen_view.html">BlueScreenView</a> 可以读取内存转储文件（请让计算机在将内存转储到硬盘时完成，不要按重置按钮中断该过程）。
+    </p>
+
+    <hr/>
+
+    <h3 id="q-如何解决启动时的崩溃问题">Q: 如何解决启动时的崩溃问题？</h3>
+
+    <p>请尝试从 Microsoft 的 <a href="https://github.com/abbodi1406/vcredist/releases/latest">https://github.com/abbodi1406/vcredist/releases/latest</a> 下载并安装 VC Redist，以及 .NET 4.8
+        Runtime <a href="https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer">https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer</a>。
+    </p>
+
+    <p>如果问题仍然存在，请加入我们的<a href="https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;inviteCode=CZtWN&amp;from=181074&amp;biz=ka&amp;shareSource=5">QQ频道</a> 寻求帮助。<br/>
+        <strong>注意：请确保自己没有使用任何第三方插件、没有在使用Dalamud/XIVLauncher_CN前执行特定操作</strong></p>
+
+    <hr/>
+
+    <h3 id="q-网络连接正常但是无法更新xivlauncher_cndalamud或者无法加载主库插件列表">Q: 网络连接正常但是无法更新XIVLauncher_CN、Dalamud或者无法加载主库插件列表</h3>
+
+    <p>这是一个加速器或者代理设置问题。</p>
+
+    <h4 id="如果你使用了加速器">如果你使用了加速器</h4>
+
+    <p>已知部分加速器会导致网络问题，如<code class="language-plaintext highlighter-rouge">UU加速器</code>。请在使用加速器的时候尽量使用路由模式。<br/>
+        此外，多数加速器不兼容最终幻想14（国服）和 FINAL FANTASY XIV（国际服）分别加速，请不要在使用国际服加速线路的时候，在国服使用XIVLauncher_CN或Dalamud。</p>
+
+    <h4 id="代理问题">代理问题</h4>
+
+    <p>代理问题不属于我们的支持项目，唯一能够提供的信息是：XIVLauncher_CN、Dalamud和主库插件列表均不需要使用代理，我们的服务会自动将国内的请求分流到国内主干网CDN上。<br/>
+        如果你遇到了网络问题且没有使用加速器，请在Dalamud设置中关闭使用自定义代理，并且重启游戏。</p>
+
+    <h4 id="我们的服务故障">我们的服务故障</h4>
+
+    <p>我们的独立服务器托管在与世界前列云运营商相同的机房，国内CDN使用了中国电信提供的CDN服务，而国外则使用了著名的cloudflare提供的CDN服务。<br/>
+        理论上我们的服务故障的可能性极小，而且我们还有一定的灾备策略。<br/>
+        如果您真的怀疑不是您自己的原因导致的无法加载，可以尝试使用浏览器访问 <code class="language-plaintext highlighter-rouge">https://aonyx.ffxiv.wang/</code> 以确定是否是服务故障。</p>
+
+    <h4 id="滥用网络攻击导致的防火墙自动禁用">滥用/网络攻击导致的防火墙自动禁用</h4>
+
+    <p>网络攻击无处不在，因此我们通过CDN和源服务器两层进行了网络攻击过滤。其中CDN层比较宽松，源服务器层相对严格。<br/>
+        正常使用的情况下，99.99%以上都不会触发到防火墙。<br/>
+        原则上我们不提供被防火墙禁止后的解封。</p>
+
+    <!--
+    我们可以推荐 [MUDFISH](https://mudfish.net) 作为游玩 FFXIV 的 VPN，它价格便宜且似乎工作可靠。如果在更新补丁时出现错误，我们推荐使用 [ProtonVPN](https://protonvpn.com/)
+    或 [Cloudflare WARP](https://1.1.1.1/)。
+
+    要进行故障排除，您可以对 SE 的日本登录服务器 `frontier.ffxiv.com` 进行 Ping 测试。
+    -->
+    <hr/>
+
+    <h3 id="q-官方启动器无法工作--xivlauncher_cn-在检查更新时失败--无法验证补丁文件">Q: 官方启动器无法工作 / XIVLauncher_CN 在检查更新时失败 / 无法验证补丁文件</h3>
+
+    <p>最有可能的情况是您的网络连接或连接到盛趣服务器和/或我们的在线服务出现了问题。但是，XIVLauncher 实际上只能获得“出现了问题”的信息。</p>
+
+    <p>虽然这通常是家庭网络问题，但不能保证在同一位置的多台计算机会被平衡负载到相同的服务器上（这就是为什么一台计算机正常工作而另一台不工作的原因）。</p>
+
+    <p>如果您确定这不是防火墙问题或速率限制问题，可以尝试以下几个方法：</p>
+
+    <ul>
+        <li>重新启动计算机</li>
+        <li>重新启动网络设备（调制解调器和路由器）</li>
+        <li>确保硬盘不是满的</li>
+        <li>尝试不同的 DNS
+            <ul>
+                <li>DNSPod 提供 119.29.29.29 （推荐）</li>
+                <li>Google 提供 8.8.8.8 和 8.8.4.4</li>
+                <li>CloudFlare 提供 1.1.1.1 和 1.0.0.1</li>
+                <li>Level3 提供 4.2.2.2 和 4.2.2.4</li>
+            </ul>
+        </li>
+        <li>检查加速器设置或者代理设置
+            <ul>
+                <li>参考<a
+                        href="#q-the-launcher-shows-a-red-world-icon-and-an-error-message-when-trying-to-log-in-and-the-official-launcher-doesnt-open">网络连接正常但是无法更新XIVLauncher_CN、Dalamud或者无法加载主库插件列表</a>
+                </li>
+            </ul>
+        </li>
+        <li>从另一台计算机复制可正常运行的 FFXIV 安装文件
+            <ul>
+                <li>最简单的方法是将文件夹复制到一个大容量的闪存驱动器或外部硬盘上。</li>
+                <li>如果您熟悉设置 Windows 共享，您还可以从一台可正常工作的计算机共享驱动器/文件夹，然后通过网络将其复制到您的计算机。</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr/>
+
+    <h3 id="q-如何在-rivatunerrtss-中设置注入延迟">Q: 如何在 RivaTuner/RTSS 中设置注入延迟</h3>
+
+    <ol>
+        <li>打开 <code class="language-plaintext highlighter-rouge">C:\Program Files (x86)\RivaTuner Statistics Server\Profiles\\</code>。</li>
+        <li>使用您选择的文本编辑器打开 <code class="language-plaintext highlighter-rouge">ffxiv_dx11.exe.cfg</code> 文件。</li>
+        <li>找到 <code class="language-plaintext highlighter-rouge">[Hooking]</code> 部分，并更改其中的两个参数：</li>
+    </ol>
+
+    <div class="language-text highlighter-rouge">
+        <div class="highlight"><pre class="highlight"><code>InjectionDelay=15000
 InjectionDelayTriggers=KERNEL32.dll,USER32.dll
 </code></pre>
-                </div>
-            </div>
-            <p>If they are not present, add them</p>
-        </li>
-    </ol>
+        </div>
+    </div>
+
+    <p>如果它们不存在，请添加它们。</p>
 
     <hr/>
 
-    <h3 id="q-where-can-i-find-my-ffxiv-installation">Q: Where can I find my FFXIV Installation?</h3>
-    <p>(AKA: What does XIVLauncher mean by GamePath?)</p>
+    <h3 id="q-我可以修复我的ffxiv安装吗">Q: 我可以修复我的FFXIV安装吗？</h3>
 
-    <p>FFXIV installs to a few different locations depending on whether you used the official installer or steam, when you installed it, and potentially if you installed the free trial or not. Here
-        are some of the common paths.</p>
+    <p>暂时不可以，但是你可以检查哪个文件出错，并让朋友拷贝给你。
+        如果你想要使用这个功能，在XIVLauncher_CN中，右键点击“登录”并选择“修复游戏文件”。</p>
 
-    <p>Whatever you do, DO NOT SELECT THE <code class="language-plaintext highlighter-rouge">BOOT</code> OR <code class="language-plaintext highlighter-rouge">GAME</code> FOLDER. But if you already
-        have a copy of FFXIV installed, you’ll want the folder that contains them.</p>
+    <p><strong>请不要使用官方启动器中的修复功能！</strong>它只会修复官方登录器**。</p>
 
-    <p>Official Launcher:
-        <code class="language-plaintext highlighter-rouge">C:\Program Files (x86)\SquareEnix\FINAL FANTASY XIV - A Realm Reborn</code></p>
-
-    <p>Steam:
-        <code class="language-plaintext highlighter-rouge">C:\Program Files (x86)\Steam\steamapps\common\FINAL FANTASY XIV Online</code>
-        <code class="language-plaintext highlighter-rouge">C:\Program Files (x86)\Steam\steamapps\common\FINAL FANTASY XIV - A Realm Reborn</code>
-        <strong>NOTE</strong>: If your steam library is on another drive, it will have a different, but similar structure. <br/>
-        <img src="/faq/images/xivlaunchersSettings.png" alt="Example"/></p>
     <hr/>
 
-    <h3 id="q-how-do-i-migrate-ffxiv-andor-xivlauncher-files-from-an-old-wine-prefix-to-a-new-one-linux">Q: How do I migrate ffxiv and\/or xivlauncher files from an old Wine prefix to a new one?
-        [Linux]</h3>
-
-    <p>Once you’ve made your new xivlauncher-based prefix, you can copy files from your old ffxiv prefix for the following:</p>
-
-    <p><strong>Copy a FFXIV Install from one prefix to another (or move/symlink as desired)</strong></p>
-
-    <p>from:
-        <code class="language-plaintext highlighter-rouge">~/Games/&lt;old prefix&gt;/drive_c/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn</code>
-        <br/>
-        to:
-        <code class="language-plaintext highlighter-rouge">~/Games/&lt;new prefix&gt;/drive_c/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn</code></p>
-
-    <p><strong>Copy your user/character settings:</strong></p>
-
-    <p>from:
-        <code class="language-plaintext highlighter-rouge">~/Games/&lt;old prefix&gt;/drive_c/users/&lt;username&gt;/My Documents/My Games/FINAL FANTASY XIV - A Realm Reborn</code>
-        <br/>
-        to:</p>
-    <ul>
-        <li>(Wine 5) <code class="language-plaintext highlighter-rouge">~/Games/&lt;new prefix&gt;/drive_c/users/&lt;username&gt;/My Documents/My Games/FINAL FANTASY XIV - A Realm Reborn</code></li>
-        <li>(Wine 6) <code class="language-plaintext highlighter-rouge">~/Games/&lt;new prefix&gt;/drive_c/users/&lt;username&gt;/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn</code></li>
-    </ul>
-
-    <p><strong>Copy XIV Launcher config (please reinstall plugins)</strong>:</p>
-
-    <p>from:
-        <code class="language-plaintext highlighter-rouge">~/Games/&lt;old prefix&gt;/drive_c/users/&lt;username&gt;/Application Data/XIVLauncher/pluginConfigs</code>
-        <br/>
-        to:</p>
-    <ul>
-        <li>(Wine 5) <code class="language-plaintext highlighter-rouge">~/Games/&lt;new prefix&gt;/drive_c/users/&lt;username&gt;/Application Data/XIVLauncher/pluginConfigs</code></li>
-        <li>(Wine 6) <code class="language-plaintext highlighter-rouge">~/Games/&lt;new prefix&gt;/drive_c/users/&lt;username&gt;/AppData/Roaming/XIVLauncher/pluginConfigs</code></li>
-    </ul>
-    <hr/>
-
-    <h3 id="q-how-do-i-migrate-ffxiv-andor-xivlauncher-files-from-an-old-installation-to-a-new-one-windows">Q: <strong>How do I migrate ffxiv and\/or xivlauncher files from an old installation to a
-        new one? [Windows]</strong></h3>
-
-    <p><strong>Copy a FFXIV Install</strong>
-        For the most part, FFXIV is portable. You just need to make sure you’ve installed DirectX as needed. I recommend installing the launcher with SE’s installer first, and then replacing the files
-        with a backup if you don’t want to patch.
-        <strong>NOTE</strong>: You shouldn’t do this if you had Textools installed. Or at least, make sure to restore indexes first as it probably broke your client.</p>
-
-    <p><strong>Copy your user\character settings:</strong>
-        <code class="language-plaintext highlighter-rouge">%USERPROFILE%\Documents\My Games\FINAL FANTASY XIV - A Realm Reborn</code></p>
-
-    <p><strong>Copy XIV Launcher config (please reinstall plugins)</strong>:
-        <strong>NOTE</strong>: do not copy other config or folders as those are unique to that particular computer. You should set them up per machine.
-        <code class="language-plaintext highlighter-rouge">%appdata%\XIVLauncher\pluginConfigs</code></p>
-    <hr/>
-
-    <h3 id="q-why-do-people-keep-asking-about-steam-so-much">Q: Why do people keep asking about Steam so much?</h3>
-    <p>Steam Integration = “I want the steam program to see I’m playing FFXIV and do the overlay thing”</p>
-
-    <p>Use Steam service account = “I bought FFXIV through Steam, which is not the same as the Windows platform.”</p>
-
-    <h4 id="how-to-override-your-ffxiv-steam-entry-to-open-xivlauncher-instead">How to override your FFXIV steam entry to open XIVLauncher instead</h4>
-    <ol>
-        <li>Right Click on your game</li>
-        <li>Go to Properties</li>
-        <li>Set Launch Options…<br/>Set the launch option to <code class="language-plaintext highlighter-rouge">"C:\Users\YOUR_USERNAME_HERE\AppData\Local\XIVLauncher\XIVLauncher.exe" %command%</code>
-            (the quotes are important). If you’re one of those monsters with your userprofile in a nonstandard location, you will be expected to adjust the full path accordingly.
-        </li>
-    </ol>
-    <hr/>
-
-    <h3 id="q-can-i-repair-my-ffxiv-installation">Q: Can I repair my FFXIV installation?</h3>
-
-    <p>Short answer: No, not without reinstalling the game.</p>
-
-    <h4 id="general-steps--to-reinstall-the-entire-game">General steps to reinstall the entire game</h4>
-    <ol>
-        <li>Go to your ffxiv installation folder (refer to your gamepath)</li>
-        <li>Delete the <code class="language-plaintext highlighter-rouge">boot</code> and <code class="language-plaintext highlighter-rouge">game</code> folders</li>
-        <li>Open xivlauncher and login. It should ask to patch</li>
-    </ol>
-
-    <p>Fun answer: XIVLauncher can assist you in selectively reinstalling only certain portions of the FFXIV game client if needed. Or the entire game.</p>
-
-    <h4 id="general-steps-to-reinstall-just-arr">General steps to reinstall just ARR:</h4>
+    <h3 id="q-在尝试更新ffxiv时如何修复版本检查错误">Q: 在尝试更新FFXIV时，如何修复版本检查错误？</h3>
 
     <ol>
-        <li>Go to your ffxiv installation folder (refer to your gamepath)</li>
-        <li>Go to the <code class="language-plaintext highlighter-rouge">game</code> folder</li>
-        <li>Select all the files except the <code class="language-plaintext highlighter-rouge">sqpack</code> folder</li>
-        <li>If you have reshade/reshade, unselect those files to preserve them (gshade-presets, gshade-shaders, GShade.ini, dxgi/d3d11)</li>
-        <li>Delete the selected files so only the sqpack folder remains (and reshade/gshade files if applicable)</li>
-        <li>Go to the <code class="language-plaintext highlighter-rouge">sqpack</code> folder now</li>
-        <li>Delete the <code class="language-plaintext highlighter-rouge">ffxiv</code> folder there</li>
-        <li>Open xivlauncher and login. It should ask to patch</li>
-    </ol>
-
-    <h4 id="general-steps-to-reinstall-one-or-more-expansions">General steps to reinstall one or more expansions:</h4>
-    <ol>
-        <li>Go to your ffxiv installation folder (refer to your gamepath)</li>
-        <li>Go to the <code class="language-plaintext highlighter-rouge">game</code> folder</li>
-        <li>Go to the <code class="language-plaintext highlighter-rouge">sqpack</code> folder now</li>
-        <li>Delete the corresponding expac folder[s] you want to reinstall.
-            4a. ex1 = heavensward
-            4b. ex2 = stormblood
-            4c. ex3 = shadowbringers
-        </li>
-        <li>Open xivlauncher and login. It should ask to patch</li>
+        <li>进入<code class="language-plaintext highlighter-rouge">\上海数龙科技有限公司\最终幻想XIV\game\My Games</code>。</li>
+        <li>打开<code class="language-plaintext highlighter-rouge">FFXIV_BOOT.cfg</code>文件，使用您选择的文本编辑器。</li>
+        <li>将<code class="language-plaintext highlighter-rouge">BootVersionCheckMode</code>更改为<code class="language-plaintext highlighter-rouge">1</code>。</li>
+        <li>重新启动游戏。</li>
     </ol>
 
     <hr/>
 
-    <h3 id="q-how-do-i-fix-a-version-check-error-when-trying-to-update-ffxiv">Q: How do I fix a version check error when trying to update FFXIV?</h3>
-    <ol>
-        <li>Go to <code class="language-plaintext highlighter-rouge">&lt;your user folder&gt;\Documents\My Games\FINAL FANTASY XIV - A Realm Reborn</code></li>
-        <li>Open the <code class="language-plaintext highlighter-rouge">FFXIV_BOOT.cfg</code> file in your text editor of choice.</li>
-        <li>Change <code class="language-plaintext highlighter-rouge">BootVersionCheckMode</code> to <code class="language-plaintext highlighter-rouge">1</code></li>
-        <li>Relaunch.</li>
-    </ol>
+    <h3 id="q-我在安装了-textools-的情况下更新了游戏如何修复崩溃问题">Q: 我在安装了 TexTools 的情况下更新了游戏。如何修复崩溃问题？</h3>
+
+    <p>您会知道是否受到此问题的影响，因为官方启动器也会崩溃。这个问题不是由XIVLauncher引起的。</p>
+
+    <p>备份您的模组文件，并<a href="#q-can-i-repair-my-ffxiv-installation">按照这个FAQ条目修复游戏</a>。请注意，您的模组将被卸载。<br/>
+        <del><em>*请不要使用tt，tt只会带来不幸——獭爹*</em></del>
+    </p>
 
     <hr/>
 
-    <h3 id="q-how-can-i-stop-gshade-or-reshade-shaders-from-affecting-plugin-windows">Q: How can I stop GShade or ReShade shaders from affecting plugin windows?</h3>
-    <ol>
-        <li>Go to <code class="language-plaintext highlighter-rouge">&lt;your game installation folder&gt;\FINAL FANTASY XIV - A Realm Reborn\game</code></li>
-        <li>Make sure the game is closed</li>
-        <li>If there is a file called <code class="language-plaintext highlighter-rouge">d3d11.dll</code> or <code class="language-plaintext highlighter-rouge">dinput8.dll</code> <strong>rename
-            it</strong> to <code class="language-plaintext highlighter-rouge">dxgi.dll</code></li>
-        <li>Relaunch.</li>
-    </ol>
+    <h3 id="q-xl-环境变量">Q: XL 环境变量</h3>
+
+    <p>如果适用，您可以设置 <code class="language-plaintext highlighter-rouge">XL_PRERELEASE=true</code> 来测试 XIVLauncher
+        的新版本。<strong>如果您在不了解其作用的情况下启用此选项，我们将不会在发生问题时提供帮助。</strong></p>
+
+    <p>不再使用 wine 环境变量。只需使用与 SquirrelSetup 兼容的正常工作的 Lutris 脚本。</p>
+
+    <p><strong>如果您未使用当前版本的 XL、Dalamud 和插件，则不提供支持。请谨慎使用，因为过时的版本可能会导致崩溃。</strong></p>
 
     <hr/>
 
-    <h3 id="q-i-updated-my-game-with-textools-mods-installed-how-do-i-fix-crashes">Q: I updated my game with TexTools mods installed. How do I fix crashes?</h3>
-    <p>You’ll know if you’re affected by this because the official launcher will crash the game too. This issue is not caused by XIVLauncher.</p>
+    <h3 id="q-wtfast-配置">Q: WTFast 配置</h3>
 
-    <p>While the last few game patches have been relatively fine to keep your Textools mods enabled as it will do minor adjustments to fix things up, please refer to the Textools Discord for best
-        practices.</p>
+    <p><img src="/faq/images/wtfastconfig.png" alt="WTFast 配置设置"/></p>
 
-    <p>To fix the crash, open Textools, click on the Help menu, and select “Download Index Backups” and then “Start Over” to repair files broken from updating with Textools modifications.</p>
     <hr/>
 
-    <p>Want to add a new FAQ entry? Please use the template below and PR to the main <a href="https://github.com/goatcorp/faq">FAQ repo</a></p>
+    <p>想要添加一个新的常见问题解答？ 请使用下面的模板，PR 到主 <a href="https://github.com/ottercorp/faq">常见问题</a></p>
+
     <div class="language-plaintext highlighter-rouge">
-        <div class="highlight"><pre class="highlight"><code>### Basic Title
+        <div class="highlight"><pre class="highlight"><code>### Q: Basic Title
 FAQ content
 &lt;hr&gt;
 </code></pre>
         </div>
     </div>
-    <p>Then add it to the Table of Contents using <code class="language-plaintext highlighter-rouge">[Name / Title here](#anchor here) &lt;br&gt;</code></p>
+
+    <p>然后使用“[Name/Title here]（#anchor here）将其添加到目录中<br/></p>
 
     <p><a href="#table-of-contents">Return to the top</a><br/>
-        <a href="/faq">Return to the main Readme</a></p>
+        <a href="https://goatcorp.github.io/faq">Return to the main Readme</a></p>
 
 
     <footer class="site-footer">
