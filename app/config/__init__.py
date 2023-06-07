@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     plogon_api_key: str = ''
     # stg code
     stg_code: str = ''
+    # ottercloud cdn
+    ottercloud_cdn_host = ''
+    ottercloud_cdn_id = ''
+    ottercloud_cdn_key = ''
 
     class Config:
         env_file = '.env'
@@ -59,6 +63,8 @@ SENSITIVE_FIELDS = [
     'crowdin_token',
     'api_secret',
     'plogon_api_key',
+    'ottercloud_cdn_id',
+    'ottercloud_cdn_key',
 ]
 settings_json = Settings().dict()
 for field in SENSITIVE_FIELDS:
