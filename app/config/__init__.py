@@ -49,7 +49,7 @@ class Settings(BaseSettings):
     ottercloud_cdn_id = ''
     ottercloud_cdn_key = ''
     # OtterBot Web JSON
-    otterbot_web_json: int = ''
+    otterbot_web_json: int = 0
 
     class Config:
         env_file = '.env'
