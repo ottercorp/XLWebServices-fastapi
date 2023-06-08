@@ -42,4 +42,4 @@ async def home():
 
 @router.get(f"/{get_settings().otterbot_web_json}.json")
 async def otterbot_web_json():
-    return json.dumps({"bot_appid": get_settings().otterbot_web_json})
+    return {"bot_appid": get_settings().otterbot_web_json}
