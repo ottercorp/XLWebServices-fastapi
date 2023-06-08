@@ -14,6 +14,7 @@ from .git import update_git_repo, get_repo_dir, get_user_repo_name
 from .redis import Redis
 from .cdn.cloudflare import CloudFlareCDN
 from .cdn.ctcdn import CTCDN
+from .cdn.ottercloudcdn import OtterCloudCDN
 from github import Github
 from termcolor import colored
 
@@ -38,11 +39,13 @@ def regen(task_list: list[str]):
             cdn_client_list.append(CloudFlareCDN())
         elif cdn == 'ctcdn':
             cdn_client_list.append(CTCDN())
+        elif cdn == 'ottercloudcdn':
+            cdn_client_list.append(OtterCloudCDN())
     task_cdn_list = list(product(task_list, cdn_client_list))
 
     logger.info(f"Started CDN refresh tasks: {task_cdn_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = executor.map(refresh_cdn_task, task_cdn_list)
+        results = executor.map(refresh_cdn_task, task_cdn_list) # an iterator of for i in task_cdn_list -> refresh_cdn_task(i)
         results_list = []
         for (task_cdn, result) in zip(task_cdn_list, results):
             task, cdn = task_cdn
@@ -77,7 +80,7 @@ def regen_task(task: str):
         return False
 
 
-def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN]]):
+def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloudCDN]]):
     task, cdn = task_cdn
     logger.info(f"Started CDN refresh task: {cdn}-{task}.")
     try:

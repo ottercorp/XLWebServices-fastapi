@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -9,7 +11,7 @@ from .xivlauncher import router as router_xivl
 from .launcher import router as router_launcher
 from .plogon import router as router_plogon
 from .faq import router as router_faq
-
+from app.utils.common import get_settings
 
 router = APIRouter()
 
@@ -36,3 +38,8 @@ template = Jinja2Templates("artifact")
 async def home():
     # 返回artifact/index.html页面
     return template.TemplateResponse("index.html", context={'request': {}})
+
+
+@router.get(f"/{get_settings().otterbot_web_json}.json")
+async def otterbot_web_json():
+    return json.dumps({"bot_appid": get_settings().otterbot_web_json})
