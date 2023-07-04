@@ -29,7 +29,7 @@ class OtterCloudCDN(CDN):
     def _get_token(self):
         url = f'https://{self.cdn_host}/APIAccessTokenService/getAPIAccessToken'
         data = {
-            "type": "admin",
+            "type": "user",
             "accessKeyId": self.id,
             "accessKey": self.key
         }
