@@ -43,7 +43,7 @@ def get_git_repo(git_url: str, shallow: bool = True):
 
 def update_git_repo(git_url: str):
     repo = get_git_repo(git_url)
-    pull = repo.remotes.origin.pull()
+    pull = repo.remotes.origin.pull(force=True)
     info = pull[0]
     assert info.flags & info.ERROR == 0, f"Error while pulling repo {git_url}"
     assert info.flags & info.REJECTED == 0, f"Rejected while pulling repo {git_url}"
