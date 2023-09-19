@@ -18,7 +18,7 @@ router = APIRouter()
 SEMVER_REGEX = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(\.(0|[1-9]\d*))?(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$|^$"
 
 
-@router.get("/GetLease")
+@router.get("/Release/VersionInfo")
 async def launcher(
         user_agent: Union[str, None] = Header(default="Injector"),
         accept: Union[str, None] = Header(default="*/*"),

@@ -95,6 +95,7 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
             'xl': ['/Proxy/Meta'],
             'xivl': ['/Proxy/Meta'],
             'xivlauncher': ['/Proxy/Meta'],
+            'injector': ['/Injector/Release/VersionInfo'],
         }
         if task in path_map:
             cdn.purge(path_map[task])
