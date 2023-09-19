@@ -392,8 +392,9 @@ def regen_injector(redis_client=None):
     releases = repo.get_releases()
     last_release = next((r for r in releases if not r.prerelease), None)
     pre_release = next((r for r in releases if r.prerelease), None)
-    if last_release is None:
-        last_release = pre_release
+    if last_release is None or pre_release is None:
+        last_release = last_release or pre_release
+        pre_release = pre_release or last_release
     for release in (last_release, pre_release):
         release_type = 'prerelease' if release.prerelease else 'release'
         assets = release.get_assets()
