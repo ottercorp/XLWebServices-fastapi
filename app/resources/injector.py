@@ -41,7 +41,7 @@ async def launcher(
         "success": True,
         "message": None,
         "release":{
-            "version": version_dict['release_type'],
+            "version": version_dict[f'{release_type}'],
             "url": f"/File/Get/{hashed_name}",
         },
         "flags": 0,
