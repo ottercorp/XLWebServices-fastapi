@@ -3,7 +3,7 @@
 # cython:language_level=3
 # @Time    : 2023/9/13 8:25
 # @File    : injector.py
-
+import json
 from typing import Union
 from app.config import Settings
 from app.utils.common import get_settings
@@ -33,7 +33,7 @@ async def launcher(
     else:
         raise HTTPException(status_code=400, detail="Invalid track")
     hashed_name = r.hget(f'{settings.redis_prefix}injector', f'{release_type}-asset')
-    version_dict = r.hget(f'{settings.redis_prefix}injector', 'version')
+    version_dict = json.loads(r.hget(f'{settings.redis_prefix}injector', 'version'))
     # if x_xl_firststart == 'yes' or not x_xl_haveversion:
     #     r.hincrby(f'{settings.redis_prefix}xivlauncher-count', 'XLUniqueInstalls')
     # r.hincrby(f'{settings.redis_prefix}xivlauncher-count', 'XLStarts')
