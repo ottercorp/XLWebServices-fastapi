@@ -66,6 +66,7 @@ def regen_task(task: str):
             'xl': regen_xivlauncher,
             'xivl': regen_xivlauncher,
             'xivlauncher': regen_xivlauncher,
+            'injector': regen_injector,
         }
         if task in task_map:
             func = task_map[task]
@@ -375,3 +376,42 @@ def regen_xivlauncher(redis_client = None):
             f'{release_type}-meta',
             json.dumps(meta)
         )
+
+
+def regen_injector(redis_client = None):
+    logger.info("Start regenerating injector distribution.")
+    if not redis_client:
+        redis_client = Redis.create_client()
+    settings = get_settings()
+    injector_repo_url = settings.injector_repo
+    s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', injector_repo_url)
+    user, repo_name = s.group('user'), s.group('repo')
+    gh = Github(None if not settings.github_token else settings.github_token)
+    repo = gh.get_repo(f'{user}/{repo_name}')
+    releases = repo.get_releases()
+    last_release = next((r for r in releases if not r.prerelease), None)
+    pre_release = next((r for r in releases if r.prerelease), None)
+    if last_release is None:
+        last_release = pre_release
+    for release in (last_release, pre_release):
+        release_type = 'prerelease' if release.prerelease else 'release'
+        assets = release.get_assets()
+        for asset in assets:
+            file_name = asset.name
+            if file_name == 'Dalamud.Updater.exe':
+                asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
+                (hashed_name, _) = cache_file(asset_filepath)
+                redis_client.hset(
+                    f'{settings.redis_prefix}injector',
+                    f'{release_type}-asset',
+                    hashed_name
+                )
+    version_dict = {
+        'release': last_release.tag_name,
+        'prerelease': pre_release.tag_name,
+    }
+    redis_client.hset(
+        f'{settings.redis_prefix}injector',
+        f'version',
+        json.dumps(version_dict)
+    )
