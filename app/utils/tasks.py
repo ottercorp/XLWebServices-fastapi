@@ -67,7 +67,7 @@ def regen_task(task: str):
             'xl': regen_xivlauncher,
             'xivl': regen_xivlauncher,
             'xivlauncher': regen_xivlauncher,
-            'injector': regen_injector,
+            'updater': regen_updater,
         }
         if task in task_map:
             func = task_map[task]
@@ -96,7 +96,7 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
             'xl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivlauncher': ['/Proxy/Meta', '/Launcher/GetLease'],
-            'injector': ['/Injector/Release/VersionInfo'],
+            'updater': ['/Updater/Release/VersionInfo'],
         }
         if task in path_map:
             cdn.purge(path_map[task])
@@ -379,13 +379,13 @@ def regen_xivlauncher(redis_client=None):
         )
 
 
-def regen_injector(redis_client=None):
-    logger.info("Start regenerating injector distribution.")
+def regen_updater(redis_client=None):
+    logger.info("Start regenerating Updater distribution.")
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
-    injector_repo_url = settings.injector_repo
-    s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', injector_repo_url)
+    updater_repo_url = settings.updater_repo
+    s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', updater_repo_url)
     user, repo_name = s.group('user'), s.group('repo')
     gh = Github(None if not settings.github_token else settings.github_token)
     repo = gh.get_repo(f'{user}/{repo_name}')
@@ -404,7 +404,7 @@ def regen_injector(redis_client=None):
                 asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
                 (hashed_name, _) = cache_file(asset_filepath)
                 redis_client.hset(
-                    f'{settings.redis_prefix}injector',
+                    f'{settings.redis_prefix}updater',
                     f'{release_type}-asset',
                     hashed_name
                 )
@@ -413,7 +413,7 @@ def regen_injector(redis_client=None):
         'prerelease': pre_release.tag_name,
     }
     redis_client.hset(
-        f'{settings.redis_prefix}injector',
+        f'{settings.redis_prefix}updater',
         f'version',
         json.dumps(version_dict)
     )

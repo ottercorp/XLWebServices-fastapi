@@ -3,7 +3,7 @@ from app.utils.tasks import regen
 
 
 def regen_main():
-    task_list = ['dalamud', 'dalamud_changelog', 'asset', 'plugin', 'xivlauncher','injector'] \
+    task_list = ['dalamud', 'dalamud_changelog', 'asset', 'plugin', 'xivlauncher','updater'] \
         if len(sys.argv) == 1 else sys.argv[1:]
     regen(task_list)
 
