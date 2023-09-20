@@ -31,7 +31,7 @@ def start_server_func(args):
 
 def init_server_func(args):
     from app.utils.tasks import regen
-    regen(['dalamud', 'dalamud_changelog', 'asset', 'plugin', 'xivlauncher', 'injector'])
+    regen(['dalamud', 'dalamud_changelog', 'asset', 'plugin', 'xivlauncher', 'updater'])
     from app.utils.tasks import regen_pluginmaster
     regen_pluginmaster(repo_url="https://github.com/ottercorp/PluginDistD17.git")
 

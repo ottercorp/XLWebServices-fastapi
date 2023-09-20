@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     xivl_repo: str = ''
     dalamud_repo: str = ''
     distrib_repo: str = ''
-    injector_repo: str = ''
+    updater_repo: str = ''
     dalamud_format: str = 'zip'  # zip or 7z
     asset_repo: str = ''
     plugin_repo: str = ''
