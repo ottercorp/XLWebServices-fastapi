@@ -11,6 +11,7 @@ from .xivlauncher import router as router_xivl
 from .launcher import router as router_launcher
 from .plogon import router as router_plogon
 from .faq import router as router_faq
+from .updater import router as router_updater
 from app.utils.common import get_settings
 
 router = APIRouter()
@@ -22,6 +23,7 @@ router.include_router(router_xivl, tags=["xivlauncher"], prefix="/Proxy")
 router.include_router(router_launcher, tags=["launcher"], prefix="/Launcher")
 router.include_router(router_plogon, tags=["plogon"], prefix="/Plogon")
 router.include_router(router_faq, tags=["faq"], prefix="/faq")
+router.include_router(router_updater, tags=["updater"], prefix="/Updater")
 
 # @router.get("/", response_class=HTMLResponse)
 # async def home():

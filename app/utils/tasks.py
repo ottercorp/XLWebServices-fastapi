@@ -45,7 +45,7 @@ def regen(task_list: list[str]):
 
     logger.info(f"Started CDN refresh tasks: {task_cdn_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = executor.map(refresh_cdn_task, task_cdn_list) # an iterator of for i in task_cdn_list -> refresh_cdn_task(i)
+        results = executor.map(refresh_cdn_task, task_cdn_list)  # an iterator of for i in task_cdn_list -> refresh_cdn_task(i)
         results_list = []
         for (task_cdn, result) in zip(task_cdn_list, results):
             task, cdn = task_cdn
@@ -53,6 +53,7 @@ def regen(task_list: list[str]):
             results_list.append(f"{task}-{cdn}: {ok}")
         for i in results_list:
             logger.info(f"CDN refresh tasks finished with results: {i.strip()}")
+
 
 def regen_task(task: str):
     logger.info(f"Started regeneration task: {task}.")
@@ -66,6 +67,7 @@ def regen_task(task: str):
             'xl': regen_xivlauncher,
             'xivl': regen_xivlauncher,
             'xivlauncher': regen_xivlauncher,
+            'updater': regen_updater,
         }
         if task in task_map:
             func = task_map[task]
@@ -87,13 +89,14 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
         settings = get_settings()
         path_map = {
             'dalamud': ['/Dalamud/Release/VersionInfo', '/Dalamud/Release/Meta'] + \
-                [f'/Release/VersionInfo?track={x}' for x in ['release', 'staging', 'stg', 'canary']],
+                       [f'/Release/VersionInfo?track={x}' for x in ['release', 'staging', 'stg', 'canary']],
             'dalamud_changelog': ['/Plugin/CoreChangelog'],
-            'plugin': ['/Plugin/PluginMaster',f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level_test}'],
+            'plugin': ['/Plugin/PluginMaster', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level_test}'],
             'asset': ['/Dalamud/Asset/Meta'],
-            'xl': ['/Proxy/Meta'],
-            'xivl': ['/Proxy/Meta'],
-            'xivlauncher': ['/Proxy/Meta'],
+            'xl': ['/Proxy/Meta', '/Launcher/GetLease'],
+            'xivl': ['/Proxy/Meta', '/Launcher/GetLease'],
+            'xivlauncher': ['/Proxy/Meta', '/Launcher/GetLease'],
+            'updater': ['/Updater/Release/VersionInfo'],
         }
         if task in path_map:
             cdn.purge(path_map[task])
@@ -107,7 +110,6 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
         return False
 
 
-
 DEFAULT_META = {
     "Changelog": "",
     "Tags": [],
@@ -118,7 +120,8 @@ DEFAULT_META = {
     "FeedbackWebhook": None,
 }
 
-def regen_pluginmaster(redis_client = None, repo_url: str = ''):
+
+def regen_pluginmaster(redis_client=None, repo_url: str = ''):
     logger.info("Start regenerating pluginmaster.")
     settings = get_settings()
     if not redis_client:
@@ -197,11 +200,11 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
             plugin_meta["LastUpdate"] = last_updated.get(plugin, plugin_meta.get("LastUpdate", 0))
             plugin_meta["CategoryTags"] = category_tags[plugin]
             plugin_meta["DownloadLinkInstall"] = settings.hosted_url.rstrip('/') \
-                + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=False&branch=api{api_level}"
+                                                 + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=False&branch=api{api_level}"
             plugin_meta["DownloadLinkUpdate"] = settings.hosted_url.rstrip('/') \
-                + '/Plugin/Download/' + f"{plugin}?isUpdate=True&isTesting=False&branch=api{api_level}"
+                                                + '/Plugin/Download/' + f"{plugin}?isUpdate=True&isTesting=False&branch=api{api_level}"
             plugin_meta["DownloadLinkTesting"] = settings.hosted_url.rstrip('/') \
-                + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=True&branch=api{api_level}"
+                                                 + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=True&branch=api{api_level}"
             plugin_latest_path = os.path.join(plugin_dir, f'{plugin}/latest.zip')
             (hashed_name, _) = cache_file(plugin_latest_path)
             plugin_name = f"{plugin}-testing" if is_testing else plugin
@@ -211,7 +214,7 @@ def regen_pluginmaster(redis_client = None, repo_url: str = ''):
     # print(f"Regenerated Pluginmaster for {plugin_namespace}: \n" + str(json.dumps(pluginmaster, indent=2)))
 
 
-def regen_asset(redis_client = None):
+def regen_asset(redis_client=None):
     logger.info("Start regenerating dalamud assets.")
     if not redis_client:
         redis_client = Redis.create_client()
@@ -239,10 +242,9 @@ def regen_asset(redis_client = None):
             bs = f.read()
             cheatplugin_hash_sha256 = hashlib.sha256(bs).hexdigest().upper()
             redis_client.hset(f'{settings.redis_prefix}asset', 'cheatplugin_hash_sha256', cheatplugin_hash_sha256)
-        
 
 
-def regen_dalamud(redis_client = None):
+def regen_dalamud(redis_client=None):
     logger.info("Start regenerating dalamud distribution.")
     if not redis_client:
         redis_client = Redis.create_client()
@@ -284,7 +286,7 @@ def regen_dalamud(redis_client = None):
     # return release_version
 
 
-def regen_dalamud_changelog(redis_client = None):
+def regen_dalamud_changelog(redis_client=None):
     logger.info("Start regenerating dalamud changelog.")
     if not redis_client:
         redis_client = Redis.create_client()
@@ -294,7 +296,7 @@ def regen_dalamud_changelog(redis_client = None):
     gh = Github(None if not settings.github_token else settings.github_token)
     repo = gh.get_repo(f'{user}/{repo_name}')
     tags = repo.get_tags()
-    sliced_tags = list(tags[:11]) # only care about latest 10 tags
+    sliced_tags = list(tags[:11])  # only care about latest 10 tags
     changelogs = []
     skip_prefix = ['build:', 'Merge pull request', 'Merge branch']
     for (idx, tag) in enumerate(sliced_tags[:-1]):
@@ -319,7 +321,7 @@ def regen_dalamud_changelog(redis_client = None):
     redis_client.hset(f'{settings.redis_prefix}dalamud', 'changelog', json.dumps(changelogs))
 
 
-def regen_xivlauncher(redis_client = None):
+def regen_xivlauncher(redis_client=None):
     logger.info("Start regenerating xivlauncher distribution.")
     if not redis_client:
         redis_client = Redis.create_client()
@@ -375,3 +377,43 @@ def regen_xivlauncher(redis_client = None):
             f'{release_type}-meta',
             json.dumps(meta)
         )
+
+
+def regen_updater(redis_client=None):
+    logger.info("Start regenerating Updater distribution.")
+    if not redis_client:
+        redis_client = Redis.create_client()
+    settings = get_settings()
+    updater_repo_url = settings.updater_repo
+    s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', updater_repo_url)
+    user, repo_name = s.group('user'), s.group('repo')
+    gh = Github(None if not settings.github_token else settings.github_token)
+    repo = gh.get_repo(f'{user}/{repo_name}')
+    releases = repo.get_releases()
+    last_release = next((r for r in releases if not r.prerelease), None)
+    pre_release = next((r for r in releases if r.prerelease), None)
+    if last_release is None or pre_release is None:
+        last_release = last_release or pre_release
+        pre_release = pre_release or last_release
+    for release in (last_release, pre_release):
+        release_type = 'prerelease' if release.prerelease else 'release'
+        assets = release.get_assets()
+        for asset in assets:
+            file_name = asset.name
+            if file_name == 'Dalamud.Updater.exe':
+                asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
+                (hashed_name, _) = cache_file(asset_filepath)
+                redis_client.hset(
+                    f'{settings.redis_prefix}updater',
+                    f'{release_type}-asset',
+                    hashed_name
+                )
+    version_dict = {
+        'release': last_release.tag_name,
+        'prerelease': pre_release.tag_name,
+    }
+    redis_client.hset(
+        f'{settings.redis_prefix}updater',
+        f'version',
+        json.dumps(version_dict)
+    )
