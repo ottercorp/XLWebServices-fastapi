@@ -40,7 +40,7 @@ async def updater_version_info(
     return {
         "version": version_dict[f'{release_type}'],
         "downloadurl": f"https://aonyx.ffxiv.wang/File/Get/{hashed_name}",
-        "changelog": ['https://aonyx.ffxiv.wang/Updater/ChangeLog'],
+        "changelog": 'https://aonyx.ffxiv.wang/Updater/ChangeLog',
         "config":{
             "SafeMode": True,
         }
