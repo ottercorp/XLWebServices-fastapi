@@ -403,6 +403,7 @@ def regen_updater(redis_client=None):
             if file_name == 'release.zip':
                 asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
                 (hashed_name, _) = cache_file(asset_filepath)
+                redis_client.delete(f'{settings.redis_prefix}updater')
                 redis_client.hset(
                     f'{settings.redis_prefix}updater',
                     f'{release_type}-asset',
