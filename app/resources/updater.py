@@ -10,7 +10,7 @@ from app.utils.common import get_settings
 from app.utils.redis import Redis
 from app.utils.tasks import regen
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Header
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse,PlainTextResponse
 from datetime import datetime, timedelta
 
 router = APIRouter()
@@ -63,4 +63,4 @@ async def updater_download(settings: Settings = Depends(get_settings)):
 
 @router.get("/ChangeLog")
 async def updater_changelog(settings: Settings = Depends(get_settings)):
-    return 'Updater更新公告\n新增安全模式注入，勾选后可以不启动插件注入，方便更新旧版本插件。'
+    return PlainTextResponse('Updater更新公告\n新增安全模式注入，勾选后可以不启动插件注入，方便更新旧版本插件。')
