@@ -19,7 +19,7 @@ SEMVER_REGEX = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(\.(0|[1-9]\d*))?(?:-(
 
 
 @router.get("/Release/VersionInfo")
-async def launcher(
+async def updater_version_info(
         user_agent: Union[str, None] = Header(default="Injector"),
         accept: Union[str, None] = Header(default="*/*"),
         x_updater_track: Union[str, None] = Header(default="Release"),
@@ -38,13 +38,12 @@ async def launcher(
     #     r.hincrby(f'{settings.redis_prefix}xivlauncher-count', 'XLUniqueInstalls')
     # r.hincrby(f'{settings.redis_prefix}xivlauncher-count', 'XLStarts')
     return {
-        "success": True,
-        "message": None,
-        "release":{
-            "version": version_dict[f'{release_type}'],
-            "url": f"/File/Get/{hashed_name}",
-        },
-        "flags": 0,
+        "version": version_dict[f'{release_type}'],
+        "downloadurl": f"https://aonyx.ffxiv.wang/File/Get/{hashed_name}",
+        "changelog": ['https://aonyx.ffxiv.wang/Updater/ChangeLog'],
+        "config":{
+            "SafeMode": True,
+        }
     }
 
 @router.post("/ClearCache")
@@ -56,7 +55,12 @@ async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), set
 
 
 @router.get("/Download")
-async def xivlauncher_download(settings: Settings = Depends(get_settings)):
+async def updater_download(settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
     hashed_name = r.hget(f'{settings.redis_prefix}updater', 'release-asset')
     return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
+
+
+@router.get("/ChangeLog")
+async def updater_changelog(settings: Settings = Depends(get_settings)):
+    return 'Updater更新公告\n新增安全模式注入，勾选后可以不启动插件注入，方便更新旧版本插件。'

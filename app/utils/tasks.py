@@ -400,7 +400,7 @@ def regen_updater(redis_client=None):
         assets = release.get_assets()
         for asset in assets:
             file_name = asset.name
-            if file_name == 'Dalamud.Updater.exe':
+            if file_name == 'release.zip':
                 asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
                 (hashed_name, _) = cache_file(asset_filepath)
                 redis_client.hset(
