@@ -249,10 +249,14 @@ def regen_dalamud(redis_client=None):
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
-    update_git_repo(settings.distrib_repo)
+    (__, repo) = update_git_repo(settings.distrib_repo)
+    branch_prefix = ''
+    branch_name = repo.active_branch.name
+    if branch_name not in ('main', 'master'):
+        branch_prefix = f'{branch_name}-'
     distrib_repo_dir = get_repo_dir(settings.distrib_repo)
     runtime_verlist = []
-    release_version = {}
+    # release_version = {}
     for track in ["release", "stg", "canary"]:
         dist_dir = distrib_repo_dir if track == "release" else \
             os.path.join(distrib_repo_dir, track)
@@ -269,9 +273,9 @@ def regen_dalamud(redis_client=None):
             version_json['changelog'] = []
         if 'key' not in version_json and 'Key' not in version_json:
             version_json['key'] = None
-        redis_client.hset(f'{settings.redis_prefix}dalamud', f'dist-{track}', json.dumps(version_json))
-        if track == 'release':
-            release_version = version_json
+        redis_client.hset(f'{settings.redis_prefix}dalamud', f'dist-{branch_prefix}{track}', json.dumps(version_json))
+        # if track == 'release':
+        #     release_version = version_json
     for version in runtime_verlist:
         desktop_url = f'https://dotnetcli.azureedge.net/dotnet/WindowsDesktop/{version}/windowsdesktop-runtime-{version}-win-x64.zip'
         (hashed_name, _) = cache_file(download_file(desktop_url))

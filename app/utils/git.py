@@ -37,7 +37,7 @@ def get_git_repo(git_url: str, shallow: bool = True):
     return git.Repo.clone_from(
         git_url,
         repo_dir,
-        multi_options=['--depth=1']
+        multi_options=options
     )
 
 
