@@ -51,6 +51,7 @@ class Settings(BaseSettings):
     ottercloud_cdn_key = ''
     # OtterBot Web JSON
     otterbot_web_json: int = 0
+    updater_safe_mode: bool = False
 
     class Config:
         env_file = '.env'
