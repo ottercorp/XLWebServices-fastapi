@@ -15,6 +15,7 @@ router = APIRouter()
 api_secret = get_settings().ga_api_secret
 measurement_id = "G-W3HJPGVM1J"
 
+
 class Analytics(BaseModel):
     client_id: str
     user_id: str
@@ -24,6 +25,7 @@ class Analytics(BaseModel):
     dalamud_version: str = ""
     is_testing: bool = None
     plugin_count: int
+    plugin_list: list
 
 
 @router.get("/Asset/Meta")
@@ -105,7 +107,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
     cheatplugin_hash = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash')
     cheatplugin_hash_sha256 = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash_sha256')
     cheat_banned_hash_valid = analytics.cheat_banned_hash and \
-        (cheatplugin_hash == analytics.cheat_banned_hash or cheatplugin_hash_sha256 == analytics.cheat_banned_hash)
+                              (cheatplugin_hash == analytics.cheat_banned_hash or cheatplugin_hash_sha256 == analytics.cheat_banned_hash)
     data = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,
@@ -146,7 +148,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
 
 
 @router.get("/TOS")
-async def dalamud_tos(tosHash: bool=False, settings: Settings = Depends(get_settings)):
+async def dalamud_tos(tosHash: bool = False, settings: Settings = Depends(get_settings)):
     if tosHash:
         tos_hash = get_tos_hash()
         return {'message': 'OK', 'tosHash': tos_hash.upper()}
