@@ -25,7 +25,7 @@ class Analytics(BaseModel):
     dalamud_version: str = ""
     is_testing: bool = None
     plugin_count: int
-    plugin_list: list
+    plugin_list: list = []
 
 
 @router.get("/Asset/Meta")

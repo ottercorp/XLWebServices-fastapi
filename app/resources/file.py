@@ -1,6 +1,6 @@
 import os
 import re
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Path
 from fastapi.responses import FileResponse
 
 router = APIRouter()
@@ -8,7 +8,7 @@ router = APIRouter()
 FILENAME_REGEX = r"(?P<name>.*?)\.(?P<hash>.{64})\.(?P<ext>.*)"
 
 @router.get("/Get/{file_name}")
-async def file_get(file_name: str = Query(regex=FILENAME_REGEX)):
+async def file_get(file_name: str = Path(regex=FILENAME_REGEX)):
     cache_dir = os.getenv('CACHE_DIR', 'cache')
     if not os.path.isdir(cache_dir):
         os.mkdir(cache_dir)
