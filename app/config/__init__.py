@@ -1,6 +1,6 @@
 import os
 import json
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from typing import Dict, List
 
 from logs import logger
