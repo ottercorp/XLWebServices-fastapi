@@ -68,6 +68,7 @@ def regen_task(task: str):
             'xivl': regen_xivlauncher,
             'xivlauncher': regen_xivlauncher,
             'updater': regen_updater,
+            'xlassets': regen_xlassets,
         }
         if task in task_map:
             func = task_map[task]
@@ -96,7 +97,8 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
             'xl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivlauncher': ['/Proxy/Meta', '/Launcher/GetLease'],
-            'updater': ['/Updater/Release/VersionInfo','/Updater/ChangeLog'],
+            'updater': ['/Updater/Release/VersionInfo', '/Updater/ChangeLog'],
+            'xlassets': [''],
         }
         if task in path_map:
             cdn.purge(path_map[task])
@@ -421,4 +423,29 @@ def regen_updater(redis_client=None):
         f'{settings.redis_prefix}updater',
         f'version',
         json.dumps(version_dict)
+    )
+
+
+def regen_xlassets(redis_client=None):
+    logger.info("Start regenerating XLAssets distribution")
+    if not redis_client:
+        redis_client = Redis.create_client()
+    settings = get_settings()
+    xlassets_repo = settings.xlassets_repo
+    update_git_repo(xlassets_repo)
+    integrity_path = os.path.join(get_repo_dir(xlassets_repo), 'integrity')
+    integrity_files = os.listdir(integrity_path)
+    integrity_files.sort(reverse=True)
+    latest_integrity = integrity_files[0]
+    with codecs.open(os.path.join(integrity_path, latest_integrity), 'r', 'utf8') as f:
+        integrity_json = json.load(f)
+    redis_client.hset(
+        f'{settings.redis_prefix}xlassets',
+        f'version',
+        latest_integrity.split('.json')[0]
+    )
+    redis_client.hset(
+        f'{settings.redis_prefix}xlassets',
+        f'json',
+        json.dumps(integrity_json)
     )
