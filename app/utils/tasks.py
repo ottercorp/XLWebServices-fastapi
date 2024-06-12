@@ -446,5 +446,5 @@ def regen_xlassets(redis_client=None):
     redis_client.hset(
         f'{settings.redis_prefix}xlassets',
         f'json',
-        integrity_json
+        json.dumps(integrity_json)
     )
