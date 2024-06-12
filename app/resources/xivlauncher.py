@@ -12,6 +12,7 @@ router = APIRouter()
 
 SEMVER_REGEX = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(\.(0|[1-9]\d*))?(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$|^$"
 
+
 @router.get("/Meta")
 async def xivlauncher_meta(settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
@@ -70,9 +71,20 @@ async def xivlauncher(track_file: str, localVersion: Union[str, None] = None, se
     return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
 
 
+@router.get("/XLAssets/{ff_client_version}")
+async def xivlauncher_assets(ff_client_version: str, settings: Settings = Depends(get_settings)):
+    r = Redis.create_client()
+    assets_version = r.hget(f'{settings.redis_prefix}xlassets', 'version')
+    if ff_client_version == assets_version:
+        result = r.hget(f'{settings.redis_prefix}xlassets', 'json')
+        return json.loads(result)
+    else:
+        raise HTTPException(status_code=404, detail="XLAssets not found")
+
+
 @router.post("/ClearCache")
 async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), settings: Settings = Depends(get_settings)):
     if key != settings.cache_clear_key:
         raise HTTPException(status_code=400, detail="Cache clear key not match")
-    background_tasks.add_task(regen, ['xivlauncher'])
+    background_tasks.add_task(regen, ['xivlauncher', 'xlassets'])
     return {'message': 'Background task was started.'}

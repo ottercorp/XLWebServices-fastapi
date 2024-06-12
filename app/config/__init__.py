@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     dalamud_format: str = 'zip'  # zip or 7z
     asset_repo: str = ''
     plugin_repo: str = ''
+    xlassets_repo: str = ''
     plugin_api_level: int = 7
     plugin_api_level_test: int = 8
     api_namespace: Dict[int, str] = {
@@ -46,9 +47,9 @@ class Settings(BaseSettings):
     # stg code
     stg_code: str = ''
     # ottercloud cdn
-    ottercloud_cdn_host:str = ''
-    ottercloud_cdn_id:str = ''
-    ottercloud_cdn_key:str = ''
+    ottercloud_cdn_host: str = ''
+    ottercloud_cdn_id: str = ''
+    ottercloud_cdn_key: str = ''
     # OtterBot Web JSON
     otterbot_web_json: int = 0
     updater_safe_mode: bool = False
