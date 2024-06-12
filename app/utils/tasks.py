@@ -98,6 +98,7 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
             'xivl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivlauncher': ['/Proxy/Meta', '/Launcher/GetLease'],
             'updater': ['/Updater/Release/VersionInfo', '/Updater/ChangeLog'],
+            'xlassets': [''],
         }
         if task in path_map:
             cdn.purge(path_map[task])
@@ -446,5 +447,5 @@ def regen_xlassets(redis_client=None):
     redis_client.hset(
         f'{settings.redis_prefix}xlassets',
         f'json',
-        json.loads(integrity_json)
+        json.dumps(integrity_json)
     )
