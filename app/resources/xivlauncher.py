@@ -71,7 +71,7 @@ async def xivlauncher(track_file: str, localVersion: Union[str, None] = None, se
     return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
 
 
-@router.get("/XLAssets/{ff_client_version}")
+@router.get("/XLAssets/{ff_client_version}.json")
 async def xivlauncher_assets(ff_client_version: str, settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
     assets_version = r.hget(f'{settings.redis_prefix}xlassets', 'version')
