@@ -1,6 +1,6 @@
 import os
 import json
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from typing import Dict, List
 
 from logs import logger
@@ -46,9 +46,9 @@ class Settings(BaseSettings):
     # stg code
     stg_code: str = ''
     # ottercloud cdn
-    ottercloud_cdn_host = ''
-    ottercloud_cdn_id = ''
-    ottercloud_cdn_key = ''
+    ottercloud_cdn_host:str = ''
+    ottercloud_cdn_id:str = ''
+    ottercloud_cdn_key:str = ''
     # OtterBot Web JSON
     otterbot_web_json: int = 0
     updater_safe_mode: bool = False
