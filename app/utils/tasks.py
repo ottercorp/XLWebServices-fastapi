@@ -1,24 +1,25 @@
+import codecs
+import concurrent.futures
+import hashlib
+import json
 import os
 import re
-import json
-import hashlib
-import codecs
-import toml
-import concurrent.futures
-import commentjson
 from collections import defaultdict
 from itertools import product
 from typing import Union, Tuple
-from .common import get_settings, cache_file, download_file
-from .git import update_git_repo, get_repo_dir, get_user_repo_name
-from .redis import Redis
-from .cdn.cloudflare import CloudFlareCDN
-from .cdn.ctcdn import CTCDN
-from .cdn.ottercloudcdn import OtterCloudCDN
+
+import commentjson
+import toml
 from github import Github
 from termcolor import colored
 
 from logs import logger
+from .cdn.cloudflare import CloudFlareCDN
+from .cdn.ctcdn import CTCDN
+from .cdn.ottercloudcdn import OtterCloudCDN
+from .common import get_settings, cache_file, download_file
+from .git import update_git_repo, get_repo_dir, get_user_repo_name
+from .redis import Redis
 
 
 def regen(task_list: list[str]):
@@ -45,7 +46,8 @@ def regen(task_list: list[str]):
 
     logger.info(f"Started CDN refresh tasks: {task_cdn_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = executor.map(refresh_cdn_task, task_cdn_list)  # an iterator of for i in task_cdn_list -> refresh_cdn_task(i)
+        results = executor.map(refresh_cdn_task,
+                               task_cdn_list)  # an iterator of for i in task_cdn_list -> refresh_cdn_task(i)
         results_list = []
         for (task_cdn, result) in zip(task_cdn_list, results):
             task, cdn = task_cdn
@@ -92,13 +94,14 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
             'dalamud': ['/Dalamud/Release/VersionInfo', '/Dalamud/Release/Meta'] + \
                        [f'/Release/VersionInfo?track={x}' for x in ['release', 'staging', 'stg', 'canary']],
             'dalamud_changelog': ['/Plugin/CoreChangelog'],
-            'plugin': ['/Plugin/PluginMaster', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level_test}'],
+            'plugin': ['/Plugin/PluginMaster', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}',
+                       f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level_test}'],
             'asset': ['/Dalamud/Asset/Meta'],
             'xl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivlauncher': ['/Proxy/Meta', '/Launcher/GetLease'],
             'updater': ['/Updater/Release/VersionInfo', '/Updater/ChangeLog'],
-            'xlassets': [''],
+            'xlassets': ['/XLAssets/integrity'],
         }
         if task in path_map:
             cdn.purge(path_map[task])
@@ -150,6 +153,8 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
     pluginmaster = []
     stable_dir = os.path.join(plugin_repo_dir, cahnnel_map['stable'])
     testing_dir = os.path.join(plugin_repo_dir, cahnnel_map['testing'])
+    if not os.path.exists(testing_dir):
+        os.mkdir(testing_dir)
     jsonc = commentjson
     # Load categories
     category_tags = defaultdict(list)
