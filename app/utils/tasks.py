@@ -45,7 +45,8 @@ def regen(task_list: list[str]):
 
     logger.info(f"Started CDN refresh tasks: {task_cdn_list}.")
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = executor.map(refresh_cdn_task, task_cdn_list)  # an iterator of for i in task_cdn_list -> refresh_cdn_task(i)
+        results = executor.map(refresh_cdn_task,
+                               task_cdn_list)  # an iterator of for i in task_cdn_list -> refresh_cdn_task(i)
         results_list = []
         for (task_cdn, result) in zip(task_cdn_list, results):
             task, cdn = task_cdn
@@ -92,7 +93,8 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
             'dalamud': ['/Dalamud/Release/VersionInfo', '/Dalamud/Release/Meta'] + \
                        [f'/Release/VersionInfo?track={x}' for x in ['release', 'staging', 'stg', 'canary']],
             'dalamud_changelog': ['/Plugin/CoreChangelog'],
-            'plugin': ['/Plugin/PluginMaster', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level_test}'],
+            'plugin': ['/Plugin/PluginMaster', f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level}',
+                       f'/Plugin/PluginMaster?apiLevel={settings.plugin_api_level_test}'],
             'asset': ['/Dalamud/Asset/Meta'],
             'xl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivl': ['/Proxy/Meta', '/Launcher/GetLease'],
@@ -150,6 +152,8 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
     pluginmaster = []
     stable_dir = os.path.join(plugin_repo_dir, cahnnel_map['stable'])
     testing_dir = os.path.join(plugin_repo_dir, cahnnel_map['testing'])
+    if not os.path.exists(testing_dir):
+        os.mkdir(testing_dir)
     jsonc = commentjson
     # Load categories
     category_tags = defaultdict(list)
