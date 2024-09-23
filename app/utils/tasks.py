@@ -1,24 +1,25 @@
+import codecs
+import concurrent.futures
+import hashlib
+import json
 import os
 import re
-import json
-import hashlib
-import codecs
-import toml
-import concurrent.futures
-import commentjson
 from collections import defaultdict
 from itertools import product
 from typing import Union, Tuple
-from .common import get_settings, cache_file, download_file
-from .git import update_git_repo, get_repo_dir, get_user_repo_name
-from .redis import Redis
-from .cdn.cloudflare import CloudFlareCDN
-from .cdn.ctcdn import CTCDN
-from .cdn.ottercloudcdn import OtterCloudCDN
+
+import commentjson
+import toml
 from github import Github
 from termcolor import colored
 
 from logs import logger
+from .cdn.cloudflare import CloudFlareCDN
+from .cdn.ctcdn import CTCDN
+from .cdn.ottercloudcdn import OtterCloudCDN
+from .common import get_settings, cache_file, download_file
+from .git import update_git_repo, get_repo_dir, get_user_repo_name
+from .redis import Redis
 
 
 def regen(task_list: list[str]):
@@ -100,7 +101,7 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
             'xivl': ['/Proxy/Meta', '/Launcher/GetLease'],
             'xivlauncher': ['/Proxy/Meta', '/Launcher/GetLease'],
             'updater': ['/Updater/Release/VersionInfo', '/Updater/ChangeLog'],
-            'xlassets': [''],
+            'xlassets': ['/XLAssets/integrity'],
         }
         if task in path_map:
             cdn.purge(path_map[task])
