@@ -18,6 +18,7 @@ measurement_id = "G-W3HJPGVM1J"
 
 class Analytics(BaseModel):
     client_id: str
+    aid: str = ""
     user_id: str
     server_id: str
     os: str
@@ -119,7 +120,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
                 "value": cheat_banned_hash_valid
             },
             "Client": {
-                "value": analytics.client_id,
+                "value": analytics.aid if analytics.aid != "" else analytics.client_id,
             },
             "os": {
                 "value": analytics.os,
