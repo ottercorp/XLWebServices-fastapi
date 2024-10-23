@@ -125,6 +125,6 @@ async def front_admin_flush_cache_get(request: Request, task: str | None = None)
                 flash(request, 'error', '任务不存在', )
 
     if request.headers.get('referer') and 'flush' in request.headers.get('referer'):
-        return RedirectResponse(url=router.url_path_for("front_admin_flush_get"))
+        return RedirectResponse(url=request.app.url_path_for("front_admin_flush_get"))
     else:
-        return RedirectResponse(url=router.url_path_for("front_admin_index"))
+        return RedirectResponse(url=request.app.url_path_for("front_admin_index"))
