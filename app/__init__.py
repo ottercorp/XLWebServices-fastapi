@@ -6,8 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.routing import Route
+from starlette.middleware.sessions import SessionMiddleware
 
-from .resources import router
+from .utils.common import get_settings
+from .resources import router as resources_router
+from .front import router as front_router
+from .utils.front import FlashMessageMiddleware
+
+
 # from .models import database
 
 
@@ -18,6 +24,8 @@ def get_app() -> FastAPI:
         "http://localhost",
         "http://localhost:8080",
     ]
+
+    app.add_middleware(FlashMessageMiddleware)
 
     app.add_middleware(
         CORSMiddleware,
@@ -40,7 +48,13 @@ def get_app() -> FastAPI:
         response.headers["X-Process-Time"] = str(process_time)
         return response
 
-    app.include_router(router)
+    app.add_middleware(
+        SessionMiddleware,
+        secret_key='testkey'
+    )
+
+    app.include_router(resources_router)
+    app.include_router(front_router)
 
     app.mount("/static", StaticFiles(directory="static"), name="static")
     app.mount("/", StaticFiles(directory="artifact"), name="artifact")

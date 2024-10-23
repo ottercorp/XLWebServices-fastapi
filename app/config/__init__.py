@@ -53,6 +53,9 @@ class Settings(BaseSettings):
     # OtterBot Web JSON
     otterbot_web_json: int = 0
     updater_safe_mode: bool = False
+    # admin
+    admin_user_name: str = ''
+    admin_user_pwd: str = ''
 
     class Config:
         env_file = '.env'

@@ -1,0 +1,41 @@
+<div class="flex space-x-2">
+    <ul>
+        <li class="py-1">
+            <div class="flex items-center mb-4">
+                <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                <h2 class="text-xl font-bold text-gray-800">刷新擦车</h2>
+            </div>
+        </li>
+        <li class="py-1">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="window.location.href='{{ url_for('front_admin_flush_cache_get') }}?task=dalamud'">
+                刷新 Dalamud
+            </button>
+        </li>
+        <li class="py-1">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    onclick="window.location.href='{{ url_for( 'front_admin_flush_cache_get') }}?task=xivlauncher'">
+                刷新 XLCN
+            </button>
+        </li>
+        <li class="py-1">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="window.location.href='{{ url_for('front_admin_flush_cache_get') }}?task=asset'">
+                刷新 Asset
+            </button>
+        </li>
+        <li class="py-1">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="window.location.href='{{ url_for('front_admin_flush_cache_get') }}?task=plugin'">
+                刷新 PluginMaster
+            </button>
+        </li>
+        <li class="py-1">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="window.location.href='{{ url_for('front_admin_flush_cache_get') }}?task=updater'">
+                刷新 拉屎器
+            </button>
+        </li>
+        <li class="py-1">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="window.location.href='{{ url_for('front_admin_flush_cache_get') }}?task=xlassets'">
+                刷新 完整性
+            </button>
+        </li>
+    </ul>
+</div>
