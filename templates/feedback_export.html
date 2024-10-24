@@ -15,7 +15,7 @@
                         {% for k,v in export_dict.items() %}
                             <details class="details-custom border rounded-lg p-2 bg-gray-100 transition duration-300 ease-in-out mb-2 w-full">
                                 <summary class="summary-custom font-semibold cursor-pointer text-blue-600 relative py-2 flex items-center">
-                                    <span class="w-2 h-6 bg-blue-600 mr-3"></span>{{ k }}
+                                    <span class="w-2 h-6 bg-blue-600 mr-3"></span>{{ k }} ({{ v|length }})
                                 </summary>
                                 {% for i in v %}
                                     {% set counter = 1 %}

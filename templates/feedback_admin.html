@@ -11,15 +11,15 @@
             <div class="w-full">
                 {% include "base/flash_messages.html" %}
                 <div class="flex justify-between mb-6">
-                    <div class="flex flex-wrap gap-y-4 gap-x-4">
+                    <div class="flex flex-wrap gap-y-4 gap-x-4 w-full">
                         {% for i in feedback_list %}
                             <div class="p-2">
-                            <a href="{{ url_for('front_admin_feedback_detail_get', plugin_name=i[1], feedback_id=i[2]) }}?dhash={{ i[0] }}"
-                               class="btn border border-gray-300 rounded-full px-4 py-2 text-center inline-block hover:bg-gray-100 my-1">
-                                {{ i[1] }}#{{ i[2] }}|{{ i[0] }}
-                            </a>
+                                <a href="{{ url_for('front_admin_feedback_detail_get', plugin_name=i[1], feedback_id=i[2]) }}?dhash={{ i[0] }}"
+                                   class="btn border border-gray-300 rounded-full px-4 py-2 text-center inline-block hover:bg-gray-100 my-1">
+                                    {{ i[1] }}#{{ i[2] }}|{{ i[0] }}
+                                </a>
+                            </div>
                         {% endfor %}
-                        </div>
                     </div>
                 </div>
             </div>
