@@ -115,7 +115,7 @@ async def front_admin_feedback_detail_get(request: Request, plugin_name: str, fe
 
 
 @router.get('/feedback/solve/{feedback_id}', response_class=RedirectResponse)
-async def front_admin_feedback_solve_post(request: Request, feedback_id: int, referer: str | None = None):
+async def front_admin_feedback_solve_get(request: Request, feedback_id: int, referer: str | None = None):
     r_fb = RedisFeedBack.create_client()
     feedback_list = r_fb.keys(f'feedback|*|{feedback_id}')
     if len(feedback_list) == 1:

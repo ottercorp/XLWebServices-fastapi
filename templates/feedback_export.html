@@ -12,37 +12,40 @@
                 {% include "base/flash_messages.html" %}
                 <div class="flex justify-between mb-6">
                     <div class="flex flex-wrap gap-y-4 gap-x-4 w-full">
-                    {% set counter = 1 %}
                         {% for k,v in export_dict.items() %}
                             <details class="details-custom border rounded-lg p-2 bg-gray-100 transition duration-300 ease-in-out mb-2 w-full">
                                 <summary class="summary-custom font-semibold cursor-pointer text-blue-600 relative py-2 flex items-center">
                                     <span class="w-2 h-6 bg-blue-600 mr-3"></span>{{ k }}
                                 </summary>
                                 {% for i in v %}
+                                    {% set counter = 1 %}
                                     <div class="w-full p-2">
                                         <ul class="flex flex-row w-full">
-                                            <li class="w-full md:w-1/2">插件版本：</li>
-                                            <li class="w-full md:w-1/2">Dalamud版本：</li>
+                                            <li class="w-full md:w-full">报告人：{{ i['reporter'] }}</li>
+                                        </ul>
+                                        <ul class="flex flex-row w-full">
+                                            <li class="w-full md:w-1/2">插件版本：{{ i['version'] }}</li>
+                                            <li class="w-full md:w-1/2">Dalamud版本：{{ i['dhash'] }}</li>
                                         </ul>
                                         <div class="flex flex-row pt-2">
                                             <details class="w-11/12">
-                                                <summary class="pb-1">异常描述</summary>
-                                                <p>异常1111111111111111111</p>
+                                                <summary class="pb-1">{{ i['content'] }}</summary>
+                                                <p>{{ i['exception'] }}</p>
                                             </details>
                                             <div>
                                                 <button type="button" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded" data-bs-toggle="modal"
                                                         data-bs-target="#exampleModal"
-                                                        onClick="window.location.href='{{ url_for( 'front_admin_feedback_get') }}'">
+                                                        onClick="window.location.href='{{ url_for( 'front_admin_feedback_solve_get', feedback_id=i['order_id'] ) }}&referer=export'">
                                                     Solved
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
+                                    {% set counter = counter + 1 %}
+                                    {% if counter < v|length %}
+                                        <hr class="my-2 border-neutral-800"/>
+                                    {% endif %}
                                 {% endfor %}
-                                {% set counter = counter + 1 %}
-                                {% if counter < export_dict|length %}
-                                    <hr class="my-2 border-neutral-800"/>
-                                {% endif %}
                             </details>
                         {% endfor %}
                     </div>
