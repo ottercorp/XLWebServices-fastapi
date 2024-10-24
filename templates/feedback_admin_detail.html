@@ -1,0 +1,78 @@
+{% extends "base/admin_base.html" %}
+{% block add_head %}
+    <title>反馈详情 - XLWebServices</title>
+{% endblock %}
+
+{% block page_content %}
+    <div class="max-w-sm w-10/12 lg:max-w-screen-xl bg-white p-12 rounded-lg shadow-md">
+        <div class="flex flex-wrap justify-center">
+            <div class="w-full">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">
+                            反馈详情 #{{ detail.feedback_id }}
+                        </h2>
+                    </div>
+                    <button id="backButton"
+                            class="bg-gray-100 border border-gray-400 text-gray-600 hover:bg-gray-200 hover:border-gray-600 hover:text-gray-800 transition duration-300 ease-in-out font-semibold px-6 py-1 rounded-lg shadow-md">
+                        返回
+                    </button>
+                </div>
+                <hr class="mt-1 mb-4">
+                <p>插件名称：{{ detail.plugin_name }}</p>
+                <p>插件版本：{{ detail.version }}</p>
+                <p class="mt-4">反馈内容:</p>
+                <p class="mt-2">{{ detail.content }}</p>
+                <p class="mt-2">{{ detail.exception }}</p>
+                <p class="mt-2">{{ detail.exception }}</p>
+            </div>
+        </div>
+        <div class="flex flex-wrap mt-6">
+            <div class="w-full">
+                <h4 class="text-lg font-semibold mt-6 mb-4">回复</h4>
+                <hr class="my-6">
+                <form method="post" action="{{ url_for('front_admin_feedback_get') }}" onsubmit="return validateForm()">
+                    {#{{ form.csrf_token }}#}
+                    {#{{ render_hidden_errors(form) }}#}
+                    {#{{ render_form(form) }}#}
+                    <div id="error-message" class="text-red-500 mb-4 hidden">请填写所有必填字段。</div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">回复</button>
+                        <button type="button" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                onClick="window.location.href='{{ url_for( 'front_admin_feedback_get') }}'">
+                            Solved
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.getElementById('backButton').addEventListener('click', function () {
+            history.back();
+        });
+
+        function validateForm() {
+            const formElements = document.querySelector('form').elements;
+            let isValid = true;
+            for (let element of formElements) {
+                if (element.required && !element.value) {
+                    isValid = false;
+                    break;
+                }
+            }
+            const errorMessage = document.getElementById('error-message');
+            if (!isValid) {
+                errorMessage.classList.remove('hidden');
+            } else {
+                errorMessage.classList.add('hidden');
+            }
+            return isValid;
+        }
+    </script>
+
+{% endblock %}
