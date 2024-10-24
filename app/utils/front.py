@@ -8,7 +8,10 @@ from starlette.middleware.base import BaseHTTPMiddleware
 def flash(request: Request, category: str = "info", message: str = ""):
     if "flash_messages" not in request.session:
         request.session["flash_messages"] = []
-    request.session["flash_messages"].append({"message": message, "category": category, "read": False})
+    flash_message = {"message": message, "category": category, "read": False}
+    request.session["flash_messages"].append(flash_message)
+    if hasattr(request.state, "flashed_messages"):
+        request.state.flashed_messages.append(flash_message)
 
 
 def get_flashed_messages(request: Request, with_categories: bool = True):
@@ -16,7 +19,7 @@ def get_flashed_messages(request: Request, with_categories: bool = True):
         messages = request.session.pop("flash_messages", [])
         if with_categories:
             return messages
-        return [msg[1] for msg in messages]
+        return [msg["message"] for msg in messages]
     return []
 
 
@@ -24,6 +27,6 @@ class FlashMessageMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         if not hasattr(request, "session"):
             raise RuntimeError("SessionMiddleware is required but not found.")
-        request.state.flashed_messages = get_flashed_messages(request)
+        request.state.flashed_messages = []
         response = await call_next(request)
         return response
