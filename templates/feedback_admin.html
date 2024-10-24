@@ -5,7 +5,10 @@
 
 {% block page_content %}
     <div class="container max-w-screen-2xl mx-auto bg-white p-16 rounded-lg shadow-md py-6">
-        <h1 class="text-2xl font-bold py-4">反馈处理</h1>
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold py-4">反馈处理</h1>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="window.location.href='{{ url_for('front_admin_feedback_export_get') }}'">问题总览</button>
+        </div>
         <hr class="mb-2"/>
         <div class="flex flex-col space-y-6 px-4">
             <div class="w-full">
@@ -13,9 +16,9 @@
                 <div class="flex justify-between mb-6">
                     <div class="flex flex-wrap gap-y-4 gap-x-4 w-full">
                         {% for i in feedback_list %}
-                            <div class="p-2">
+                            <div>
                                 <a href="{{ url_for('front_admin_feedback_detail_get', plugin_name=i[1], feedback_id=i[2]) }}?dhash={{ i[0] }}"
-                                   class="btn border border-gray-300 rounded-full px-4 py-2 text-center inline-block hover:bg-gray-100 my-1">
+                                   class="btn border border-gray-300 rounded-full px-4 py-2 text-center inline-block hover:bg-gray-100 my-1 text-gray-500">
                                     {{ i[1] }}#{{ i[2] }}|{{ i[0] }}
                                 </a>
                             </div>
