@@ -73,6 +73,7 @@ SENSITIVE_FIELDS = [
     'plogon_api_key',
     'ottercloud_cdn_id',
     'ottercloud_cdn_key',
+    'admin_user_pwd'
 ]
 settings_json = Settings().dict()
 for field in SENSITIVE_FIELDS:
