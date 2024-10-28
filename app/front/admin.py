@@ -4,7 +4,7 @@ import asyncio
 import json
 import secrets
 from pydantic import BaseModel
-from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Request, Form
+from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Request, Form, UploadFile
 from fastapi.responses import RedirectResponse, PlainTextResponse, HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
@@ -145,11 +145,19 @@ async def front_admin_flush_get(request: Request):
 
 
 @router.post('/flush')
-async def front_admin_flush_post(request: Request, action: str = Form(...), task_type: int = Form(...), content: str = Form(...),ottercloudcdn: OtterCloudCDN = Depends(OtterCloudCDN)):
-    url_list = content.replace('\r', '').split('\n')
-    ottercloudcdn.prefetch(task_type, url_list)
-    flash(request, 'error', f'{content}', )
-    return template.TemplateResponse("flush.html", {"request": request})
+async def front_admin_flush_post(request: Request, action: str = Form(...), task_type: int = Form(...), content: str = Form(...), ottercloudcdn: OtterCloudCDN = Depends(OtterCloudCDN)):
+    try:
+        url_list = content.replace('\r', '').split('\n')
+        if action == 'prefetch':
+            ottercloudcdn.prefetch(task_type, url_list)
+            flash(request, 'success', f'预取任务已提交')
+        if action == 'flushUrl':
+            ottercloudcdn.refresh(task_type, url_list)
+            flash(request, 'success', f'刷新任务已完成')
+    except Exception as e:
+        flash(request, 'error', f'任务失败，{e}', )
+    finally:
+        return template.TemplateResponse("flush.html", {"request": request})
 
 
 @router.get('/flush_cache')
@@ -191,7 +199,7 @@ async def front_admin_log_analytics_get(request: Request):
 
 
 @router.post('/log_analytics', response_class=HTMLResponse)
-async def front_admin_log_analytics_post(request: Request):
+async def front_admin_log_analytics_post(request: Request, file: UploadFile = Form(...)):
     flash(request, 'error', '测试', )
     return template.TemplateResponse("log_analysis.html", {"request": request})
 
