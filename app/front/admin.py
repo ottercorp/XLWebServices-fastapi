@@ -107,7 +107,7 @@ async def front_admin_feedback_export_get(request: Request):
 
 @router.get('/feedback/detail/{plugin_name}/{feedback_id}', response_class=HTMLResponse)
 async def front_admin_feedback_detail_get(request: Request, plugin_name: str, feedback_id: int, dhash: str | None = None):
-    r_fb = Redis.create_client()
+    r_fb = RedisFeedBack.create_client()
     feedback = r_fb.hgetall(f'feedback|{dhash}|{plugin_name}|{feedback_id}')
     if not feedback:
         raise HTTPException(status_code=404, detail="Feedback not found")
