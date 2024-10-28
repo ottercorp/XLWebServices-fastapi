@@ -4,7 +4,7 @@ import asyncio
 import json
 import secrets
 from pydantic import BaseModel
-from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Request
+from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Request, Form
 from fastapi.responses import RedirectResponse, PlainTextResponse, HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
@@ -14,6 +14,7 @@ from app.utils.common import get_settings, get_tos_content, get_tos_hash
 from app.utils.front import flash
 from app.utils.tasks import regen
 from app.utils.redis import Redis, RedisFeedBack
+from app.utils.cdn.ottercloudcdn import OtterCloudCDN
 
 router = APIRouter()
 template = Jinja2Templates("templates")
@@ -137,14 +138,17 @@ async def front_admin_feedback_reply_post(request: Request, feedback_id: int, co
 
 # endregion
 
+# region flush
 @router.get('/flush', response_class=HTMLResponse)
 async def front_admin_flush_get(request: Request):
     return template.TemplateResponse("flush.html", {"request": request})
 
 
 @router.post('/flush')
-async def front_admin_flush_post(request: Request):
-    flash(request, 'error', '测试', )
+async def front_admin_flush_post(request: Request, action: str = Form(...), task_type: int = Form(...), content: str = Form(...),ottercloudcdn: OtterCloudCDN = Depends(OtterCloudCDN)):
+    url_list = content.replace('\r', '').split('\n')
+    ottercloudcdn.prefetch(task_type, url_list)
+    flash(request, 'error', f'{content}', )
     return template.TemplateResponse("flush.html", {"request": request})
 
 
@@ -168,8 +172,27 @@ async def front_admin_flush_cache_get(request: Request, task: str | None = None)
                 regen(['dalamud', 'dalamud_changelog', 'asset', 'plugin', 'xivlauncher', 'updater', 'xlassets'])
             case _:
                 flash(request, 'error', '任务不存在', )
-
+                return RedirectResponse(url=request.app.url_path_for("front_admin_flush_get"))
+        flash(request, 'success', f'刷新{task if task != "all" else "全部"}任务已完成')
+    else:
+        raise HTTPException(status_code=400, detail="No task specified.")
     if request.headers.get('referer') and 'flush' in request.headers.get('referer'):
         return RedirectResponse(url=request.app.url_path_for("front_admin_flush_get"))
     else:
         return RedirectResponse(url=request.app.url_path_for("front_admin_index"))
+
+
+# endregion
+
+# region analytics
+@router.get('/log_analytics', response_class=HTMLResponse)
+async def front_admin_log_analytics_get(request: Request):
+    return template.TemplateResponse("log_analysis.html", {"request": request})
+
+
+@router.post('/log_analytics', response_class=HTMLResponse)
+async def front_admin_log_analytics_post(request: Request):
+    flash(request, 'error', '测试', )
+    return template.TemplateResponse("log_analysis.html", {"request": request})
+
+# endregion

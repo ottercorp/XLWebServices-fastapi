@@ -6,13 +6,83 @@
 {% block page_content %}
     <div class="container max-w-screen-md mx-auto bg-white p-16 rounded-lg shadow-md py-6">
         <h1 class="text-2xl font-bold py-4">刷新缓存</h1>
-        <hr class="mb-2"/>
-        <div class="flex flex-col space-y-6 px-4">
+        <hr class="mb-4"/>
+        {% include "base/flash_messages.html" %}
+        <div class="flex flex-col space-y-6 px-4" id="flush_cache">
             <div class="w-full">
-                {% include "base/flash_messages.html" %}
                 <div class="flex justify-between mb-6">
-                    {% include "base/flush_cache.html" %}
+                    <div class="space-y-4">
+                        <div class="flex items-center mb-4">
+                            <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                            <h2 class="text-xl font-bold text-gray-800">刷新擦车</h2>
+                        </div>
+                        {% include "base/flush_cache.html" %}
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col space-y-6 px-4" id="prefetch">
+            <div class="w-full">
+                <div class="flex items-center mb-6">
+                    <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                    <h2 class="text-xl font-bold text-gray-800">预取资源</h2>
+                </div>
+                <form action="{{ url_for('front_admin_flush_post') }}" method="POST" class="bg-white rounded-lg w-full mb-6">
+                    <input type="hidden" name="action" value="prefetch">
+                    <div class="w-full">
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">预取类型：</label>
+                        <div class="flex space-x-4 mb-2">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="radio" name="task_type" value="1" class="sr-only peer" checked>
+                                <span class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white peer-checked:bg-blue-500 peer-checked:text-white transition-colors">完整URL</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">预取地址：</label>
+                        <textarea id="content" name="content" rows="10"
+                                  class="w-full p-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="请输入预取的完整URL（如：https://example.com/1.html），一行一个。（包含http:// or https://）"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-700">提交预取</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="flex flex-col space-y-6 px-4" id="flushurl">
+            <div class="w-full">
+                <div class="flex items-center mb-6">
+                    <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                    <h2 class="text-xl font-bold text-gray-800">刷新缓存</h2>
+                </div>
+                <form action="{{ url_for('front_admin_flush_post') }}" method="POST" class="bg-white rounded-lg w-full mb-6">
+                    <input type="hidden" name="action" value="flushUrl">
+                    <div class="w-full">
+                        <div class="w-full">
+                            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">刷新类型：</label>
+                            <div class="flex space-x-4 mb-2">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="task_type" value="1" class="sr-only peer" checked>
+                                    <span class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white peer-checked:bg-blue-500 peer-checked:text-white transition-colors">完整URL</span>
+                                </label>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="task_type" value="2" class="sr-only peer">
+                                    <span class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white peer-checked:bg-blue-500 peer-checked:text-white transition-colors">目录前缀</span>
+                                </label>
+                            </div>
+                        </div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">刷新URL：</label>
+                        <textarea id="content" name="content" rows="10"
+                                  class="w-full p-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="请输入刷新的完整URL（如：https://example.com/1.html）或目录前缀（如：https://example.com/path），一行一个。（包含http:// or https://）"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-700">提交刷新</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
