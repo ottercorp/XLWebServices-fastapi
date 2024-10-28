@@ -108,7 +108,7 @@ async def front_admin_feedback_export_get(request: Request):
 @router.get('/feedback/detail/{plugin_name}/{feedback_id}', response_class=HTMLResponse)
 async def front_admin_feedback_detail_get(request: Request, plugin_name: str, feedback_id: int, dhash: str | None = None):
     r = Redis.create_client()
-    feedback = r.hgetall(f'feedback|{plugin_name}|{feedback_id}')
+    feedback = r.hgetall(f'feedback|{dhash}|{plugin_name}|{feedback_id}')
     if not feedback:
         raise HTTPException(status_code=404, detail="Feedback not found")
     feedback['reply_log'] = json.loads(feedback['reply_log'])
@@ -124,7 +124,7 @@ async def front_admin_feedback_solve_get(request: Request, feedback_id: int, ref
         if referer == "export":
             return RedirectResponse(request.app.url_path_for('front_admin_feedback_export_get'))
         else:
-            return RedirectResponse(request.app.url_path_for('admins._feedback_admin'))
+            return RedirectResponse(request.app.url_path_for('front_admin_feedback_get'))
     elif len(feedback_list) > 1:
         raise HTTPException(status_code=400, detail="More than one feedback found.")
     else:
