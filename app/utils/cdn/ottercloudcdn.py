@@ -84,5 +84,25 @@ class OtterCloudCDN(CDN):
         }
         return self._do_post(path, params)
 
+    def prefetch(self, type: int, urls: list):
+        """预取任务创建
+        Args:
+            type (int): 刷新类型，必须,类型说明: 1. url 2. 目录dir
+            urls (list): 刷新参数值，必须，数组格式；刷新类型为url时单次最多1000条，类型为dir和re时单次最多50条。 (数组类型)
+        """
+        path = "/HTTPCacheTaskService/createHTTPCacheTask"
+        if type == 1:
+            type_str = "key"
+        elif type == 2:
+            type_str = "prefix"
+        else:
+            raise ValueError(f'Unknown type {type}')
+        params = {
+            "type": "fetch",
+            "keyType": type_str,
+            "keys": urls,
+        }
+        return self._do_post(path, params)
+
     def purge_urls(self, urls: list[str]):
         self.refresh(1, urls)

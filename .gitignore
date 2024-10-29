@@ -137,3 +137,4 @@ translations/*
 logs/app.log*
 
 tests/
+/node_modules/
