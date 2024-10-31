@@ -10,7 +10,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-bold mb-4">
-                            反馈详情 #{{ detail.feedback_id }}
+                            反馈详情 #{{ detail.order_id }}
                         </h2>
                     </div>
                     <button id="backButton"
@@ -39,7 +39,7 @@
                     <div class="flex justify-between">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">回复</button>
                         <button type="button" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                onClick="window.location.href='{{ url_for( 'front_admin_feedback_solve_get', feedback_id=detail.feedback_id ) }}?referer=export'">
+                                onClick="window.location.href='{{ url_for( 'front_admin_feedback_solve_get', feedback_id=detail.order_id ) }}?referer=export'">
                             Solved
                         </button>
                     </div>
