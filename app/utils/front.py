@@ -10,8 +10,6 @@ def flash(request: Request, category: str = "info", message: str = ""):
         request.session["flash_messages"] = []
     flash_message = {"message": message, "category": category, "read": False}
     request.session["flash_messages"].append(flash_message)
-    if hasattr(request.state, "flashed_messages"):
-        request.state.flashed_messages.append(flash_message)
 
 
 def get_flashed_messages(request: Request, with_categories: bool = True):
@@ -28,5 +26,6 @@ class FlashMessageMiddleware(BaseHTTPMiddleware):
         if not hasattr(request, "session"):
             raise RuntimeError("SessionMiddleware is required but not found.")
         request.state.flashed_messages = []
+        request.state.flashed_messages.extend(get_flashed_messages(request))
         response = await call_next(request)
         return response
