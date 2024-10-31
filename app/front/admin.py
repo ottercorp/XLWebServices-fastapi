@@ -112,7 +112,7 @@ async def front_admin_feedback_detail_get(request: Request, plugin_name: str, fe
     if not feedback:
         raise HTTPException(status_code=404, detail="Feedback not found")
     feedback['reply_log'] = json.loads(feedback['reply_log'])
-    return template.TemplateResponse("feedback_admin_detail.html", {"request": request, "detail": feedback})
+    return template.TemplateResponse("feedback_admin_detail.html", {"request": request, "detail": feedback, "plugin_name": plugin_name, "feedback_id": feedback_id})
 
 
 @router.get('/feedback/solve/{feedback_id}', response_class=RedirectResponse)

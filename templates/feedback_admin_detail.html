@@ -10,7 +10,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-bold mb-4">
-                            反馈详情 #{{ detail.order_id }}
+                            反馈详情 #{{ feedback_id }}
                         </h2>
                     </div>
                     <button id="backButton"
@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <hr class="mt-1 mb-4">
-                <p>插件名称：{{ detail.plugin_name }}</p>
+                <p>插件名称：{{ plugin_name }}</p>
                 <p>插件版本：{{ detail.version }}</p>
                 <p class="mt-4">反馈内容:</p>
                 <p class="mt-2">{{ detail.content }}</p>
@@ -39,7 +39,7 @@
                     <div class="flex justify-between">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">回复</button>
                         <button type="button" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                onClick="window.location.href='{{ url_for( 'front_admin_feedback_solve_get', feedback_id=detail.order_id ) }}?referer=export'">
+                                onClick="window.location.href='{{ url_for( 'front_admin_feedback_solve_get', feedback_id=feedback_id ) }}?referer=export'">
                             Solved
                         </button>
                     </div>
