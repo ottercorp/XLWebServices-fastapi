@@ -40,10 +40,10 @@ async def xivlauncher(track_file: str, localVersion: Union[str, None] = None, se
     if localVersion:
         if not re.match(SEMVER_REGEX, localVersion):
             raise HTTPException(status_code=400, detail="Invalid local version")
-        if (file == "RELEASES"):
+        if (file == "RELEASES" or file == "releases.win.json"):
             r.hincrby(f'{settings.redis_prefix}xivlauncher-count', 'XLStarts')
     else:
-        if (file == "RELEASES"):
+        if (file == "RELEASES" or file == "releases.win.json"):
             r.hincrby(f'{settings.redis_prefix}xivlauncher-count', 'XLUniqueInstalls')
     if track == 'Release':
         release_type = 'release'
