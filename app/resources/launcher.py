@@ -70,11 +70,15 @@ async def launcher_file(
     tag_name = r.hget(f'{settings.redis_prefix}xivlauncher', f'{release_type}-tag')
     valid_files = [
         'Setup.exe',
-        f'XIVLauncherCN-{tag_name}-delta.nupkg',
-        f'XIVLauncherCN-{tag_name}-full.nupkg',
+        'CHANGELOG.txt',
         f'XIVLauncher-{tag_name}-delta.nupkg',
         f'XIVLauncher-{tag_name}-full.nupkg',
-        'CHANGELOG.txt'
+
+        'releases.win.json',
+        f'XIVLauncherCN-{tag_name}-delta.nupkg',
+        f'XIVLauncherCN-{tag_name}-full.nupkg',
+        'XIVLauncherCN-Setup.exe',
+        'XIVLauncherCN.7z'
     ]
     hashed_name = r.hget(f'{settings.redis_prefix}xivlauncher', f'{release_type}-{file}')
     if file not in valid_files or not hashed_name:
