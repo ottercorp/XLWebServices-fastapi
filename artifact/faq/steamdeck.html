@@ -69,64 +69,112 @@
 </header>
 
 <main id="content" class="main-content" role="main">
-    <h1 id="xivlaunchercn-steam-deck-安装指南">XIVLauncherCN Steam Deck 安装指南</h1>
+    <h1 id="xivlaunchercn-linux-安装指南">XIVLauncherCN Linux 安装指南</h1>
 
-    <h2 id="安装">安装</h2>
+    <p>Linux 版 XIVLauncherCN 以多种不同格式发布，具体取决于您的系统设置。请阅读以下内容，了解为您的系统安装 XIVLauncherCN 的推荐方法：</p>
 
-    <!--    <h3 id="在您的-steam-deck-上安装-steam-版本的-ffxiv">在您的 Steam Deck 上安装 Steam 版本的 FFXIV</h3>-->
-
-    <!--    <p>要使用 XIVLauncherCN，FFXIV 免费试用版或完整版 FFXIV 必须安装在您的 Steam Deck 的 <strong>内部存储器</strong> 中。 您无需启动它，也无需创建 Steam 版本的 SE 帐户，只需安装即可。 如果您在 Steam 上没有-->
-    <!--        FFXIV，请安装免费试用版。</p>-->
-
-    <!--    <p>要安装试用版，您需要在 Steam 商店中查找。 根据您之前是否在此帐户上安装了试用版，它可能会从搜索结果中隐藏。 在这种情况下，在桌面模式下寻找最终幻想系列中的 demo，或 <a-->
-    <!--            href="https://store.steampowered.com/app/312060/FINAL_FANTASY_XIV_Online_Free_Trial/">使用此链接进入试用版</a>。</p>-->
-
-    <!--    <p>这是在游戏模式下查看游戏窗口所必需的。</p>-->
-
-    <h3 id="切换到桌面模式">切换到桌面模式</h3>
-
-    <p>按住电源按钮。 选择“切换到桌面模式”</p>
-
-    <h3 id="安装-xivlaunchercn">安装 XIVLauncherCN</h3>
-
-    <p>打开 “Discover Store”，搜索 “XIVLauncherCN” ，然后安装。</p>
-
-    <p><strong>可选：</strong>如果您想将 Final Fantasy XIV 安装到您的 Deck 的 MicroSD 卡或默认以外的任何文件夹 (<code class="language-plaintext highlighter-rouge">~/.xlcore_cn/ffxiv</code>)，您还需要
-        Discover Store 中的 <code class="language-plaintext highlighter-rouge">Flatseal</code>。</p>
-
-    <h3 id="拷贝国服游戏文件">拷贝国服游戏文件</h3>
-
-    <p>由于盛趣删除了早期补丁，启动器无法从头下载游戏，请通过各种方式下载国服游戏文件并转移到 Steam Deck 中。</p>
-
-    <h3 id="添加非-steam-游戏">添加非 Steam 游戏</h3>
-
-    <p>在 Steam 的桌面模式中，选择“添加游戏”，向下滚动到 XIVLauncherCN，单击复选框，然后单击“添加所选程序”</p>
-
-    <p>在 Steam 中右键单击 XIVLauncher，选择“属性”，然后</p>
     <ul>
-        <li>将“启动目录”替换为： <code class="language-plaintext highlighter-rouge">/home/deck</code> 或其他的非只读目录，国服的启动器需要运行在有写入权限的目录来进行登陆二维码的下载。</li>
-        <li>将“启动选项”替换为： <code class="language-plaintext highlighter-rouge">XL_SECRET_PROVIDER=FILE %command% run --parent-expose-pids --parent-share-pids --parent-pid=1 --branch=stable
-            --arch=x86_64 --command=xivlauncher cn.ottercorp.xivlaunchercn</code> 请注意，在此配置下，XIVLauncher 会将您的密码保存到您的 Steam Deck 中的文件中，因为 Valve 默认没有提供更安全的密码存储方式。
-            如果这对您来说是个问题，请从上面的行中省略 <code class="language-plaintext highlighter-rouge">XL_SECRET_PROVIDER=FILE</code> - 在这种情况下，XIVLauncher 将无法保存您的密码。
+        <li><strong>我正在使用带有 Steam 大屏幕的 Steamdeck/Linux 手持设备（无论您是否在 Steam 上拥有 FFXIV）</strong>：您应该遵循 <a href="#安装-xivlaunchercn-为兼容工具">安装为兼容工具指南</a>.</li>
+        <li><strong>我正在使用桌面 Linux 发行版并通过 Steam 拥有 FFXIV</strong>: 您应该遵循 <a href="#安装-xivlaunchercn-为兼容工具">安装为兼容工具指南</a>.</li>
+        <li><strong>我使用的是桌面 Linux 发行版，但未通过 Steam 购买 FFXIV</strong>: 您应该遵循 <a href="#安装-xivlaunchercn-作为-flatpak-或系统包">作为 Flatpak 或系统包安装指南</a></li>
+        <li><strong>我正在使用此处未列出的设置</strong>: 您的设置可能不支持 XIVLauncherCN，但仍可以参考 <a href="#安装-xivlaunchercn-作为-flatpak-或系统包">作为 Flatpak 或系统包安装指南</a> 来进一步确定.
         </li>
     </ul>
 
-    <p><strong>不要为 XIVLauncher 设置兼容模式。</strong> XIVLauncher 是本机 Linux 应用程序。 为它设置兼容性会破坏它。</p>
+    <h2 id="安装-xivlaunchercn-为兼容工具">安装 XIVLauncherCN 为兼容工具</h2>
 
-    <h3 id="允许外部文件夹访问-xivlauncher">允许外部文件夹访问 XIVLauncher</h3>
+    <p>XIVLauncherCN Steam 兼容工具由名为 <a href="https://github.com/Blooym/XLM">XLM</a> 的项目负责。所有主要系统配置均提供自动安装脚本，可为您完成大部分设置工作 <em>（但是，如果您的系统配置未在此处介绍，您可以随时从
+        <a href="https://github.com/Blooym/xlm/releases/latest">GitHub 发布页面</a> 手动下载 XLM 二进制文件并以此方式安装）</em>。</p>
 
-    <p>运行 Flatseal。 在左侧，向下滚动到 XIVLauncherCN。 在窗口的主要部分，向下滚动到“文件系统”。 单击其他文件旁边的文件夹图标。 输入您所安装最终幻想 XIV 的位置。 默认情况下，您的 MicroSD 安装到 <code
-            class="language-plaintext highlighter-rouge">/run/media/mmcblk0p1</code>。同样的，也需要添加上一步骤的启动目录为可访问目录。</p>
+    <p><em>兼容工具的安装与运行均需要访问 Github，请确保您能够正常与 Github API 进行通信。</em></p>
 
-    <h3 id="切换到游戏模式">切换到游戏模式</h3>
+    <p>Steam 兼容工具的自动安装程序适用于 Steam 的 <code class="language-plaintext highlighter-rouge">Steam Deck</code>、<code class="language-plaintext highlighter-rouge">Flatpak</code> 和 <code
+            class="language-plaintext highlighter-rouge">Native</code> 软件包。只需将下面适用于您系统的脚本复制并粘贴到终端中，兼容工具就会为您安装。之后，按照以下步骤开始使用它。</p>
 
-    <p>在桌面上，点击“返回游戏模式”。</p>
+    <p><strong>Steamdeck 安装脚本</strong>:</p>
 
-    <h3 id="第一次设置运行游戏">第一次设置/运行游戏</h3>
+    <div class="language-sh highlighter-rouge">
+        <div class="highlight"><pre class="highlight"><code>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://file.bluefissure.com/d/FFXIV/Dalamud/xlcore/xlm/install-steamdeck-cn.sh<span
+                class="si">)</span><span class="s2">"</span>
+</code></pre>
+        </div>
+    </div>
 
-    <p>在 Steam 中运行 XIVLauncherCN。 打开 XIVLauncherCN 后，点击左下角的齿轮图标设置游戏数据路径、Dalamud 注入设置等。更改设置后，点击对号。 输入您的用户名，单击登录，扫码，然后让 XIVLauncher 更新游戏。</p>
+    <p><strong>Steam 安装脚本 (Native)</strong></p>
+    <div class="language-sh highlighter-rouge">
+        <div class="highlight"><pre class="highlight"><code>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://file.bluefissure.com/d/FFXIV/Dalamud/xlcore/xlm/install-native-cn.sh<span
+                class="si">)</span><span class="s2">"</span>
+</code></pre>
+        </div>
+    </div>
 
-    <p>出现提示时，按“Steam”按钮，选择“FINAL FANTASY XIV Online Free Trial”。 片刻之后，最终幻想 XIV 将出现在屏幕上。</p>
+    <p><strong>Steam 安装脚本 (Snap)</strong></p>
+    <div class="language-sh highlighter-rouge">
+        <div class="highlight"><pre class="highlight"><code>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://file.bluefissure.com/d/FFXIV/Dalamud/xlcore/xlm/install-snap-cn.sh<span
+                class="si">)</span><span class="s2">"</span>
+</code></pre>
+        </div>
+    </div>
+
+    <p><strong>Steam 安装脚本 (Flatpak)</strong></p>
+    <div class="language-sh highlighter-rouge">
+        <div class="highlight"><pre class="highlight"><code>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://file.bluefissure.com/d/FFXIV/Dalamud/xlcore/xlm/install-flatpak-cn.sh<span
+                class="si">)</span><span class="s2">"</span>
+</code></pre>
+        </div>
+    </div>
+
+    <p>安装程序完成后，请按照以下步骤使用兼容工具：</p>
+    <ul>
+        <li>切换回游戏模式（如果在 Steam Deck 上）或重新启动 Steam 客户端。</li>
+        <li>如果您正在通过免费试用版玩游戏或没有 FFXIV 的 Steam 版本，请导航到您的库并选择“FINAL FANTASY XIV Online”或“FINAL FANTASY XIV Online 免费试用版”。</li>
+        <li>如果您所在的商店中这两款游戏已下架，您可以夺舍大部分没有反作弊的单机游戏进行启动 XIVLauncher.Core，请注意游戏时间会一并算入对应游戏中。</li>
+        <li>打开游戏属性菜单并切换到“兼容性”选项卡。</li>
+        <li>启用“强制使用特定的 Steam Play 兼容工具”复选框。</li>
+        <li>从出现的框中选择“XLCore [XLM]”（如果没有显示，请确保您正确重新启动了 Steam）。</li>
+        <li>您现在可以像往常一样启动游戏。XIVLauncher 将自动安装并为您运行。</li>
+    </ul>
+
+    <h2 id="安装-xivlaunchercn-作为-flatpak-或系统包">安装 XIVLauncherCN 作为 flatpak 或系统包</h2>
+
+    <h3 id="flatpak">Flatpak</h3>
+
+    <p>首先，通过运行 <code class="language-plaintext highlighter-rouge">flatpak remotes</code> 检查 flathub 是否已安装。如果您没有看到 flathub 的条目，请查看 <a href="https://flathub.org/setup">https://flathub.org/setup</a>
+        以获取有关如何安装它的说明。</p>
+
+    <h4 id="通过终端">通过终端</h4>
+
+    <p>要使用终端将 XIVLauncherCN 安装为 flatpak，请以普通用户身份（无需<code class="language-plaintext highlighter-rouge">sudo</code>）运行命令 <code class="language-plaintext highlighter-rouge">flatpak
+        install flathub cn.ottercorp.xivlaunchercn</code>。</p>
+
+    <h4 id="通过软件商店-gnomekde">通过软件商店 (GNOME/KDE)</h4>
+
+    <p>某些桌面环境为 Flatpak 存储库提供图形前端，允许您浏览应用商店以更直观的方式安装 Flatpaks。</p>
+
+    <ul>
+        <li>
+            <p>如果您使用的是 GNOME，请打开软件，然后搜索“XIVLauncherCN”。单击结果中的 XIVLauncherCN 条目。单击“安装”。</p>
+        </li>
+        <li>
+            <p>如果您使用的是 KDE，请打开 Discover，然后搜索“XIVLauncherCN”。单击结果中的 XIVLauncherCN 条目。单击“安装”。</p>
+        </li>
+    </ul>
+
+    <p>其他桌面环境可能在其自己的 Flatpak 前端应用程序中提供 XIVLauncherCN，也可能不提供。如果 XIVLauncherCN 没有出现在 GNOME 软件或 KDE Discover 中，请验证 Flatpak 是否已安装并正在运行，并验证您是否已启用
+        Flathub 存储库。</p>
+
+    <h4 id="将-ffxiv-安装到外部驱动器">将 FFXIV 安装到外部驱动器</h4>
+
+    <p>如果您想将最终幻想14安装到默认文件夹 (<code class="language-plaintext highlighter-rouge">~/.xlcore_cn/ffxiv</code>) 之外的任何文件夹，您还需要 Discover Store 中的 <code
+            class="language-plaintext highlighter-rouge">Flatseal</code>。</p>
+
+    <p>运行 Flatseal。在左侧，向下滚动到 XIVLauncherCN。在窗口的主要部分，向下滚动到 <code class="language-plaintext highlighter-rouge">Filesystem</code>。单击其他文件旁边的文件夹图标。输入您想要安装最终幻想14的路径。
+    </p>
+
+    <h3 id="系统包">系统包</h3>
+
+    <p>可在<a href="https://github.com/ottercorp/XIVLauncher.Core?tab=readme-ov-file#%E5%88%86%E5%8F%91">此处</a>找到替代包的列表。请注意，除了兼容工具和 Flatpak
+        外，其余的都由社区成员维护，并被视为非官方。但是，只要包是最新的，您仍将获得社区支持。</p>
 
     <h2 id="常见问题">常见问题</h2>
 
@@ -136,12 +184,25 @@
 
     <h3 id="q-我的配置文件保存在哪里">Q: 我的配置文件保存在哪里？</h3>
 
-    <p>配置文件保存在<code class="language-plaintext highlighter-rouge">~/.xlcore_cn</code>。</p>
+    <p>配置文件保存到 <code class="language-plaintext highlighter-rouge">~/.xlcore_cn</code>，除非使用 flatpak 安装运行的 Steam，此时配置文件保存到 <code class="language-plaintext highlighter-rouge">~/.var/app/com.valvesoftware.Steam/.xlcore_cn</code>。
+    </p>
 
     <h3 id="q-游戏随机消失休眠后无法恢复">Q: 游戏随机消失，休眠后无法恢复</h3>
 
     <p>请确保 Steam 商店的 <a href="https://store.steampowered.com/app/39210/FINAL_FANTASY_XIV_Online/">FINAL FANTASY XIV Online</a> 或 <a
-            href="https://store.steampowered.com/app/312060/FINAL_FANTASY_XIV_Online_Free_Trial/">FINAL FANTASY XIV Online Free Trial</a> 已安装在您的 Steam Deck 的 <strong>内部存储器</strong> 中。</p>
+            href="https://store.steampowered.com/app/312060/FINAL_FANTASY_XIV_Online_Free_Trial/">FINAL FANTASY XIV Online Free Trial</a> 或其他用于启动 XIVLauncher.Core 的游戏已安装在您的 Steam Deck
+        的 <strong>内部存储器</strong> 中。</p>
+
+    <h3 id="q-final-fantasy-xiv-online-或-free-trial-已在所在的-steam-商店下架">Q: FINAL FANTASY XIV Online (或 Free Trial) 已在所在的 Steam 商店下架</h3>
+
+    <p>您可以：</p>
+    <ul>
+        <li>打开 <code class="language-plaintext highlighter-rouge">~/.xlcore_cn/launcher.ini</code> 并将 <code class="language-plaintext highlighter-rouge">IsIgnoringSteam</code> 设置为 <code
+                class="language-plaintext highlighter-rouge">true</code>。
+        </li>
+        <li>添加 <code class="language-plaintext highlighter-rouge">XL_APPID=2805730</code> 到额外环境变量来强制指定使用 Proton 9.0 来运行游戏。</li>
+        <li>如果您将 XIVLauncherCN 安装为兼容工具（XLM）：您可以使用其他任意没有反作弊（会影响 Dalamud 注入）的游戏，将其兼容工具强制设定为 XLM。</li>
+    </ul>
 
     <h3 id="q-我的音频有爆裂声失真">Q: 我的音频有爆裂声/失真</h3>
 
@@ -149,12 +210,10 @@
 
     <h3 id="q-我无法控制我的游戏">Q: 我无法控制我的游戏</h3>
 
-    <p>请在 Steam 中更改 “FINAL FANTASY XIV Online Free Trial” 的控制器布局，<strong>而不是</strong>更改 XIVLauncher 的控制器布局。</p>
+    <p>请在 Steam 中更改 “FINAL FANTASY XIV Online Free Trial” 或 “Proton 9.0” 的控制器布局，<strong>而不是</strong> 更改 XIVLauncherCN 的控制器布局。</p>
 
-    <h3 id="q-final-fantasy-xiv-无法正常关闭--steam-一直认为-final-fantasy-xiv-正在运行">Q: Final Fantasy XIV 无法正常关闭 / Steam 一直认为 Final Fantasy XIV 正在运行</h3>
-
-    <p>确保在“添加非 Steam 游戏”步骤中设置了启动选项。 特别是 <code class="language-plaintext highlighter-rouge">--parent-expose-pids --parent-share-pids --parent-pid=1</code> 参数允许 XIVLauncherCN 与
-        Steam 通信以报告游戏结束。</p>
+    <p>如果这不能解决问题，请将 ~/.xlcore_cn/ffxivConfig/FFXIV.cfg 重命名为 FFXIV.cfg.bak，然后从游戏模式再次运行游戏。这会将所有最终幻想14系统设置重置为默认设置。将 FFXIV.cfg.bak 重命名回 FFXIV.cfg
+        将恢复这些设置。</p>
 
     <h3 id="q-xivlauncher-在尝试通过-steam-运行时立即关闭">Q: XIVLauncher 在尝试通过 Steam 运行时立即关闭</h3>
 
@@ -168,21 +227,14 @@
 
     <p>由于 Steam 文本输入 API 的 BUG，请选中内容高亮后进行输入替换。</p>
 
-    <h3 id="q-我无法在游戏内聊天框中输入中文中文字符变成问号">Q: 我无法在游戏内聊天框中输入中文（中文字符变成问号）</h3>
-
-    <p>游戏对于输入法的检测无法识别 Steam Deck 虚拟键盘的语言切换。</p>
-
-    <p>建议启用插件框架后安装 ChatTwo 插件替代游戏原本的聊天系统。</p>
-
-    <p><a href="#安装">返回顶部</a><br/>
+    <p><a href="#安装">返回顶部</a><br>
         <a href="/faq/">返回 FAQ 主页</a></p>
 
 
     <footer class="site-footer">
-      
-      <span><a href="https://github.com/ottercorp/faq">faq</a> 受 <a
-              href="https://github.com/ottercorp">ottercorp</a> 维护。 <b><a
-              href="/faq/support">支持我们！</a></b></span>
+
+        <span><a href="/faq">faq</a> 受 <a href="https://github.com/ottercorp">ottercorp</a> 维护。 <b><a
+                href="/faq/support">支持我们！</a></b></span>
 
     </footer>
 </main>
