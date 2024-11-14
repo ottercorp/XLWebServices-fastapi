@@ -3,6 +3,8 @@
 import asyncio
 import json
 import secrets
+from io import BytesIO
+
 from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Request, Form, UploadFile
 from fastapi.responses import RedirectResponse, PlainTextResponse, HTMLResponse, FileResponse
@@ -11,6 +13,7 @@ from fastapi.templating import Jinja2Templates
 from app.utils import httpx_client
 from app.config import Settings
 from app.utils.common import get_settings, get_tos_content, get_tos_hash
+from app.utils.dalamud_log_analysis import analysis
 from app.utils.front import flash
 from app.utils.tasks import regen
 from app.utils.redis import Redis, RedisFeedBack
@@ -198,9 +201,11 @@ async def front_admin_log_analytics_get(request: Request):
     return template.TemplateResponse("log_analysis.html", {"request": request})
 
 
-@router.post('/log_analytics', response_class=HTMLResponse)
-async def front_admin_log_analytics_post(request: Request, file: UploadFile = Form(...)):
-    flash(request, 'error', '测试', )
-    return template.TemplateResponse("log_analysis.html", {"request": request})
+@router.post('/log_analytics', )
+async def front_admin_log_analytics_post(request: Request, file: UploadFile = Form(...), settings: Settings = Depends(get_settings)):
+    file_byte = await file.read()
+    file = BytesIO(file_byte)
+    analysis_result, log_file_type = analysis(file, settings.plugin_api_level)
+    return template.TemplateResponse("log_analysis_result.html", {"request": request, "analysis_result": analysis_result, "log_file_type": log_file_type})
 
 # endregion

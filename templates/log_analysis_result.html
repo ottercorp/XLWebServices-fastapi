@@ -1,0 +1,130 @@
+{% extends "base/admin_base.html" %}
+{% block add_head %}
+    <title>日志分析 - XLWebServices</title>
+{% endblock %}
+
+{% block page_content %}
+    <div class="container max-w-screen-2xl mx-auto bg-white p-16 rounded-lg shadow-md py-6">
+        <h1 class="text-2xl font-bold py-4">日志分析结果</h1>
+        <hr class="mb-4"/>
+        {% include "base/flash_messages.html" %}
+        {% if log_file_type == 0 %}
+            <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+                <ul>
+                    <li>
+                        <div class="flex items-center mb-4">
+                            <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                            <h2 class="text-xl font-bold text-gray-800">Dalamud版本</h2>
+                        </div>
+                    </li>
+                    <li>
+                        <p>{{ analysis_result.troubleshooting.DalamudVersion }} - {{ analysis_result.troubleshooting.DalamudGitHash }}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+                <ul>
+                    <li>
+                        <div class="flex items-center mb-4">
+                            <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                            <h2 class="text-xl font-bold text-gray-800">游戏版本</h2>
+                        </div>
+                    </li>
+                    <li>
+                        <p>{{ analysis_result.troubleshooting.GameVersion }}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+                <ul>
+                    <li>
+                        <div class="flex items-center mb-4">
+                            <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                            <h2 class="text-xl font-bold text-gray-800">第三方插件</h2>
+                        </div>
+                    </li>
+                    <li>
+                        <p>{{ analysis_result.Third_party_plugins }}</p>
+                    </li>
+                </ul>
+            </div>
+        {% elif log_file_type == 1 %}
+            <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+                <ul>
+                    <li>
+                        <div class="flex items-center mb-4">
+                            <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                            <h2 class="text-xl font-bold text-gray-800">XIVLauncherCN版本</h2>
+                        </div>
+                    </li>
+                    <li>
+                        <p>{{ analysis_result.troubleshooting.LauncherHash }}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+                <ul>
+                    <li>
+                        <div class="flex items-center mb-4">
+                            <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                            <h2 class="text-xl font-bold text-gray-800">游戏版本</h2>
+                        </div>
+                    </li>
+                    <li>
+                        <p>{{ analysis_result.troubleshooting.ObservedGameVersion }}</p>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+        <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+            <ul>
+                <li>
+                    <div class="flex items-center mb-4">
+                        <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                        <h2 class="text-xl font-bold text-gray-800">Exception_Last</h2>
+                    </div>
+                </li>
+                <li>
+                    <p>[{{ analysis_result.Exception_Last.When }}] {{ analysis_result.Exception_Last.Context }}</p>
+                </li>
+                <li>
+                    <pre class="whitespace-pre-wrap">{{ analysis_result.Exception_Last.Info }}</pre>
+                </li>
+            </ul>
+        </div>
+        <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+            <ul>
+                <li>
+                    <div class="flex items-center mb-4">
+                        <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                        <h2 class="text-xl font-bold text-gray-800">Exception_Second_Last</h2>
+                    </div>
+                </li>
+                <li>
+                    <p>[{{ analysis_result.Exception_Second_Last.When }}] {{ analysis_result.Exception_Second_Last.Context }}</p>
+                </li>
+                <li>
+                    <pre class="whitespace-pre-wrap">{{ analysis_result.Exception_Second_Last.Info }}</pre>
+                </li>
+            </ul>
+        </div>
+        <div class="flex flex-col space-y-6 px-4 w-full justify-between mb-6">
+            <ul>
+                <li>
+                    <div class="flex items-center mb-4">
+                        <div class="w-2 h-6 bg-blue-600 mr-3"></div>
+                        <h2 class="text-xl font-bold text-gray-800">Exception_Third_Last</h2>
+                    </div>
+                </li>
+                <li>
+                    <p>[{{ analysis_result.Exception_Third_Last.When }}] {{ analysis_result.Exception_Third_Last.Context }}</p>
+                </li>
+                <li>
+                    <pre class="whitespace-pre-wrap">{{ analysis_result.Exception_Third_Last.Info }}</pre>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+{% endblock %}
