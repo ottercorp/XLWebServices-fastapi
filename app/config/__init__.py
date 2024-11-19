@@ -1,5 +1,6 @@
 import os
 import json
+from pydantic import Field
 from pydantic_settings import BaseSettings
 from typing import Dict, List
 
@@ -27,11 +28,9 @@ class Settings(BaseSettings):
     xlassets_repo: str = ''
     plugin_api_level: int = 7
     plugin_api_level_test: int = 8
-    api_namespace: Dict[int, str] = {
-        7: 'plugin-PluginDistD17-main'
-    }
+    api_namespace: Dict[int, str] =  Field(default_factory=lambda: {7: 'plugin-PluginDistD17-main'})
     # CDN
-    cdn_list: List[str] = []
+    cdn_list: List[str] = Field(default_factory=lambda: [])
     cf_token: str = ''
     cf_zone_id: str = ''
     ctcdn_ak: str = ''
@@ -75,7 +74,7 @@ SENSITIVE_FIELDS = [
     'ottercloud_cdn_key',
     'admin_user_pwd'
 ]
-settings_json = Settings().dict()
+settings_json = Settings().model_dump()
 for field in SENSITIVE_FIELDS:
     if field in settings_json:
         settings_json[field] = '*' * len(settings_json[field])
