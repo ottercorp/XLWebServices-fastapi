@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     xlassets_repo: str = ''
     plugin_api_level: int = 7
     plugin_api_level_test: int = 8
-    api_namespace: Dict[int, str] =  Field(default_factory=lambda: {7: 'plugin-PluginDistD17-main'})
+    api_namespace: Dict[int, str] = Field(default_factory=lambda: {7: 'plugin-PluginDistD17-main'})
     # CDN
     cdn_list: List[str] = Field(default_factory=lambda: [])
     cf_token: str = ''

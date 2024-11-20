@@ -1,11 +1,13 @@
+from datetime import datetime, timedelta
 from typing import Union
+
+from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Header
+from fastapi.responses import RedirectResponse
+
 from app.config import Settings
 from app.utils.common import get_settings
 from app.utils.redis import Redis
 from app.utils.tasks import regen
-from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Header
-from fastapi.responses import RedirectResponse
-from datetime import datetime, timedelta
 
 router = APIRouter()
 
@@ -92,6 +94,4 @@ async def clear_cache(background_tasks: BackgroundTasks, key: str = Query(), set
 
 @router.get("/Download")
 async def xivlauncher_download(settings: Settings = Depends(get_settings)):
-    r = Redis.create_client()
-    hashed_name = r.hget(f'{settings.redis_prefix}xivlauncher', 'release-Setup.exe')
-    return RedirectResponse(f"/File/Get/{hashed_name}", status_code=302)
+    return RedirectResponse(f"https://s3.ffxiv.wang/xivlauncher-cn/XIVLauncherCN-win-Portable.7z", status_code=302)
