@@ -1,25 +1,30 @@
+import codecs
+import hashlib
 import os
 import re
-import codecs
 import shutil
-import hashlib
-import requests
-from ..config import Settings
 from functools import cache
 
+import requests
+
 from logs import logger
+from ..config import Settings
+
 
 @cache
 def get_settings():
     return Settings()
 
+
 @cache
 def get_apilevel_namespace_map():
     return get_settings().api_namespace
 
+
 @cache
 def get_namespace_apilevel_map():
     return dict([(v, k) for (k, v) in get_settings().api_namespace.items()])
+
 
 @cache
 def get_tos_content():
@@ -27,6 +32,7 @@ def get_tos_content():
     with codecs.open(tos_path, "r", "utf8") as f:
         tos_content = f.read()
     return tos_content
+
 
 @cache
 def get_tos_hash():
@@ -41,7 +47,7 @@ def cache_file(file_path: str):
     if not os.path.exists(file_cache_dir):
         os.makedirs(file_cache_dir, exist_ok=True)
     try:
-        with open(file_path,"rb") as f:
+        with open(file_path, "rb") as f:
             bs = f.read()
     except FileNotFoundError:
         logger.error("File not found: " + file_path)
@@ -71,6 +77,6 @@ def download_file(url, dst="", force: bool = False):
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(filepath, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192): 
+            for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
     return filepath
