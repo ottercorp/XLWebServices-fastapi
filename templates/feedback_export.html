@@ -21,7 +21,8 @@
                                     {% set counter = 1 %}
                                     <div class="w-full p-2">
                                         <ul class="flex flex-row w-full">
-                                            <li class="w-full md:w-full">报告人：{{ i['reporter'] }}</li>
+                                            <li class="w-full md:w-1/2">报告人：{{ i['reporter'] }}</li>
+                                            <li class="w-full md:w-1/2">报告时间：{{ i['create_time'] }}</li>
                                         </ul>
                                         <ul class="flex flex-row w-full">
                                             <li class="w-full md:w-1/2">插件版本：{{ i['version'] }}</li>
