@@ -1,5 +1,6 @@
 import re
 import json
+import time
 from app.config import Settings
 from app.utils import httpx_client
 from app.utils.common import get_settings, get_apilevel_namespace_map
@@ -128,6 +129,7 @@ async def feedback(feedback: FeedBack, settings: Settings = Depends(get_settings
         'exception': exception,  # 异常信息(base64)
         'status': 'open',  # status：open waiting closed
         'reply_log': json.dumps([]),  # 回复记录
+        'create_time': time.time()
     }
     order_id = r.incr(f'{settings.redis_prefix}feedback-order-id')  # 自增生成唯一id
     r_fb.hincrby(f'{settings.redis_prefix}feedback-count', name)  # 记录每个插件现有的反馈数

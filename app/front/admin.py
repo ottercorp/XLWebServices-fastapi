@@ -2,22 +2,20 @@
 # cython:language_level=3
 import asyncio
 import json
-import secrets
+from datetime import datetime, timezone, timedelta
 from io import BytesIO
 
-from pydantic import BaseModel
-from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks, Request, Form, UploadFile
+from fastapi import APIRouter, HTTPException, Depends, Request, Form, UploadFile
 from fastapi.responses import RedirectResponse, PlainTextResponse, HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
-from app.utils import httpx_client
 from app.config import Settings
-from app.utils.common import get_settings, get_tos_content, get_tos_hash
+from app.utils.cdn.ottercloudcdn import OtterCloudCDN
+from app.utils.common import get_settings
 from app.utils.dalamud_log_analysis import analysis
 from app.utils.front import flash
+from app.utils.redis import RedisFeedBack
 from app.utils.tasks import regen
-from app.utils.redis import Redis, RedisFeedBack
-from app.utils.cdn.ottercloudcdn import OtterCloudCDN
 
 router = APIRouter()
 template = Jinja2Templates("templates")
@@ -95,6 +93,7 @@ async def front_admin_feedback_export_get(request: Request):
         if plugin_name not in return_dict:
             return_dict[plugin_name] = []
         feedback = r_fb.hgetall(f'feedback|{dhash}|{plugin_name}|{order_id}')
+        create_time = datetime.fromtimestamp(float(feedback.get('create_time', 0)), tz=timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M:%S')
         return_dict[plugin_name].append({
             "order_id": order_id,
             "dhash": dhash,
@@ -102,6 +101,7 @@ async def front_admin_feedback_export_get(request: Request):
             "content": feedback['content'],
             "exception": feedback['exception'],
             "reporter": feedback['reporter'],
+            "create_time": create_time,
         })
     for k, v in return_dict.items():
         return_dict[k] = sorted(v, key=lambda x: x['order_id'], reverse=True)
@@ -115,6 +115,7 @@ async def front_admin_feedback_detail_get(request: Request, plugin_name: str, fe
     if not feedback:
         raise HTTPException(status_code=404, detail="Feedback not found")
     feedback['reply_log'] = json.loads(feedback['reply_log'])
+    feedback['create_time'] = datetime.fromtimestamp(float(feedback.get('create_time', 0)), tz=timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M:%S')
     return template.TemplateResponse("feedback_admin_detail.html", {"request": request, "detail": feedback, "plugin_name": plugin_name, "feedback_id": feedback_id})
 
 
