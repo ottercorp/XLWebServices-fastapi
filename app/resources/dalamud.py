@@ -154,7 +154,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             }
         }]
     }
-    await asyncio.gather(httpx_client.post(url, json=data), httpx_client.post("http://127.0.0.1:7000/collect", json=data))
+    await asyncio.gather(httpx_client.post(url, json=data), httpx_client.post("http://127.0.0.1:7000/collect", json=data,headers={"content-type": "application/json"}))
     return {'message': 'OK'}
 
 
