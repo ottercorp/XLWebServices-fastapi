@@ -1,6 +1,7 @@
+import asyncio
 import os
 import json
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse, PlainTextResponse
 from app.utils import httpx_client
@@ -26,7 +27,8 @@ class Analytics(BaseModel):
     dalamud_version: str = ""
     is_testing: bool = None
     plugin_count: int
-    plugin_list: list = []
+    plugin_list: list = Field(default_factory=lambda: [])
+    mid: str = ""
 
 
 @router.get("/Asset/Meta")
@@ -109,6 +111,8 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
     cheatplugin_hash_sha256 = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash_sha256')
     cheat_banned_hash_valid = analytics.cheat_banned_hash and \
                               (cheatplugin_hash == analytics.cheat_banned_hash or cheatplugin_hash_sha256 == analytics.cheat_banned_hash)
+    plugin_name_list = r.lrange(f'{settings.redis_prefix}plugin_name_list', 0, -1)
+    plugin_3rd_list = list(set(analytics.plugin_list) - set(plugin_name_list))
     data = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,
@@ -133,6 +137,12 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             },
             "plugin_count": {
                 "value": analytics.plugin_count
+            },
+            "machine_id": {
+                "value": analytics.mid
+            },
+            "plugin_3rd_list": {
+                "value": plugin_3rd_list
             }
         },
         'events': [{
@@ -144,7 +154,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
             }
         }]
     }
-    await httpx_client.post(url, json=data)
+    await asyncio.gather(httpx_client.post(url, json=data), httpx_client.post("http://127.0.0.1:7000/collect", json=data))
     return {'message': 'OK'}
 
 

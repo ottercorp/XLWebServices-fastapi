@@ -221,6 +221,12 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
             redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', plugin_name, hashed_name)
             pluginmaster.append(plugin_meta)
     redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
+    plugin_name_list =[]
+    for plugin in pluginmaster:
+        plugin_name = plugin['InternalName']
+        plugin_name_list.append(plugin_name)
+    redis_client.delete(f'{settings.redis_prefix}plugin_name_list')
+    redis_client.rpush(f'{settings.redis_prefix}plugin_name_list', *plugin_name_list)
     # print(f"Regenerated Pluginmaster for {plugin_namespace}: \n" + str(json.dumps(pluginmaster, indent=2)))
 
 
