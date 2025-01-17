@@ -25,7 +25,7 @@ class Analytics(BaseModel):
     os: str
     cheat_banned_hash: str = ""
     dalamud_version: str = ""
-    is_testing: bool = None
+    is_testing: bool = False
     plugin_count: int
     plugin_list: list = Field(default_factory=lambda: [])
     mid: str = ""
