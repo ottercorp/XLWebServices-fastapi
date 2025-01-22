@@ -404,6 +404,7 @@ def regen_updater(redis_client=None):
     if not redis_client:
         redis_client = Redis.create_client()
     settings = get_settings()
+    redis_client.delete(f'{settings.redis_prefix}updater')
     updater_repo_url = settings.updater_repo
     s = re.search(r'github.com[\/:](?P<user>.+)\/(?P<repo>.+)\.git', updater_repo_url)
     user, repo_name = s.group('user'), s.group('repo')
@@ -423,7 +424,6 @@ def regen_updater(redis_client=None):
             if file_name == 'release.zip':
                 asset_filepath = download_file(asset.browser_download_url, force=True)  # overwrite file
                 (hashed_name, _) = cache_file(asset_filepath)
-                redis_client.delete(f'{settings.redis_prefix}updater')
                 redis_client.hset(
                     f'{settings.redis_prefix}updater',
                     f'{release_type}-asset',
