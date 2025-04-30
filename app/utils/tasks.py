@@ -104,7 +104,7 @@ def refresh_cdn_task(task_cdn: Tuple[str, Union[CloudFlareCDN, CTCDN, OtterCloud
                             'https://s3.ffxiv.wang/xivlauncher-cn/XIVLauncherCN-win-Setup.exe', 'https://s3.ffxiv.wang/xivlauncher-cn/XIVLauncherCN-beta-Setup.exe',
                             'https://s3.ffxiv.wang/xivlauncher-cn/XIVLauncherCN-win-Portable.7z', 'https://s3.ffxiv.wang/xivlauncher-cn/XIVLauncherCN-beta-Portable.7z'],
             'updater': ['/Updater/Release/VersionInfo', '/Updater/ChangeLog'],
-            'xlassets': ['/XLAssets/integrity'],
+            'xlassets': ['/XLAssets/integrity','https://s3.ffxiv.wang/xlassets/patchinfo/latest.json'],
         }
         if task in path_map:
             cdn.purge(path_map[task])

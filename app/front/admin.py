@@ -161,7 +161,7 @@ async def front_admin_flush_post(request: Request, action: str = Form(...), task
     except Exception as e:
         flash(request, 'error', f'任务失败，{e}', )
     finally:
-        return template.TemplateResponse("flush.html", {"request": request})
+        return RedirectResponse(url=request.app.url_path_for('front_admin_flush_get'))
 
 
 @router.get('/flush_cache')
