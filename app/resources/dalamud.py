@@ -2,6 +2,7 @@ import asyncio
 import os
 import json
 
+import httpx
 import orjson
 from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
@@ -106,11 +107,19 @@ async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(
 
 
 async def _analytics_post(url: str, payload: dict):
-    await httpx_client.post(
-        url,
-        content=orjson.dumps(payload),
-        headers={"content-type": "application/json"}
-    )
+    content = orjson.dumps(payload)
+    for attempt in range(3):
+        try:
+            resp = await httpx_client.post(
+                url,
+                content=content,
+                headers={"content-type": "application/json"},
+            )
+            return resp.status_code
+        except (httpx.RequestError, httpx.HTTPStatusError):
+            if attempt == 2:
+                return None
+            await asyncio.sleep(0.5 * (attempt + 1))
 
 
 @router.post("/Analytics/Start")
