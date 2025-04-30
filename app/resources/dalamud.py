@@ -1,6 +1,8 @@
 import asyncio
 import os
 import json
+
+import orjson
 from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Depends, Query, BackgroundTasks
 from fastapi.responses import RedirectResponse, PlainTextResponse
@@ -103,9 +105,17 @@ async def asset_clear_cache(background_tasks: BackgroundTasks, key: str = Query(
     return {'message': 'Background task was started.'}
 
 
+async def _analytics_post(url: str, payload: dict):
+    await httpx_client.post(
+        url,
+        content=orjson.dumps(payload),
+        headers={"content-type": "application/json"}
+    )
+
+
 @router.post("/Analytics/Start")
 async def analytics_start(analytics: Analytics, settings: Settings = Depends(get_settings)):
-    url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
+    ga_url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
     r = Redis.create_client()
     cheatplugin_hash = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash')
     cheatplugin_hash_sha256 = r.hget(f'{settings.redis_prefix}asset', 'cheatplugin_hash_sha256')
@@ -113,48 +123,41 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
                               (cheatplugin_hash == analytics.cheat_banned_hash or cheatplugin_hash_sha256 == analytics.cheat_banned_hash)
     plugin_name_list = r.lrange(f'{settings.redis_prefix}plugin_name_list', 0, -1)
     plugin_3rd_list = list(set(analytics.plugin_list) - set(plugin_name_list))
-    data = {
+    user_props_base = {
+        "HomeWorld": {"value": analytics.server_id},
+        "Cheat_Banned_Hash_Valid": {"value": cheat_banned_hash_valid},
+        "Client": {"value": analytics.aid or analytics.client_id},
+        "os": {"value": analytics.os},
+        "dalamud_version": {"value": analytics.dalamud_version},
+        "is_testing": {"value": analytics.is_testing},
+        "plugin_count": {"value": analytics.plugin_count},
+        "machine_id": {"value": analytics.mid},
+    }
+    event_params = {
+        "server_id": analytics.server_id,
+        "engagement_time_msec": "100",
+        "session_id": analytics.client_id,
+    }
+    data_ga = {
+        "client_id": analytics.client_id,
+        "user_id": analytics.user_id,
+        "user_properties": user_props_base,
+        "events": [{"name": "start_dalamud", "params": event_params}],
+    }
+    data_oa = {
         "client_id": analytics.client_id,
         "user_id": analytics.user_id,
         "user_properties": {
-            "HomeWorld": {
-                "value": analytics.server_id
-            },
-            "Cheat_Banned_Hash_Valid": {
-                "value": cheat_banned_hash_valid
-            },
-            "Client": {
-                "value": analytics.aid if analytics.aid != "" else analytics.client_id,
-            },
-            "os": {
-                "value": analytics.os,
-            },
-            "dalamud_version": {
-                "value": analytics.dalamud_version
-            },
-            "is_testing": {
-                "value": analytics.is_testing
-            },
-            "plugin_count": {
-                "value": analytics.plugin_count
-            },
-            "machine_id": {
-                "value": analytics.mid
-            },
-            "plugin_3rd_list": {
-                "value": plugin_3rd_list
-            }
+            **user_props_base,
+            "plugin_3rd_list": {"value": plugin_3rd_list},
         },
-        'events': [{
-            'name': 'start_dalamud',
-            "params": {
-                "server_id": analytics.server_id,
-                "engagement_time_msec": "100",
-                "session_id": analytics.client_id
-            }
-        }]
+        "events": [{"name": "start_dalamud", "params": event_params}],
     }
-    await asyncio.gather(httpx_client.post(url, json=data), httpx_client.post("http://127.0.0.1:7000/collect", json=data,headers={"content-type": "application/json"}))
+
+    await asyncio.gather(
+        _analytics_post(ga_url, data_ga),
+        _analytics_post("http://127.0.0.1:7000/collect", data_oa),
+    )
     return {'message': 'OK'}
 
 
