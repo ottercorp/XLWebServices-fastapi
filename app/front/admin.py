@@ -161,7 +161,7 @@ async def front_admin_flush_post(request: Request, action: str = Form(...), task
     except Exception as e:
         flash(request, 'error', f'任务失败，{e}', )
     finally:
-        return RedirectResponse(url=request.app.url_path_for('front_admin_flush_get'))
+        return RedirectResponse(url=request.app.url_path_for('front_admin_flush_get'), status_code=303)
 
 
 @router.get('/flush_cache')
@@ -189,9 +189,9 @@ async def front_admin_flush_cache_get(request: Request, task: str | None = None)
     else:
         raise HTTPException(status_code=400, detail="No task specified.")
     if request.headers.get('referer') and 'flush' in request.headers.get('referer'):
-        return RedirectResponse(url=request.app.url_path_for("front_admin_flush_get"))
+        return RedirectResponse(url=request.app.url_path_for("front_admin_flush_get"), status_code=303)
     else:
-        return RedirectResponse(url=request.app.url_path_for("front_admin_index"))
+        return RedirectResponse(url=request.app.url_path_for("front_admin_index"), status_code=303)
 
 
 # endregion
