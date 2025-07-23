@@ -216,6 +216,7 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
             plugin_meta["DownloadLinkTesting"] = settings.hosted_url.rstrip('/') \
                                                  + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=True&branch=api{api_level}"
             plugin_latest_path = os.path.join(plugin_dir, f'{plugin}/latest.zip')
+            plugin_meta["IconUrl"] = f"https://s3test.ffxiv.wang/plugindistd17/stable/{plugin}/images/icon.png"
             (hashed_name, _) = cache_file(plugin_latest_path)
             plugin_name = f"{plugin}-testing" if is_testing else plugin
             redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', plugin_name, hashed_name)
