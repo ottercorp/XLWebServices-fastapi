@@ -1,5 +1,5 @@
 import asyncio
-import os
+import hashlib
 import json
 
 import httpx
@@ -132,6 +132,7 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
                               (cheatplugin_hash == analytics.cheat_banned_hash or cheatplugin_hash_sha256 == analytics.cheat_banned_hash)
     plugin_name_list = r.lrange(f'{settings.redis_prefix}plugin_name_list', 0, -1)
     plugin_3rd_list = list(set(analytics.plugin_list) - set(plugin_name_list))
+    user_id = hashlib.blake2s(analytics.user_id.encode(), digest_size=8).hexdigest()
     user_props_base = {
         "HomeWorld": {"value": analytics.server_id},
         "Cheat_Banned_Hash_Valid": {"value": cheat_banned_hash_valid},
@@ -149,13 +150,13 @@ async def analytics_start(analytics: Analytics, settings: Settings = Depends(get
     }
     data_ga = {
         "client_id": analytics.client_id,
-        "user_id": analytics.user_id,
+        "user_id": user_id,
         "user_properties": user_props_base,
         "events": [{"name": "start_dalamud", "params": event_params}],
     }
     data_oa = {
         "client_id": analytics.client_id,
-        "user_id": analytics.user_id,
+        "user_id": user_id,
         "user_properties": {
             **user_props_base,
             "plugin_3rd_list": {"value": plugin_3rd_list},
