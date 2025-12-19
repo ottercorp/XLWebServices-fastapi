@@ -218,8 +218,8 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
 
     repo_url_goatcorp = settings.plugin_repo_goatcorp
 
-    pluginmaster_cn, _, plugin_namespace = parsing_pluginmaster(redis_client, settings, repo_url)
-    pluginmaster, _, _ = parsing_pluginmaster(redis_client, settings, repo_url_goatcorp, pluginmaster_cn)
+    pluginmaster_cn, plugin_name_list_cn, plugin_namespace = parsing_pluginmaster(redis_client, settings, repo_url)
+    pluginmaster, _, _ = parsing_pluginmaster(redis_client, settings, repo_url_goatcorp, plugin_name_list_cn)
     pluginmaster += pluginmaster_cn
 
     redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
