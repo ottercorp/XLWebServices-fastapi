@@ -7,6 +7,7 @@ import re
 from collections import defaultdict
 from itertools import product
 from typing import Union, Tuple
+from datetime import datetime
 
 import commentjson
 from github import Github
@@ -158,7 +159,7 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
         state = json.load(f)
     for (channel, channel_meta) in state['Channels'].items():
         for (plugin, plugin_meta) in channel_meta['Plugins'].items():
-            last_updated[plugin] = int(plugin_meta['TimeBuilt'].timestamp())
+            last_updated[plugin] = int(datetime.fromisoformat(re.sub(r'(\.\d{6})\d+(?=[+-]\d{2}:\d{2}$)', r'\1', plugin_meta['TimeBuilt'])).timestamp())
     # Generate pluginmaster
     for plugin_dir in [stable_dir, testing_dir]:
         for plugin in os.listdir(plugin_dir):
