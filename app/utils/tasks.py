@@ -9,7 +9,6 @@ from itertools import product
 from typing import Union, Tuple
 
 import commentjson
-import toml
 from github import Github
 from termcolor import colored
 
@@ -154,12 +153,12 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
 
     # Load last update time
     last_updated = {}
-    state_path = os.path.join(plugin_repo_dir, 'State.toml')
+    state_path = os.path.join(plugin_repo_dir, 'state.json')
     with codecs.open(state_path, 'r', 'utf8') as f:
-        state = toml.load(f)
-    for (channel, channel_meta) in state['channels'].items():
-        for (plugin, plugin_meta) in channel_meta['plugins'].items():
-            last_updated[plugin] = int(plugin_meta['time_built'].timestamp())
+        state = json.load(f)
+    for (channel, channel_meta) in state['Channels'].items():
+        for (plugin, plugin_meta) in channel_meta['Plugins'].items():
+            last_updated[plugin] = int(plugin_meta['TimeBuilt'].timestamp())
     # Generate pluginmaster
     for plugin_dir in [stable_dir, testing_dir]:
         for plugin in os.listdir(plugin_dir):
