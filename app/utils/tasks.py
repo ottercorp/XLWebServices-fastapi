@@ -133,7 +133,6 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
     if plugin_list is None:
         plugin_list = list()
     plugin_list_length = len(plugin_list)
-    is_dip17 = True  # default to be using dip17
     (_, repo_name) = get_user_repo_name(repo_url)
     (_, repo) = update_git_repo(repo_url)
     branch = repo.active_branch.name
