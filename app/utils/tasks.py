@@ -142,13 +142,13 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
     plugin_repo_dir = get_repo_dir(repo_url)
     pluginmaster = []
     plugin_name_list = []
-    cahnnel_map = {
+    channel_map = {
         'stable': 'stable',
         'testing': 'testing-live'
     }
     jsonc = commentjson
-    stable_dir = os.path.join(plugin_repo_dir, cahnnel_map['stable'])
-    testing_dir = os.path.join(plugin_repo_dir, cahnnel_map['testing'])
+    stable_dir = os.path.join(plugin_repo_dir, channel_map['stable'])
+    testing_dir = os.path.join(plugin_repo_dir, channel_map['testing'])
     if not os.path.exists(testing_dir):
         os.mkdir(testing_dir)
 
@@ -218,7 +218,7 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
 
     repo_url_goatcorp = settings.plugin_repo_goatcorp
 
-    pluginmaster_cn, plugin_name_list_cn, plugin_namespace = parsing_pluginmaster(redis_client, settings, repo_url)
+    pluginmaster_cn, _, plugin_namespace = parsing_pluginmaster(redis_client, settings, repo_url)
     pluginmaster, _, _ = parsing_pluginmaster(redis_client, settings, repo_url_goatcorp, pluginmaster_cn)
     pluginmaster += pluginmaster_cn
 
