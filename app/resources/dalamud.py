@@ -187,6 +187,6 @@ class StgCode(BaseModel):
 @router.post("/Check/StgCode")
 async def check_stg_code(StgCode: StgCode, settings: Settings = Depends(get_settings)):
     r = Redis.create_client()
-    if StgCode.code != r.hget('settings', 'stg_code'):
+    if StgCode.code != r.hget(f'{settings.redis_prefix}settings', 'stg_code'):
         raise HTTPException(status_code=400, detail="Invalid code")
     return {'message': 'OK'}
