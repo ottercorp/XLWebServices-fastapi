@@ -142,6 +142,7 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
     plugin_repo_dir = get_repo_dir(repo_url)
     pluginmaster = []
     plugin_name_list = []
+    stable_plugin_map = {}
     channel_map = {
         'stable': 'stable',
         'testing': 'testing-live'
@@ -188,6 +189,8 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
             plugin_meta["IsTestingExclusive"] = is_testing
             if is_testing:
                 plugin_meta["TestingAssemblyVersion"] = plugin_meta["AssemblyVersion"]
+                plugin_meta["TestingChangelog"] = plugin_meta["Changelog"]
+                plugin_meta["TestingDalamudApiLevel"] = api_level
             download_count = redis_client.hget(f'{settings.redis_prefix}plugin-count', plugin) or 0
             plugin_meta["DownloadCount"] = int(download_count)
             plugin_meta["LastUpdate"] = last_updated.get(plugin, plugin_meta.get("LastUpdate", 0))
@@ -202,6 +205,17 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
             (hashed_name, _) = cache_file(plugin_latest_path)
             plugin_name = f"{plugin}-testing" if is_testing else plugin
             redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', plugin_name, hashed_name)
+            if is_testing and plugin in stable_plugin_map:
+                stable_meta = stable_plugin_map[plugin]
+                stable_meta["TestingAssemblyVersion"] = plugin_meta["TestingAssemblyVersion"]
+                stable_meta["TestingChangelog"] = plugin_meta["TestingChangelog"]
+                stable_meta["TestingDalamudApiLevel"] = plugin_meta["TestingDalamudApiLevel"]
+                if "_Dip17Channel" in plugin_meta:
+                    stable_meta["_Dip17Channel"] = plugin_meta["_Dip17Channel"]
+                plugin_name_list.append(plugin)
+                continue
+            if not is_testing:
+                stable_plugin_map[plugin] = plugin_meta
             pluginmaster.append(plugin_meta)
             plugin_name_list.append(plugin)
 
