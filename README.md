@@ -11,6 +11,7 @@ Yet another xlweb service provider written in python &amp; fastapi
 - [x] Plugin Master
 - [x] Multiple Plugin Master (D17 & old)
 - [x] Plugin Download Count
+- [x] S3-compatible plugin asset upload
 - [x] XIVLauncher Distribution
 - [x] XIVLauncher Changelog
 - [x] XIVLauncher Download Count
@@ -42,11 +43,34 @@ XIVL_REPO='https://github.com/ottercorp/FFXIVQuickLauncher.git'
 HOSTED_URL='https://aonyx.ffxiv.wang/'
 PLUGIN_API_LEVEL='7'
 API_NAMESPACE='{"7": "plugin-PluginDistD17-main"}'
+
+# Optional: S3-compatible storage for plugin icons and plugin helper files.
+# Leave all three values empty to disable upload.
+XIVLAUNCHER_S3_ACCESS_KEY=''
+XIVLAUNCHER_S3_SECRET_KEY=''
+XIVLAUNCHER_S3_ENDPOINT=''
 ```
 
 For the `*_REPO` vars, both `https://github.com/xxx/yyy.git` and `git@github.com:xxx/yyy.git` are supported.
 
 For other available settings please check [the config file](/app/config/__init__.py).
+
+#### S3-compatible plugin asset upload
+
+When `XIVLAUNCHER_S3_ACCESS_KEY`, `XIVLAUNCHER_S3_SECRET_KEY`, and `XIVLAUNCHER_S3_ENDPOINT` are all empty, S3 upload is skipped.
+
+When one of them is set, all three must be set. The service creates a path-style S3 client and uploads during `plugin` regeneration:
+
+- plugin icons from `stable/<plugin>/images/icon.png` and `testing-live/<plugin>/images/icon.png` to `s3://plugindistd17/<same relative path>`;
+- plugin helper files to `s3://xlassets/pluginfiles/`:
+  - `DamageInfoPlugin.csv`;
+  - `AggroDistances.dat`.
+
+The endpoint should be the S3 API endpoint, for example:
+
+```
+XIVLAUNCHER_S3_ENDPOINT='https://example-account.r2.cloudflarestorage.com'
+```
 
 ### Run
 
