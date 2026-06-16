@@ -21,6 +21,7 @@ from .cdn.ottercloudcdn import OtterCloudCDN
 from .common import get_settings, cache_file, download_file
 from .git import update_git_repo, get_repo_dir, get_user_repo_name
 from .redis import Redis
+from .s3 import create_client as create_s3_client, upload_file
 
 
 def regen(task_list: list[str]):
@@ -129,6 +130,17 @@ DEFAULT_META = {
     "FeedbackWebhook": None,
 }
 
+PLUGIN_CACHE_FILES = [
+    {
+        'url': 'https://docs.google.com/spreadsheets/d/1z2skn_jokyj02Qv2GPEs6HSmAZVLiw2LbwQxkXPjiEs/gviz/tq?tqx=out:csv&sheet=main1',
+        'filename': 'DamageInfoPlugin.csv',
+    },
+    {
+        'url': 'https://raw.githubusercontent.com/PunishedPineapple/PunishedPineapple.github.io/master/DalamudPlugins/Distance/Support/AggroDistances.dat',
+        'filename': 'AggroDistances.dat',
+    },
+]
+
 
 def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> tuple[list[dict], list[str], str]:
     if plugin_list is None:
@@ -234,6 +246,9 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
 
     pluginmaster_cn, plugin_name_list_cn, plugin_namespace = parsing_pluginmaster(redis_client, settings, repo_url)
     pluginmaster, _, _ = parsing_pluginmaster(redis_client, settings, repo_url_goatcorp, plugin_name_list_cn)
+    upload_plugin_icons(settings, repo_url_goatcorp)
+    if repo_url != repo_url_goatcorp:
+        upload_plugin_icons(settings, repo_url)
     pluginmaster += pluginmaster_cn
 
     redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
@@ -243,7 +258,39 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
         plugin_name_list.append(plugin_name)
     redis_client.delete(f'{settings.redis_prefix}plugin_name_list')
     redis_client.rpush(f'{settings.redis_prefix}plugin_name_list', *plugin_name_list)
+    upload_plugin_cache_files(settings)
     # print(f"Regenerated Pluginmaster for {plugin_namespace}: \n" + str(json.dumps(pluginmaster, indent=2)))
+
+
+def upload_plugin_cache_files(settings):
+    cache_dir = os.path.join(settings.root_path, settings.file_cache_dir)
+    file_paths = [
+        download_file(cache_item['url'], cache_dir, force=True, filename=cache_item['filename'])
+        for cache_item in PLUGIN_CACHE_FILES
+    ]
+    s3_client = create_s3_client(settings)
+    if not s3_client:
+        return
+    for file_path in file_paths:
+        file_name = os.path.basename(file_path)
+        upload_file(s3_client, file_path, 'xlassets', f'pluginfiles/{file_name}')
+
+
+def upload_plugin_icons(settings, repo_url):
+    s3_client = create_s3_client(settings)
+    if not s3_client:
+        return
+    plugin_repo_dir = get_repo_dir(repo_url)
+    for channel in ['stable', 'testing-live']:
+        channel_dir = os.path.join(plugin_repo_dir, channel)
+        if not os.path.isdir(channel_dir):
+            continue
+        for plugin in os.listdir(channel_dir):
+            icon_path = os.path.join(channel_dir, plugin, 'images', 'icon.png')
+            if not os.path.isfile(icon_path):
+                continue
+            object_key = os.path.relpath(icon_path, plugin_repo_dir).replace(os.sep, '/')
+            upload_file(s3_client, icon_path, 'plugindistd17', object_key)
 
 
 def regen_asset(redis_client=None):

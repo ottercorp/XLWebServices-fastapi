@@ -54,6 +54,12 @@ class Settings(BaseSettings):
     # admin
     admin_user_name: str = ''
     admin_user_pwd: str = ''
+    # XIVLauncher S3-compatible storage
+    xivlauncher_s3_bucket: str = ''
+    xivlauncher_s3_access_key: str = ''
+    xivlauncher_s3_secret_key: str = ''
+    xivlauncher_s3_endpoint: str = ''
+    xivlauncher_s3_redirect_url: str = ''
 
     class Config:
         env_file = '.env'
@@ -67,11 +73,13 @@ SENSITIVE_FIELDS = [
     'ctcdn_ak',
     'ctcdn_sk',
     'crowdin_token',
-    'api_secret',
+    'ga_api_secret',
     'plogon_api_key',
     'ottercloud_cdn_id',
     'ottercloud_cdn_key',
-    'admin_user_pwd'
+    'admin_user_pwd',
+    'xivlauncher_s3_access_key',
+    'xivlauncher_s3_secret_key',
 ]
 settings_json = Settings().model_dump()
 for field in SENSITIVE_FIELDS:
