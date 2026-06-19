@@ -199,10 +199,6 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
                     plugin_meta[key] = value
             is_testing = plugin_dir == testing_dir
             plugin_meta["IsTestingExclusive"] = is_testing
-            if is_testing:
-                plugin_meta["TestingAssemblyVersion"] = plugin_meta["AssemblyVersion"]
-                plugin_meta["TestingChangelog"] = plugin_meta["Changelog"]
-                plugin_meta["TestingDalamudApiLevel"] = api_level
             download_count = redis_client.hget(f'{settings.redis_prefix}plugin-count', plugin) or 0
             plugin_meta["DownloadCount"] = int(download_count)
             plugin_meta["LastUpdate"] = last_updated.get(plugin, plugin_meta.get("LastUpdate", 0))
@@ -214,6 +210,13 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
                                                  + '/Plugin/Download/' + f"{plugin}?isUpdate=False&isTesting=True&branch=api{api_level}"
             plugin_latest_path = os.path.join(plugin_dir, f'{plugin}/latest.zip')
             plugin_meta["IconUrl"] = f"https://s3test.ffxiv.wang/plugindistd17/stable/{plugin}/images/icon.png"
+
+            if is_testing:
+                plugin_meta["TestingAssemblyVersion"] = plugin_meta["AssemblyVersion"]
+                plugin_meta["TestingChangelog"] = plugin_meta["Changelog"]
+                plugin_meta["TestingDalamudApiLevel"] = api_level
+                plugin_meta["IconUrl"] = f"https://s3test.ffxiv.wang/plugindistd17/testing/live/{plugin}/images/icon.png"
+
             (hashed_name, _) = cache_file(plugin_latest_path)
             plugin_name = f"{plugin}-testing" if is_testing else plugin
             redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', plugin_name, hashed_name)
