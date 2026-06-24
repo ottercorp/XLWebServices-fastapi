@@ -237,6 +237,35 @@ def parsing_pluginmaster(redis_client, settings, repo_url, plugin_list=None) -> 
     return pluginmaster, plugin_name_list, plugin_namespace
 
 
+def get_repo_plugin_versions(repo_url: str) -> dict:
+    """Map InternalName -> AssemblyVersion for all plugins in a dist repo (stable preferred over testing-live)."""
+    repo_dir = get_repo_dir(repo_url)
+    versions = {}
+    for channel in ('stable', 'testing-live'):
+        channel_dir = os.path.join(repo_dir, channel)
+        if not os.path.isdir(channel_dir):
+            continue
+        for plugin in os.listdir(channel_dir):
+            if plugin in versions:  # stable processed first, keep it
+                continue
+            manifest_path = os.path.join(channel_dir, plugin, f'{plugin}.json')
+            if not os.path.isfile(manifest_path):
+                continue
+            meta = None
+            for enc in ('utf8', 'utf-8-sig'):
+                try:
+                    with codecs.open(manifest_path, 'r', enc) as f:
+                        meta = commentjson.load(f)
+                    break
+                except Exception:
+                    continue
+            if meta:
+                ver = meta.get('AssemblyVersion')
+                if ver:
+                    versions[plugin] = ver
+    return versions
+
+
 def regen_pluginmaster(redis_client=None, repo_url: str = ''):
     logger.info("Start regenerating pluginmaster.")
     settings = get_settings()
@@ -252,6 +281,19 @@ def regen_pluginmaster(redis_client=None, repo_url: str = ''):
     upload_plugin_icons(settings, repo_url_goatcorp)
     if repo_url != repo_url_goatcorp:
         upload_plugin_icons(settings, repo_url)
+
+    # Mark source: _cn (CN maintained) = served by the ottercorp (CN) repo, i.e. a CN-exclusive
+    # plugin or a CN override of an upstream plugin (vs plugins coming purely from goatcorp upstream).
+    # For CN overrides whose version differs from upstream, record the upstream version in _uv.
+    goatcorp_versions = {} if repo_url == repo_url_goatcorp else get_repo_plugin_versions(repo_url_goatcorp)
+    for plugin in pluginmaster:  # goatcorp upstream
+        plugin["_cn"] = False
+    for plugin in pluginmaster_cn:  # ottercorp/CN maintained
+        plugin["_cn"] = True
+        upstream_ver = goatcorp_versions.get(plugin['InternalName'])
+        if upstream_ver and upstream_ver != plugin.get('AssemblyVersion'):
+            plugin["_uv"] = upstream_ver
+
     pluginmaster += pluginmaster_cn
 
     redis_client.hset(f'{settings.redis_prefix}{plugin_namespace}', 'pluginmaster', json.dumps(pluginmaster))
