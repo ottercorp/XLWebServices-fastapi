@@ -21,17 +21,23 @@ class Crowdin():
 
     def update_redis(self, pluginmaster: list):
         r = Redis.create_client()
+        name_str = r.hget(f'{self.config.redis_prefix}crowdin', 'plugin-name') or '{}'
+        name_json = json.loads(name_str)
         desc_str = r.hget(f'{self.config.redis_prefix}crowdin', 'plugin-description') or '{}'
         desc_json = json.loads(desc_str)
         punchline_str = r.hget(f'{self.config.redis_prefix}crowdin', 'plugin-punchline') or '{}'
         punchline_json = json.loads(punchline_str)
         for plugin in pluginmaster:
+            name_json.update({
+                plugin['InternalName']: plugin['Name']
+            })
             desc_json.update({
                 plugin['InternalName']: plugin['Description']
             })
             punchline_json.update({
                 plugin['InternalName']: plugin['Punchline']
             })
+        r.hset(f'{self.config.redis_prefix}crowdin', 'plugin-name', json.dumps(name_json))
         r.hset(f'{self.config.redis_prefix}crowdin', 'plugin-description', json.dumps(desc_json))
         r.hset(f'{self.config.redis_prefix}crowdin', 'plugin-punchline', json.dumps(punchline_json))
 
@@ -56,8 +62,10 @@ class Crowdin():
 
     def upload_resources(self):
         r = Redis.create_client()
+        name_str = r.hget(f'{self.config.redis_prefix}crowdin', 'plugin-name') or '{}'
         desc_str = r.hget(f'{self.config.redis_prefix}crowdin', 'plugin-description') or '{}'
         punchline_str = r.hget(f'{self.config.redis_prefix}crowdin', 'plugin-punchline') or '{}'
+        name_file = self.upload_resource('name.json', name_str)
         desc_file = self.upload_resource('description.json', desc_str)
         punchline_file = self.upload_resource('punchline.json', punchline_str)
 
@@ -77,5 +85,11 @@ class Crowdin():
         punchline_path = os.path.join(loc_folder, 'punchline.json')
         with codecs.open(punchline_path, 'r', 'utf8') as f:
             punchline = json.load(f)
+        name_path = os.path.join(loc_folder, 'name.json')
+        name = {}
+        if os.path.exists(name_path):
+            with codecs.open(name_path, 'r', 'utf8') as f:
+                name = json.load(f)
+        r.hset(f'{self.config.redis_prefix}crowdin', f'plugin-name-{lang}', json.dumps(name))
         r.hset(f'{self.config.redis_prefix}crowdin', f'plugin-description-{lang}', json.dumps(desc))
         r.hset(f'{self.config.redis_prefix}crowdin', f'plugin-punchline-{lang}', json.dumps(punchline))

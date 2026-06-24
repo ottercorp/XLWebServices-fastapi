@@ -55,9 +55,11 @@ async def pluginmaster(apiLevel: int = 0, settings: Settings = Depends(get_setti
     pluginmaster = json.loads(pluginmaster_str)
     translations = {}
     if settings.default_pm_lang != 'en-US':
+        name_str = r.hget(f'{settings.redis_prefix}crowdin', f'plugin-name-{settings.default_pm_lang}') or '{}'
         desc_str = r.hget(f'{settings.redis_prefix}crowdin', f'plugin-description-{settings.default_pm_lang}') or '{}'
         punchline_str = r.hget(f'{settings.redis_prefix}crowdin', f'plugin-punchline-{settings.default_pm_lang}') or '{}'
         translations = {
+            'name': json.loads(name_str),
             'description': json.loads(desc_str),
             'punchline': json.loads(punchline_str)
         }
@@ -67,8 +69,14 @@ async def pluginmaster(apiLevel: int = 0, settings: Settings = Depends(get_setti
         download_count = r.hget(f'{settings.redis_prefix}plugin-count', plugin_name) or 0
         plugin["DownloadCount"] = int(download_count)
         if translations:
-            plugin['Description'] = translations['description'].get(plugin_name, plugin.get('Description'))
-            plugin['Punchline'] = translations['punchline'].get(plugin_name, plugin.get('Punchline'))
+            for tkey, src_key, tr_field in (
+                ('NameLoc', 'Name', 'name'),
+                ('PunchlineLoc', 'Punchline', 'punchline'),
+                ('DescriptionLoc', 'Description', 'description'),
+            ):
+                translated = translations[tr_field].get(plugin_name, '')
+                original = plugin.get(src_key, '')
+                plugin[tkey] = translated if (translated and translated != original) else ''
     return pluginmaster
 
 

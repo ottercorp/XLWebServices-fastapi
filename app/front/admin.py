@@ -6,12 +6,12 @@ from datetime import datetime, timezone, timedelta
 from io import BytesIO
 
 from fastapi import APIRouter, HTTPException, Depends, Request, Form, UploadFile
-from fastapi.responses import RedirectResponse, PlainTextResponse, HTMLResponse, FileResponse
+from fastapi.responses import RedirectResponse, PlainTextResponse, HTMLResponse, FileResponse, Response, JSONResponse
 from fastapi.templating import Jinja2Templates
 
 from app.config import Settings
 from app.utils.cdn.ottercloudcdn import OtterCloudCDN
-from app.utils.common import get_settings
+from app.utils.common import get_settings, get_apilevel_namespace_map
 from app.utils.dalamud_log_analysis import analysis
 from app.utils.front import flash
 from app.utils.redis import RedisFeedBack, Redis
@@ -227,5 +227,174 @@ async def front_admin_log_analytics_post(request: Request, file: UploadFile = Fo
     file = BytesIO(file_byte)
     analysis_result, log_file_type = analysis(file, settings.plugin_api_level)
     return template.TemplateResponse("log_analysis_result.html", {"request": request, "analysis_result": analysis_result, "log_file_type": log_file_type})
+
+# endregion
+
+# region plugin translations
+def _load_pluginmaster():
+    r = Redis.create_client()
+    settings = get_settings()
+    apilevel_namespace_map = get_apilevel_namespace_map()
+    plugin_namespace = apilevel_namespace_map.get(settings.plugin_api_level)
+    pluginmaster_str = r.hget(f'{settings.redis_prefix}{plugin_namespace}', 'pluginmaster')
+    return json.loads(pluginmaster_str) if pluginmaster_str else []
+
+
+@router.get('/plugins', response_class=HTMLResponse)
+async def front_admin_plugins_get(request: Request, settings: Settings = Depends(get_settings)):
+    r = Redis.create_client()
+    lang = settings.default_pm_lang
+    pluginmaster = _load_pluginmaster()
+    name_tr = json.loads(r.hget(f'{settings.redis_prefix}crowdin', f'plugin-name-{lang}') or '{}')
+    desc_tr = json.loads(r.hget(f'{settings.redis_prefix}crowdin', f'plugin-description-{lang}') or '{}')
+    punch_tr = json.loads(r.hget(f'{settings.redis_prefix}crowdin', f'plugin-punchline-{lang}') or '{}')
+    plugins = []
+    for p in pluginmaster:
+        internal_name = p.get('InternalName', '')
+        last_update = int(p.get('LastUpdate', 0) or 0)
+        download_count = r.hget(f'{settings.redis_prefix}plugin-count', internal_name)
+        download_count = int(download_count) if download_count else int(p.get('DownloadCount', 0) or 0)
+        last_update_str = ''
+        if last_update:
+            last_update_str = datetime.fromtimestamp(
+                last_update, tz=timezone(timedelta(hours=8))
+            ).strftime('%Y-%m-%d')
+        plugins.append({
+            'internal_name': internal_name,
+            'name': p.get('Name', ''),
+            'description': p.get('Description', ''),
+            'punchline': p.get('Punchline', ''),
+            'icon_url': p.get('IconUrl', ''),
+            't_name': name_tr.get(internal_name, ''),
+            't_description': desc_tr.get(internal_name, ''),
+            't_punchline': punch_tr.get(internal_name, ''),
+            'version': p.get('AssemblyVersion', ''),
+            'api_level': p.get('DalamudApiLevel', ''),
+            'download_count': download_count,
+            'last_update': last_update,
+            'last_update_str': last_update_str,
+            'cn_maintained': bool(p.get('_cn', False)),
+            'upstream_version': p.get('_uv', ''),
+            'repo_url': p.get('RepoUrl', '') or '',
+        })
+    plugins.sort(key=lambda x: x['name'].lower())
+    api_levels = [int(p['api_level']) for p in plugins if str(p['api_level']).strip().isdigit()]
+    max_api_level = max(api_levels) if api_levels else 0
+    for p in plugins:
+        if str(p['api_level']).strip().isdigit():
+            behind = max_api_level - int(p['api_level'])
+        else:
+            behind = 0
+        p['outdated'] = behind >= 1
+        p['very_outdated'] = behind > 1
+    return template.TemplateResponse("plugins.html", {"request": request, "plugins": plugins, "lang": lang, "max_api_level": max_api_level})
+
+
+@router.get('/plugins/download_all')
+async def front_admin_plugins_download_all():
+    items = []
+    for p in _load_pluginmaster():
+        items.append({
+            'InternalName': p.get('InternalName', ''),
+            'Name': p.get('Name', ''),
+            'Punchline': p.get('Punchline', ''),
+            'Description': p.get('Description', ''),
+        })
+    content = json.dumps(items, ensure_ascii=False, indent=2)
+    return Response(
+        content=content,
+        media_type='application/json',
+        headers={'Content-Disposition': 'attachment; filename="plugins_all.json"'}
+    )
+
+
+@router.get('/plugins/download_all_translated')
+async def front_admin_plugins_download_all_translated(settings: Settings = Depends(get_settings)):
+    r = Redis.create_client()
+    lang = settings.default_pm_lang
+    name_tr = json.loads(r.hget(f'{settings.redis_prefix}crowdin', f'plugin-name-{lang}') or '{}')
+    desc_tr = json.loads(r.hget(f'{settings.redis_prefix}crowdin', f'plugin-description-{lang}') or '{}')
+    punch_tr = json.loads(r.hget(f'{settings.redis_prefix}crowdin', f'plugin-punchline-{lang}') or '{}')
+    items = []
+    for p in _load_pluginmaster():
+        internal_name = p.get('InternalName', '')
+        items.append({
+            'InternalName': internal_name,
+            'Name': name_tr.get(internal_name, ''),
+            'Punchline': punch_tr.get(internal_name, ''),
+            'Description': desc_tr.get(internal_name, ''),
+            '_Original': {
+                'Name': p.get('Name', ''),
+                'Punchline': p.get('Punchline', ''),
+                'Description': p.get('Description', ''),
+            },
+        })
+    content = json.dumps(items, ensure_ascii=False, indent=2)
+    return Response(
+        content=content,
+        media_type='application/json',
+        headers={'Content-Disposition': f'attachment; filename="plugins_translated_{lang}.json"'}
+    )
+
+
+@router.post('/plugins/upload_all')
+async def front_admin_plugins_upload_all(request: Request, lang: str = Form(...), file: UploadFile = Form(...), settings: Settings = Depends(get_settings)):
+    lang = lang.strip()
+    if not lang:
+        flash(request, 'error', '语言不能为空')
+        return RedirectResponse(url=request.app.url_path_for('front_admin_plugins_get'), status_code=303)
+    try:
+        raw = await file.read()
+        data = json.loads(raw.decode('utf-8-sig'))
+        if not isinstance(data, list):
+            raise ValueError('整合 JSON 顶层必须是数组，每个 item 含 InternalName / Name / Punchline / Description')
+        field_maps = {'name': {}, 'punchline': {}, 'description': {}}
+        for item in data:
+            if not isinstance(item, dict):
+                continue
+            internal = item.get('InternalName')
+            if not internal:
+                continue
+            for field, src_key in (('name', 'Name'), ('punchline', 'Punchline'), ('description', 'Description')):
+                value = item.get(src_key)
+                if value:
+                    field_maps[field][internal] = value
+        r = Redis.create_client()
+        counts = {}
+        for field, new_map in field_maps.items():
+            existing = json.loads(r.hget(f'{settings.redis_prefix}crowdin', f'plugin-{field}-{lang}') or '{}')
+            existing.update(new_map)
+            r.hset(f'{settings.redis_prefix}crowdin', f'plugin-{field}-{lang}', json.dumps(existing, ensure_ascii=False))
+            counts[field] = len(new_map)
+        flash(request, 'success', f'已上传 {lang} 整合翻译：Name {counts["name"]} 条、Punchline {counts["punchline"]} 条、Description {counts["description"]} 条')
+    except Exception as e:
+        flash(request, 'error', f'上传失败：{e}')
+    return RedirectResponse(url=request.app.url_path_for('front_admin_plugins_get'), status_code=303)
+
+
+@router.post('/plugins/edit')
+async def front_admin_plugins_edit(request: Request, internal_name: str = Form(...), lang: str = Form(...), name: str = Form(''), punchline: str = Form(''), description: str = Form(''), settings: Settings = Depends(get_settings)):
+    lang = lang.strip()
+    if not lang:
+        return JSONResponse({'ok': False, 'error': '语言为空'}, status_code=400)
+    if not internal_name:
+        return JSONResponse({'ok': False, 'error': '缺少 InternalName'}, status_code=400)
+    try:
+        r = Redis.create_client()
+        hkey = f'{settings.redis_prefix}crowdin'
+        result = {}
+        for field, value in (('name', name), ('punchline', punchline), ('description', description)):
+            value = value.strip()
+            fkey = f'plugin-{field}-{lang}'
+            field_map = json.loads(r.hget(hkey, fkey) or '{}')
+            if value:
+                field_map[internal_name] = value
+            else:
+                field_map.pop(internal_name, None)
+            r.hset(hkey, fkey, json.dumps(field_map, ensure_ascii=False))
+            result[field] = value
+        return JSONResponse({'ok': True, **result})
+    except Exception as e:
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
 
 # endregion
